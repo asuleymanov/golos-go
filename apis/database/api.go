@@ -9,7 +9,7 @@ import (
 	"github.com/asuleymanov/golos-go/types"
 
 	// Vendor
-	"github.com/asuleymanov/errors"
+	"github.com/pkg/errors"
 )
 
 const (

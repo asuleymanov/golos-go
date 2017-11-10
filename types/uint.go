@@ -9,7 +9,7 @@ import (
 	"github.com/asuleymanov/golos-go/encoding/transaction"
 
 	// Vendor
-	"github.com/asuleymanov/errors"
+	"github.com/pkg/errors"
 )
 
 func unmarshalUInt(data []byte) (uint64, error) {

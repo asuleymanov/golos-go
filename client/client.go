@@ -58,6 +58,8 @@ func initChainId(str string) *transactions.Chain {
 		ChainId = *transactions.SteemChain
 	case "golos":
 		ChainId = *transactions.GolosChain
+	case "test":
+		ChainId = *transactions.TestChain
 	}
 	return &ChainId
 }

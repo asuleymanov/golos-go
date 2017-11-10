@@ -9,14 +9,14 @@ import (
 )
 
 //We check whether there is a voter on the list of those who have already voted
-func (api *Client) Verify_Voter(author, permlink, voter string) bool {
+func (api *Client) Verify_Voter(author, permlink, voter string, weight int) bool {
 	ans, err := api.Rpc.Database.GetActiveVotes(author, permlink)
 	if err != nil {
 		log.Println(errors.Wrapf(err, "Error Verify Voter: "))
 		return false
 	} else {
 		for _, v := range ans {
-			if v.Voter == voter {
+			if v.Voter == voter && v.Percent == weight {
 				return true
 			}
 		}

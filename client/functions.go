@@ -108,7 +108,7 @@ func (api *Client) Comment(user_name, author_name, ppermlink, body string, v *PC
 		trx = append(trx, txo)
 	}
 
-	if v != nil || v.Weight != 0 {
+	if v != nil && v.Weight != 0 {
 		txv := &types.VoteOperation{
 			Voter:    user_name,
 			Author:   user_name,
@@ -123,43 +123,6 @@ func (api *Client) Comment(user_name, author_name, ppermlink, body string, v *PC
 		return errors.Wrapf(err, "Error Comment : ")
 	} else {
 		log.Println("[Comment] Block -> ", resp.BlockNum, " User -> ", user_name)
-		return nil
-	}
-}
-
-func (api *Client) Comment_Vote(user_name, author_name, ppermlink, body string, weight_post int) error {
-	if weight_post > 10000 {
-		weight_post = 10000
-	}
-	times, _ := strconv.Unquote(time.Now().Add(30 * time.Second).UTC().Format(fdt))
-	permlink := "re-" + author_name + "-" + ppermlink + "-" + times
-	var trx []types.Operation
-	txc := &types.CommentOperation{
-		ParentAuthor:   author_name,
-		ParentPermlink: ppermlink,
-		Author:         user_name,
-		Permlink:       permlink,
-		Title:          "",
-		Body:           body,
-		JsonMetadata:   "{\"app\":\"golos-go(go-steem)\"}",
-	}
-	trx = append(trx, txc)
-
-	if !api.Verify_Voter_Weight(author_name, permlink, user_name, weight_post) {
-		txv := &types.VoteOperation{
-			Voter:    user_name,
-			Author:   author_name,
-			Permlink: ppermlink,
-			Weight:   types.Int16(weight_post),
-		}
-		trx = append(trx, txv)
-	}
-
-	resp, err := api.Send_Arr_Trx(user_name, trx)
-	if err != nil {
-		return errors.Wrapf(err, "Error Comment and Vote: ")
-	} else {
-		log.Println("[Comment and Vote] Block -> ", resp.BlockNum, " User -> ", user_name)
 		return nil
 	}
 }
@@ -247,7 +210,7 @@ func (api *Client) Post(author_name, title, body, permlink, ptag, post_image str
 		trx = append(trx, txo)
 	}
 
-	if v != nil || v.Weight != 0 {
+	if v != nil && v.Weight != 0 {
 		txv := &types.VoteOperation{
 			Voter:    author_name,
 			Author:   author_name,

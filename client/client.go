@@ -1,6 +1,8 @@
 package client
 
 import (
+	"log"
+
 	"github.com/asuleymanov/golos-go"
 	"github.com/asuleymanov/golos-go/transactions"
 	"github.com/asuleymanov/golos-go/transports/websocket"
@@ -34,13 +36,13 @@ func initclient(url []string) *rpc.Client {
 	// Инициализация Websocket
 	t, err := websocket.NewTransport(url)
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	// Инициализация RPC клиента
 	client, err := rpc.NewClient(t)
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 	//defer client.Close()
 	return client

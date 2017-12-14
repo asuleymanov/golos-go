@@ -403,6 +403,28 @@ func (api *Client) Transfer(from_name, to_name, memo, ammount string) error {
 	}
 }
 
+func (api *Client) Multi_Transfer(username string, arrtrans []ArrTransfer) error {
+	var trx []types.Operation
+
+	for _, val := range arrtrans {
+		txt := &types.TransferOperation{
+			From:   username,
+			To:     val.To,
+			Amount: val.Ammount,
+			Memo:   val.Memo,
+		}
+		trx = append(trx, txt)
+	}
+
+	resp, err := api.Send_Trx(username, trx)
+	if err != nil {
+		return errors.Wrapf(err, "Error Multi_Transfer: ")
+	} else {
+		log.Println("[Multi_Transfer] Block -> ", resp.BlockNum, " From user -> ", username)
+		return nil
+	}
+}
+
 func (api *Client) Login(user_name, key string) bool {
 	json_string := "[\"login\",{\"account\":\"" + user_name + "\",\"app\":\"golos-go(go-steem)\"}]"
 

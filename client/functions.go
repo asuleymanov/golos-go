@@ -4,7 +4,6 @@ import (
 	// Stdlib
 	"log"
 	"strconv"
-	"strings"
 	"time"
 
 	// Vendor
@@ -16,33 +15,6 @@ import (
 	"github.com/asuleymanov/golos-go/translit"
 	"github.com/asuleymanov/golos-go/types"
 )
-
-func (api *Client) SteemPerMvest() (float64, error) {
-	dgp, errdgp := api.Rpc.Database.GetDynamicGlobalProperties()
-	if errdgp != nil {
-		return 0, errdgp
-	}
-
-	tvfs, errtvfs := strconv.ParseFloat(strings.Split(dgp.TotalVersingFundSteem, " ")[0], 64)
-	if errtvfs != nil {
-		return 0, errtvfs
-	}
-
-	tvs, errtvs := strconv.ParseFloat(strings.Split(dgp.TotalVestingShares, " ")[0], 64)
-	if errtvs != nil {
-		return 0, errtvs
-	}
-
-	spmtmp := (tvfs / tvs) * 1000000
-	str := strconv.FormatFloat(spmtmp, 'f', 3, 64)
-
-	spm, errspm := strconv.ParseFloat(str, 64)
-	if errspm != nil {
-		return 0, errspm
-	}
-
-	return spm, nil
-}
 
 func (api *Client) Vote(user_name, author_name, permlink string, weight int) error {
 	if weight > 10000 {
@@ -67,6 +39,33 @@ func (api *Client) Vote(user_name, author_name, permlink string, weight int) err
 		return errors.Wrapf(err, "Error Vote: ")
 	} else {
 		log.Println("[Vote] Block -> ", resp.BlockNum, " User -> ", user_name)
+		return nil
+	}
+}
+
+func (api *Client) Multi_Vote(username, author, permlink string, arrvote []ArrVote) error {
+	var trx []types.Operation
+
+	arrvotes := api.Verify_Delegate_Posting_Key_Sign(username, arrvote)
+	if len(arrvotes) == 0 {
+		return errors.New("Error Multi_Vote : To perform this operation, the signature rights must be delegated.")
+	}
+
+	for _, val := range arrvotes {
+		txt := &types.VoteOperation{
+			Voter:    val.User,
+			Author:   author,
+			Permlink: permlink,
+			Weight:   types.Int16(val.Weight),
+		}
+		trx = append(trx, txt)
+	}
+
+	resp, err := api.Send_Trx(username, trx)
+	if err != nil {
+		return errors.Wrapf(err, "Error Multi_Vote: ")
+	} else {
+		log.Println("[Multi_Vote] Block -> ", resp.BlockNum, " From user -> ", username)
 		return nil
 	}
 }

@@ -13,3 +13,8 @@ type ArrTransfer struct {
 	Memo    string
 	Ammount string
 }
+
+type ArrVote struct {
+	User   string
+	Weight int
+}

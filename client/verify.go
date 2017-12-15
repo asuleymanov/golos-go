@@ -2,7 +2,9 @@ package client
 
 import (
 	// Stdlib
+	"fmt"
 	"log"
+	"strings"
 
 	// Vendor
 	"github.com/pkg/errors"
@@ -113,4 +115,38 @@ func (api *Client) Verify_Post(author, permlink string) bool {
 		}
 		return false
 	}
+}
+
+func (api *Client) Verify_Delegate_Posting_Key_Sign(username string, arrvote []ArrVote) []ArrVote {
+	var truevote []ArrVote
+	var arrusr, arrtmp []string
+
+	for _, v := range arrvote {
+		arrusr = append(arrusr, v.User)
+	}
+
+	acc, err := api.Rpc.Database.GetAccounts(arrusr)
+	if err != nil {
+		log.Println(errors.Wrapf(err, "Error Verify Delegate Vote Sign: "))
+		return nil
+	} else {
+		for _, val := range acc {
+			for _, v := range val.Posting.AccountAuths {
+				l := strings.Split(strings.Replace(strings.Replace(fmt.Sprintf("%v", v), "[", "", -1), "]", "", -1), " ")[0]
+				if l == username {
+					arrtmp = append(arrtmp, val.Name)
+				}
+			}
+		}
+	}
+
+	for _, v := range arrtmp {
+		for _, val := range arrvote {
+			if v == val.User {
+				truevote = append(truevote, val)
+			}
+		}
+	}
+
+	return truevote
 }

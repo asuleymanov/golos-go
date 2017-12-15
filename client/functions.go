@@ -45,10 +45,23 @@ func (api *Client) Vote(user_name, author_name, permlink string, weight int) err
 
 func (api *Client) Multi_Vote(username, author, permlink string, arrvote []ArrVote) error {
 	var trx []types.Operation
+	var arrstr, arrtmp []string
+	var arrvotes []ArrVote
 
-	arrvotes := api.Verify_Delegate_Posting_Key_Sign(username, arrvote)
-	if len(arrvotes) == 0 {
+	for _, v := range arrvote {
+		arrstr = append(arrstr, v.User)
+	}
+	arrtmp = api.Verify_Delegate_Posting_Key_Sign(username, arrstr)
+	if len(arrtmp) == 0 {
 		return errors.New("Error Multi_Vote : To perform this operation, the signature rights must be delegated.")
+	} else {
+		for _, v := range arrtmp {
+			for _, val := range arrvote {
+				if v == val.User {
+					arrvotes = append(arrvotes, val)
+				}
+			}
+		}
 	}
 
 	for _, val := range arrvotes {

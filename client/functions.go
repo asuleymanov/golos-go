@@ -58,10 +58,16 @@ func (api *Client) Multi_Vote(username, author, permlink string, arrvote []ArrVo
 		for _, v := range arrtmp {
 			for _, val := range arrvote {
 				if v == val.User {
-					arrvotes = append(arrvotes, val)
+					if !api.Verify_Voter(author, permlink, val.User) {
+						arrvotes = append(arrvotes, val)
+					}
 				}
 			}
 		}
+	}
+
+	if len(arrvotes) == 0 {
+		return errors.New("Error Multi_Vote : All users from the list have already voted.")
 	}
 
 	for _, val := range arrvotes {

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"strings"
+	"time"
 
 	// Vendor
 	"github.com/pkg/errors"
@@ -126,14 +127,33 @@ func (api *Client) Verify_Delegate_Posting_Key_Sign(username string, arr []strin
 		return nil
 	} else {
 		for _, val := range acc {
-			for _, v := range val.Posting.AccountAuths {
-				l := strings.Split(strings.Replace(strings.Replace(fmt.Sprintf("%v", v), "[", "", -1), "]", "", -1), " ")[0]
-				if l == username {
-					truearr = append(truearr, val.Name)
+			if val.Name == username {
+				truearr = append(truearr, val.Name)
+			} else {
+				for _, v := range val.Posting.AccountAuths {
+					l := strings.Split(strings.Replace(strings.Replace(fmt.Sprintf("%v", v), "[", "", -1), "]", "", -1), " ")[0]
+					if l == username {
+						truearr = append(truearr, val.Name)
+					}
 				}
 			}
 		}
 	}
-
 	return truearr
+}
+
+func (api *Client) Verify_First_Post(username string) bool {
+	d := time.Now()
+	cont, err := api.Rpc.Database.GetDiscussionsByAuthorBeforeDate(username, "", d.Format("2006-01-02T00:00:00"), 100)
+	if err != nil {
+		log.Println(errors.Wrapf(err, "Error Verify First Post: "))
+		return false
+	} else {
+		if len(cont) > 1 {
+			return false
+		} else {
+			return true
+		}
+		return false
+	}
 }

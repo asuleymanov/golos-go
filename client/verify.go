@@ -118,30 +118,6 @@ func (api *Client) Verify_Post(author, permlink string) bool {
 	}
 }
 
-/*func (api *Client) Verify_Delegate_Posting_Key_Sign(username string, arr []string) []string {
-	var truearr []string
-
-	acc, err := api.Rpc.Database.GetAccounts(arr)
-	if err != nil {
-		log.Println(errors.Wrapf(err, "Error Verify Delegate Vote Sign: "))
-		return nil
-	} else {
-		for _, val := range acc {
-			if val.Name == username {
-				truearr = append(truearr, val.Name)
-			} else {
-				for _, v := range val.Posting.AccountAuths {
-					l := strings.Split(strings.Replace(strings.Replace(fmt.Sprintf("%v", v), "[", "", -1), "]", "", -1), " ")[0]
-					if l == username {
-						truearr = append(truearr, val.Name)
-					}
-				}
-			}
-		}
-	}
-	return truearr
-}*/
-
 func (api *Client) Verify_Delegate_Posting_Key_Sign(from, to string) bool {
 	acc, err := api.Rpc.Database.GetAccounts([]string{from})
 	if err != nil {
@@ -149,9 +125,11 @@ func (api *Client) Verify_Delegate_Posting_Key_Sign(from, to string) bool {
 		return false
 	} else if len(acc) == 1 {
 		for _, v := range acc[0].Posting.AccountAuths {
-			l := strings.Split(strings.Replace(strings.Replace(fmt.Sprintf("%v", v), "[", "", -1), "]", "", -1), " ")[0]
-			if l == to {
-				return true
+			tu := strings.Split(strings.Replace(strings.Replace(fmt.Sprintf("%v", v), "[", "", -1), "]", "", -1), " ")
+			if tu[0] == to {
+				if tu[1] == fmt.Sprintf("%v", acc[0].Posting.WeightThreshold) {
+					return true
+				}
 			}
 		}
 		return false

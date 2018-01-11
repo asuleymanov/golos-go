@@ -118,7 +118,7 @@ func (api *Client) Verify_Post(author, permlink string) bool {
 	}
 }
 
-func (api *Client) Verify_Delegate_Posting_Key_Sign(username string, arr []string) []string {
+/*func (api *Client) Verify_Delegate_Posting_Key_Sign(username string, arr []string) []string {
 	var truearr []string
 
 	acc, err := api.Rpc.Database.GetAccounts(arr)
@@ -140,6 +140,24 @@ func (api *Client) Verify_Delegate_Posting_Key_Sign(username string, arr []strin
 		}
 	}
 	return truearr
+}*/
+
+func (api *Client) Verify_Delegate_Posting_Key_Sign(from, to string) bool {
+	acc, err := api.Rpc.Database.GetAccounts([]string{from})
+	if err != nil {
+		log.Println(errors.Wrapf(err, "Error Verify Delegate Vote Sign: "))
+		return false
+	} else if len(acc) == 1 {
+		for _, v := range acc[0].Posting.AccountAuths {
+			l := strings.Split(strings.Replace(strings.Replace(fmt.Sprintf("%v", v), "[", "", -1), "]", "", -1), " ")[0]
+			if l == to {
+				return true
+			}
+		}
+		return false
+	} else {
+		return false
+	}
 }
 
 func (api *Client) Verify_First_Post(username string) bool {

@@ -139,6 +139,68 @@ func (api *Client) Comment(user_name, author_name, ppermlink, body string, v *PC
 	}
 }
 
+func (api *Client) Comment_Link(user_name, author_name, ppermlink, body string, v *PC_Vote, o *PC_Options) (string, error) {
+	var trx []types.Operation
+
+	times, _ := strconv.Unquote(time.Now().Add(30 * time.Second).UTC().Format(fdt))
+	permlink := "re-" + author_name + "-" + ppermlink + "-" + times
+	permlink = strings.Replace(permlink, ".", "-", -1)
+
+	tx := &types.CommentOperation{
+		ParentAuthor:   author_name,
+		ParentPermlink: ppermlink,
+		Author:         user_name,
+		Permlink:       permlink,
+		Title:          "",
+		Body:           body,
+		JsonMetadata:   "{\"app\":\"golos-go\"}",
+	}
+	trx = append(trx, tx)
+
+	if o != nil {
+		symbol := "GBG"
+		MAP := "1000000.000 " + symbol
+		PSD := o.Percent
+		if o.Percent == 0 {
+			MAP = "0.000 " + symbol
+			PSD = 10000
+		} else if o.Percent == 50 {
+			PSD = 10000
+		} else {
+			PSD = 0
+		}
+
+		txo := &types.CommentOptionsOperation{
+			Author:               user_name,
+			Permlink:             permlink,
+			MaxAcceptedPayout:    MAP,
+			PercentSteemDollars:  PSD,
+			AllowVotes:           true,
+			AllowCurationRewards: true,
+			Extensions:           []interface{}{},
+		}
+		trx = append(trx, txo)
+	}
+
+	if v != nil && v.Weight != 0 {
+		txv := &types.VoteOperation{
+			Voter:    user_name,
+			Author:   user_name,
+			Permlink: permlink,
+			Weight:   types.Int16(v.Weight),
+		}
+		trx = append(trx, txv)
+	}
+
+	resp, err := api.Send_Trx(user_name, trx)
+	if err != nil {
+		return "", errors.Wrapf(err, "Error Comment : ")
+	} else {
+		log.Println("[Comment] Block -> ", resp.BlockNum, " User -> ", user_name)
+		return permlink, nil
+	}
+}
+
 func (api *Client) DeleteComment(author_name, permlink string) error {
 	if api.Verify_Votes(author_name, permlink) {
 		return errors.New("You can not delete already there are voted")

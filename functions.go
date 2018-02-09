@@ -11,10 +11,10 @@ import (
 	"github.com/pkg/errors"
 
 	// RPC
-	"github.com/asuleymanov/golos/encoding/wif"
-	"github.com/asuleymanov/golos/transactions"
-	"github.com/asuleymanov/golos/translit"
-	"github.com/asuleymanov/golos/types"
+	"github.com/asuleymanov/golos-go/encoding/wif"
+	"github.com/asuleymanov/golos-go/transactions"
+	"github.com/asuleymanov/golos-go/translit"
+	"github.com/asuleymanov/golos-go/types"
 )
 
 const fdt = `"20060102t150405"`

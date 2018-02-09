@@ -1,6 +1,6 @@
-# asuleymanov/golos
+# asuleymanov/golos-go
 
-[![GoDoc](https://godoc.org/github.com/asuleymanov/golos?status.svg)](https://godoc.org/github.com/asuleymanov/golos)
+[![GoDoc](https://godoc.org/github.com/asuleymanov/golos-go?status.svg)](https://godoc.org/github.com/asuleymanov/golos-go)
 
 Golang RPC client library for [Golos](https://golos.io).
 
@@ -11,7 +11,7 @@ Golang RPC client library for [Golos](https://golos.io).
 ## Usage
 
 ```go
-import "github.com/asuleymanov/golos/client"
+import "github.com/asuleymanov/golos-go/client"
 ```
 
 

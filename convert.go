@@ -5,6 +5,33 @@ import (
 	"strings"
 )
 
+func (api *Client) SbdMedianPrice() (float64, error) {
+	smpreq, errsmp := api.Database.GetFeedHistory()
+	if errsmp != nil {
+		return 0, errsmp
+	}
+
+	base, errbase := strconv.ParseFloat(strings.Split(smpreq.CurrentMedianHistory.Base, " ")[0], 64)
+	if errbase != nil {
+		return 0, errbase
+	}
+
+	quote, errquote := strconv.ParseFloat(strings.Split(smpreq.CurrentMedianHistory.Quote, " ")[0], 64)
+	if errquote != nil {
+		return 0, errquote
+	}
+
+	smptmp := base / quote
+	str := strconv.FormatFloat(smptmp, 'f', 3, 64)
+
+	smp, errsmp := strconv.ParseFloat(str, 64)
+	if errsmp != nil {
+		return 0, errsmp
+	}
+
+	return smp, nil
+}
+
 func (api *Client) SteemPerMvest() (float64, error) {
 	dgp, errdgp := api.Database.GetDynamicGlobalProperties()
 	if errdgp != nil {

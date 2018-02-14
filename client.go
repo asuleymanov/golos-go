@@ -99,7 +99,7 @@ func initChainId(str string) (*transactions.Chain, error) {
 	case "test":
 		ChainId = *transactions.TestChain
 	default:
-		return nil, errors.New("test")
+		return nil, errors.New("Chain not found")
 	}
 	return &ChainId, nil
 }

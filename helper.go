@@ -1,5 +1,9 @@
 package client
 
+import (
+	"time"
+)
+
 func (api *Client) FollowersList(username string) ([]string, error) {
 	var followers []string
 	fc, _ := api.Follow.GetFollowCount(username)
@@ -38,4 +42,27 @@ func (api *Client) FollowingList(username string) ([]string, error) {
 	}
 
 	return following, nil
+}
+
+func (api *Client) GetVotingPower(username string) (int, error) {
+	conf, errc := api.Database.GetConfig()
+	if errc != nil {
+		return 0, errc
+	}
+
+	acc, erra := api.Database.GetAccounts([]string{username})
+	if erra != nil {
+		return 0, erra
+	}
+
+	vp := acc[0].VotingPower
+	lvt := acc[0].LastVoteTime
+	dtn := time.Now()
+
+	regen := conf.Steemit100Percent * int(dtn.Sub(*lvt.Time).Seconds()) / conf.SteemitVoteRegenerationSeconds
+	power := (vp + regen) / 100
+	if power > 100 {
+		power = 100
+	}
+	return power, nil
 }

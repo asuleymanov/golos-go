@@ -60,9 +60,9 @@ func (api *Client) GetVotingPower(username string) (int, error) {
 	dtn := time.Now()
 
 	regen := conf.Steemit100Percent * int(dtn.Sub(*lvt.Time).Seconds()) / conf.SteemitVoteRegenerationSeconds
-	power := (vp + regen) / 100
-	if power > 100 {
-		power = 100
+	power := (vp + regen) // 100
+	if power > 10000 {
+		power = 10000
 	}
 	return power, nil
 }

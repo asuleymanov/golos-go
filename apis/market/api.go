@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 
 	// RPC
-	"github.com/asuleymanov/golos-go/transports"
 	"github.com/asuleymanov/golos-go/internal/rpc"
+	"github.com/asuleymanov/golos-go/transports"
 
 	// Vendor
 	"github.com/pkg/errors"
@@ -31,7 +31,7 @@ func NewAPI(caller transports.Caller) (*API, error) {
 
 func (api *API) Raw(method string, params interface{}) (*json.RawMessage, error) {
 	var resp json.RawMessage
-	if err := api.caller.Call("call", []interface{}{api.id, method, params}, &resp); err != nil {
+	if err := api.caller.Call("call", []interface{}{"market_history_api", method, params}, &resp); err != nil {
 		return nil, errors.Wrapf(err, "golos: %v: failed to call %v\n", APIID, method)
 	}
 	return &resp, nil

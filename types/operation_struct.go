@@ -410,7 +410,7 @@ func (op *ProveAuthorityOperation) Data() interface{} {
 type RequestAccountRecoveryOperation struct {
 	RecoveryAccount   string        `json:"recovery_account"`
 	AccountToRecover  string        `json:"account_to_recover"`
-	NewOwnerAuthority []interface{} `json:"new_owner_authority"`
+	NewOwnerAuthority *Authority    `json:"new_owner_authority"`
 	Extensions        []interface{} `json:"extensions"`
 }
 
@@ -425,7 +425,7 @@ func (op *RequestAccountRecoveryOperation) Data() interface{} {
 // struct RecoverAccountOperation{}
 type RecoverAccountOperation struct {
 	AccountToRecover     string        `json:"account_to_recover"`
-	NewOwnerAuthority    string        `json:"new_owner_authority"`
+	NewOwnerAuthority    *Authority    `json:"new_owner_authority"`
 	RecentOwnerAuthority string        `json:"recent_owner_authority"`
 	Extensions           []interface{} `json:"extensions"`
 }
@@ -625,9 +625,9 @@ func (op *DeclineVotingRightsOperation) Data() interface{} {
 
 // struct ResetAccountOperation{}
 type ResetAccountOperation struct {
-	ResetAccount      string `json:"reset_account"`
-	AccountToReset    string `json:"Account_to_reset"`
-	NewOwnerAuthority string `json:"new_owner_authority"`
+	ResetAccount      string     `json:"reset_account"`
+	AccountToReset    string     `json:"Account_to_reset"`
+	NewOwnerAuthority *Authority `json:"new_owner_authority"`
 }
 
 func (op *ResetAccountOperation) Type() OpType {

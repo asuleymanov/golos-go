@@ -48,22 +48,19 @@ func NewClient(url []string, chain string) (*Client, error) {
 	client.Database = database.NewAPI(client.cc)
 
 	followAPI, err := follow.NewAPI(client.cc)
-	if err != nil {
-		return nil, err
+	if err == nil {
+		client.Follow = followAPI
 	}
-	client.Follow = followAPI
 
 	marketAPI, err := market.NewAPI(client.cc)
-	if err != nil {
-		return nil, err
+	if err == nil {
+		client.Market = marketAPI
 	}
-	client.Market = marketAPI
 
 	networkBroadcastAPI, err := networkbroadcast.NewAPI(client.cc)
-	if err != nil {
-		return nil, err
+	if err == nil {
+		client.NetworkBroadcast = networkBroadcastAPI
 	}
-	client.NetworkBroadcast = networkBroadcastAPI
 
 	chainid, err := initChainId(chain)
 	if err != nil {

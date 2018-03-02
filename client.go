@@ -38,6 +38,7 @@ type Client struct {
 }
 
 // NewClient creates a new RPC client that use the given CallCloser internally.
+// Initialize only server present API. Absent API initialized as nil value.
 func NewClient(url []string, chain string) (*Client, error) {
 	call, err := initclient(url)
 	if err != nil {
@@ -47,32 +48,24 @@ func NewClient(url []string, chain string) (*Client, error) {
 
 	client.Database = database.NewAPI(client.cc)
 
-	followAPI, err := follow.NewAPI(client.cc)
+	client.Follow, err = follow.NewAPI(client.cc)
 	if err != nil {
 		client.Follow = nil
-	} else {
-		client.Follow = followAPI
 	}
 
-	marketAPI, err := market.NewAPI(client.cc)
+	client.Market, err = market.NewAPI(client.cc)
 	if err != nil {
 		client.Market = nil
-	} else {
-		client.Market = marketAPI
 	}
 
-	networkBroadcastAPI, err := networkbroadcast.NewAPI(client.cc)
+	client.NetworkBroadcast, err = networkbroadcast.NewAPI(client.cc)
 	if err != nil {
 		client.NetworkBroadcast = nil
-	} else {
-		client.NetworkBroadcast = networkBroadcastAPI
 	}
 
-	chainid, err := initChainId(chain)
+	client.Chain, err = initChainId(chain)
 	if err != nil {
 		client.Chain = transactions.GolosChain
-	} else {
-		client.Chain = chainid
 	}
 
 	return client, nil

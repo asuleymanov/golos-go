@@ -99,7 +99,7 @@ type Config struct {
 	SteemitMinFeeds                       *types.Int `json:"STEEMIT_MIN_FEEDS"`
 	SteemitMiningReward                   string     `json:"STEEMIT_MINING_REWARD"`
 	SteemitMiningTime                     string     `json:"STEEMIT_MINING_TIME"`
-	steemitMinLiquidityReward             string     `json:"STEEMIT_MIN_LIQUIDITY_REWARD"`
+	SteemitMinLiquidityReward             string     `json:"STEEMIT_MIN_LIQUIDITY_REWARD"`
 	SteemitMinLiquidityRewardPeriodSec    *types.Int `json:"STEEMIT_MIN_LIQUIDITY_REWARD_PERIOD_SEC"`
 	SteemitMinPayoutSbd                   string     `json:"STEEMIT_MIN_PAYOUT_SBD"`
 	SteemitMinPowReward                   string     `json:"STEEMIT_MIN_POW_REWARD"`

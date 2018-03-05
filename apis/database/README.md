@@ -5,7 +5,7 @@ This package adds support for `database_api`.
 ## State
 
 The following subsections document the API completion. The method names
-are taken from `database_api.hpp` in `steemit/steem`.
+are taken from `database_api.hpp` in `golos`.
 
 | **ID** | **Command Name** | **Raw version** | **Full version** |
 |:-- |:--------------------------------------:|-------:|-------:|

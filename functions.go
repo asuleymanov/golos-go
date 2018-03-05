@@ -497,7 +497,7 @@ func (api *Client) MultiTransfer(username string, arrtrans []ArrTransfer) error 
 }
 
 func (api *Client) Login(username, key string) bool {
-	json_string := "[\"login\",{\"account\":\"" + username + "\",\"app\":\"golos(go-steem)\"}]"
+	json_string := "[\"login\",{\"account\":\"" + username + "\",\"app\":\"golos-go\"}]"
 
 	strx := &types.CustomJSONOperation{
 		RequiredAuths:        []string{},

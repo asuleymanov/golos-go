@@ -73,6 +73,8 @@ func init() {
 
 }
 
+//Returns the key from the Users list.
+//In accordance with the used opera.
 func (api *Client) SigningKeys(username string, trx types.Operation) [][]byte {
 	var keys [][]byte
 	if _, ok := Key_List[username]; ok {

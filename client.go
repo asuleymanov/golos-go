@@ -14,9 +14,8 @@ import (
 
 var Key_List = make(map[string]Keys)
 
-// Client can be used to access Steem remote APIs.
-//
-// There is a public field for every Steem API available,
+// Client can be used to access Golos remote APIs.
+// There is a public field for every Golos API available,
 // e.g. Client.Database corresponds to database_api.
 type Client struct {
 	cc transports.CallCloser

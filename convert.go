@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+//Returns the average cost of GBG when converting GOLOS.
 func (api *Client) SbdMedianPrice() (float64, error) {
 	smpreq, errsmp := api.Database.GetFeedHistory()
 	if errsmp != nil {
@@ -32,6 +33,7 @@ func (api *Client) SbdMedianPrice() (float64, error) {
 	return smp, nil
 }
 
+//Returns the ratio of TotalVersingFundSteem to TotalVestingShares.
 func (api *Client) SteemPerMvest() (float64, error) {
 	dgp, errdgp := api.Database.GetDynamicGlobalProperties()
 	if errdgp != nil {

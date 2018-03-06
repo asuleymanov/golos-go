@@ -4,6 +4,7 @@ import (
 	"time"
 )
 
+//Returns the subscriber's list of subscribers
 func (api *Client) FollowersList(username string) ([]string, error) {
 	var followers []string
 	fc, _ := api.Follow.GetFollowCount(username)
@@ -24,6 +25,7 @@ func (api *Client) FollowersList(username string) ([]string, error) {
 	return followers, nil
 }
 
+//Returns the list of user subscriptions
 func (api *Client) FollowingList(username string) ([]string, error) {
 	var following []string
 	fc, _ := api.Follow.GetFollowCount(username)
@@ -44,6 +46,7 @@ func (api *Client) FollowingList(username string) ([]string, error) {
 	return following, nil
 }
 
+//Returns the POWER of the user based on the time of the last vote.
 func (api *Client) GetVotingPower(username string) (int, error) {
 	conf, errc := api.Database.GetConfig()
 	if errc != nil {

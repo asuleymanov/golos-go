@@ -5,6 +5,7 @@ import (
 	"github.com/asuleymanov/golos-go/types"
 )
 
+//Generates and sends an array of transactions to GOLOS.
 func (api *Client) SendTrx(username string, strx []types.Operation) (*BResp, error) {
 	// Получение необходимых параметров
 	props, err := api.Database.GetDynamicGlobalProperties()

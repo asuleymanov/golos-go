@@ -1,6 +1,6 @@
 package types
 
-// OpType represents a Steem operation type, i.e. vote, comment, pow and so on.
+// OpType represents a Golos operation type, i.e. vote, comment, pow and so on.
 type OpType string
 
 // Code returns the operation code associated with the given operation type.

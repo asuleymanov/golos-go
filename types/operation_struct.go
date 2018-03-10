@@ -126,7 +126,7 @@ type LimitOrderCreateOperation struct {
 	AmountToSell string `json:"amount_to_sell"`
 	MinToReceive string `json:"min_to_receive"`
 	FillOrKill   bool   `json:"fill_or_kill"`
-	Expiration   *Time  `json:"expiration"`
+	Expiration   Time   `json:"expiration"`
 }
 
 func (op *LimitOrderCreateOperation) Type() OpType {
@@ -366,7 +366,7 @@ type LimitOrderCreate2Operation struct {
 	AmountToSell string   `json:"amount_to_sell"`
 	ExchangeRate ExchRate `json:"exchange_rate"`
 	FillOrKill   bool     `json:"fill_or_kill"`
-	Expiration   uint32   `json:"expiration"`
+	Expiration   Time     `json:"expiration"`
 }
 
 func (op *LimitOrderCreate2Operation) Type() OpType {

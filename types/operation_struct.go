@@ -285,7 +285,7 @@ func (op *POWOperation) Data() interface{} {
 type CustomOperation struct {
 	RequiredAuths []string `json:"required_auths"`
 	Id            uint16   `json:"id"`
-	Datas         []byte   `json:"data"`
+	Datas         string   `json:"data"`
 }
 
 func (op *CustomOperation) Type() OpType {

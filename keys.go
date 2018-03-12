@@ -1,0 +1,68 @@
+package client
+
+import (
+	"crypto/sha256"
+	"math/rand"
+	"time"
+
+	"github.com/btcsuite/btcd/btcec"
+	"github.com/btcsuite/btcutil/base58"
+	"golang.org/x/crypto/ripemd160"
+)
+
+var src = rand.NewSource(time.Now().UnixNano())
+
+const (
+	letterBytes   = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	letterIdxBits = 6                    // 6 bits to represent a letter index
+	letterIdxMask = 1<<letterIdxBits - 1 // All 1-bits, as many as letterIdxBits
+	letterIdxMax  = 63 / letterIdxBits   // # of letter indices fitting in 63 bits
+)
+
+// The function allows to generate a 52-character password of the evil system.
+func GenPassword() string {
+	b := make([]byte, 51)
+	for i, cache, remain := 51-1, src.Int63(), letterIdxMax; i >= 0; {
+		if remain == 0 {
+			cache, remain = src.Int63(), letterIdxMax
+		}
+		if idx := int(cache & letterIdxMask); idx < len(letterBytes) {
+			b[i] = letterBytes[idx]
+			i--
+		}
+		cache >>= letterIdxBits
+		remain--
+	}
+	return "P" + string(b)
+}
+
+//The function generates a private key based on the specified parameters.
+func GetPrivateKey(user, role, password string) string {
+	hashSha256 := sha256.Sum256([]byte(user + role + password))
+	pk := append([]byte{0x80}, hashSha256[:]...)
+	chs := sha256.Sum256(pk)
+	chs = sha256.Sum256(chs[:])
+	b58 := append(pk, chs[:4]...)
+	return base58.Encode(b58)
+}
+
+//The function generates a public key based on the prefix and the private key.
+func GetPublicKey(prefix, privatekey string) string {
+	b58 := base58.Decode(privatekey)
+	tpk := b58[:len(b58)-4]
+	chs := b58[len(b58)-4:]
+	nchs := sha256.Sum256(tpk)
+	nchs = sha256.Sum256(nchs[:])
+	if string(chs) != string(nchs[:4]) {
+		return "Invalid WIF key (checksum miss-match)"
+	} else {
+		privKeyBytes := [32]byte{}
+		copy(privKeyBytes[:], tpk[1:])
+		priv, _ := btcec.PrivKeyFromBytes(btcec.S256(), privKeyBytes[:])
+		ch_hash := ripemd160.New()
+		ch_hash.Write(priv.PubKey().SerializeCompressed())
+		nc := ch_hash.Sum(nil)
+		pk := append(priv.PubKey().SerializeCompressed(), nc[:4]...)
+		return prefix + base58.Encode(pk)
+	}
+}

@@ -91,14 +91,14 @@ func (encoder *Encoder) Encode(v interface{}) error {
 		return encoder.EncodeNumber(v)
 
 	case string:
-		return encoder.encodeString(v)
 
+		return encoder.EncodeString(v)
 	default:
 		return errors.Errorf("encoder: unsupported type encountered")
 	}
 }
 
-func (encoder *Encoder) encodeString(v string) error {
+func (encoder *Encoder) EncodeString(v string) error {
 	if err := encoder.EncodeUVarint(uint64(len(v))); err != nil {
 		return errors.Wrapf(err, "encoder: failed to write string: %v", v)
 	}

@@ -177,7 +177,7 @@ func (api *Client) VerifyUser(username string) bool {
 }
 
 //We check the possibility of execution of the signed transaction for its execution in GOLOS.
-//The check is performed using the standard GetVerifyAuthoruty API.
+//The check is performed using the standard GetVerifyAuthority API.
 func (api *Client) VerifyTrx(username string, strx types.Operation) (bool, error) {
 	// Получение необходимых параметров
 	props, err := api.Database.GetDynamicGlobalProperties()
@@ -207,7 +207,7 @@ func (api *Client) VerifyTrx(username string, strx types.Operation) (bool, error
 	}
 
 	// Отправка транзакции
-	resp, err := api.Database.GetVerifyAuthoruty(tx.Transaction)
+	resp, err := api.Database.GetVerifyAuthority(tx.Transaction)
 
 	if err != nil {
 		return false, err

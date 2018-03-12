@@ -4,6 +4,32 @@ import (
 	"github.com/asuleymanov/golos-go/encoding/transaction"
 )
 
+// Add-on encode
+func (auth *Authority) MarshalTransaction(encoder *transaction.Encoder) error {
+	enc := transaction.NewRollingEncoder(encoder)
+	enc.EncodeNumber(uint32(auth.WeightThreshold))
+	// encode AccountAuths as map[string]uint16
+	enc.EncodeUVarint(uint64(len(auth.AccountAuths)))
+	for k, v := range auth.AccountAuths {
+		enc.EncodeString(k)
+		enc.EncodeNumber(uint16(v))
+	}
+	// encode KeyAuths as map[PubKey]uint16
+	enc.EncodeUVarint(uint64(len(auth.KeyAuths)))
+	for k, v := range auth.KeyAuths {
+		enc.EncodePubKey(k)
+		enc.EncodeNumber(uint16(v))
+	}
+	return enc.Err()
+}
+
+func (exch *ExchRate) MarshalTransaction(encoder *transaction.Encoder) error {
+	enc := transaction.NewRollingEncoder(encoder)
+	enc.EncodeMoney(exch.Base)
+	enc.EncodeMoney(exch.Quote)
+	return enc.Err()
+}
+
 // encode VoteOperation{}
 func (op *VoteOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
@@ -90,8 +116,7 @@ func (op *FeedPublishOperation) MarshalTransaction(encoder *transaction.Encoder)
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeFeedPublish.Code()))
 	enc.Encode(op.Publisher)
-	enc.EncodeMoney(op.ExchangeRate.Base)
-	enc.EncodeMoney(op.ExchangeRate.Quote)
+	enc.Encode(op.ExchangeRate)
 	return enc.Err()
 }
 
@@ -108,24 +133,37 @@ func (op *ConvertOperation) MarshalTransaction(encoder *transaction.Encoder) err
 // encode AccountCreateOperation{}
 func (op *AccountCreateOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
-
 	enc.EncodeUVarint(uint64(TypeAccountCreate.Code()))
-
 	enc.EncodeMoney(op.Fee)
 	enc.EncodeString(op.Creator)
 	enc.EncodeString(op.NewAccountName)
-
 	enc.Encode(op.Owner)
 	enc.Encode(op.Active)
 	enc.Encode(op.Posting)
-
 	enc.EncodePubKey(op.MemoKey)
 	enc.EncodeString(op.JsonMetadata)
-
 	return enc.Err()
 }
 
 // encode AccountUpdateOperation{}
+func (op *AccountUpdateOperation) MarshalTransaction(encoder *transaction.Encoder) error {
+	enc := transaction.NewRollingEncoder(encoder)
+	enc.EncodeUVarint(uint64(TypeAccountUpdate.Code()))
+	enc.EncodeString(op.Account)
+	if op.Owner != nil {
+		enc.Encode(op.Owner)
+	}
+	if op.Active != nil {
+		enc.Encode(op.Active)
+	}
+	if op.Posting != nil {
+		enc.Encode(op.Posting)
+	}
+	enc.EncodePubKey(op.MemoKey)
+	enc.EncodeString(op.JsonMetadata)
+	return enc.Err()
+}
+
 // encode WitnessUpdateOperation{}
 func (op *WitnessUpdateOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
@@ -256,27 +294,6 @@ func (op *DeclineVotingRightsOperation) MarshalTransaction(encoder *transaction.
 	enc.EncodeUVarint(uint64(TypeDeclineVotingRights.Code()))
 	enc.Encode(op.Account)
 	enc.EncodeBool(op.Decline)
-	return enc.Err()
-}
-
-func (auth *Authority) MarshalTransaction(encoder *transaction.Encoder) error {
-	enc := transaction.NewRollingEncoder(encoder)
-	enc.EncodeNumber(uint32(auth.WeightThreshold))
-
-	// encode AccountAuths as map[string]uint16
-	enc.EncodeUVarint(uint64(len(auth.AccountAuths)))
-	for k, v := range auth.AccountAuths {
-		enc.EncodeString(k)
-		enc.EncodeNumber(uint16(v))
-	}
-
-	// encode KeyAuths as map[PubKey]uint16
-	enc.EncodeUVarint(uint64(len(auth.KeyAuths)))
-	for k, v := range auth.KeyAuths {
-		enc.EncodePubKey(k)
-		enc.EncodeNumber(uint16(v))
-	}
-
 	return enc.Err()
 }
 

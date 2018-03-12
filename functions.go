@@ -755,7 +755,7 @@ func (api *Client) FeedPublish(publisher, base, quote string) error {
 
 	tx := &types.FeedPublishOperation{
 		Publisher: publisher,
-		ExchangeRate: types.ExchRate{
+		ExchangeRate: &types.ExchRate{
 			Base:  base,
 			Quote: quote,
 		},

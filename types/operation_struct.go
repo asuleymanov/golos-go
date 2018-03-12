@@ -126,7 +126,7 @@ type LimitOrderCreateOperation struct {
 	AmountToSell string `json:"amount_to_sell"`
 	MinToReceive string `json:"min_to_receive"`
 	FillOrKill   bool   `json:"fill_or_kill"`
-	Expiration   *Time   `json:"expiration"`
+	Expiration   *Time  `json:"expiration"`
 }
 
 func (op *LimitOrderCreateOperation) Type() OpType {
@@ -153,8 +153,8 @@ func (op *LimitOrderCancelOperation) Data() interface{} {
 
 // struct FeedPublishOperation{}
 type FeedPublishOperation struct {
-	Publisher    string   `json:"publisher"`
-	ExchangeRate ExchRate `json:"exchange_rate"`
+	Publisher    string    `json:"publisher"`
+	ExchangeRate *ExchRate `json:"exchange_rate"`
 }
 
 func (op *FeedPublishOperation) Type() OpType {
@@ -361,12 +361,12 @@ func (op *SetWithdrawVestingRouteOperation) Data() interface{} {
 
 // struct LimitOrderCreate2Operation{}
 type LimitOrderCreate2Operation struct {
-	Qwner        string   `json:"owner"`
-	Orderid      uint32   `json:"orderid"`
-	AmountToSell string   `json:"amount_to_sell"`
-	ExchangeRate ExchRate `json:"exchange_rate"`
-	FillOrKill   bool     `json:"fill_or_kill"`
-	Expiration   Time     `json:"expiration"`
+	Qwner        string    `json:"owner"`
+	Orderid      uint32    `json:"orderid"`
+	AmountToSell string    `json:"amount_to_sell"`
+	ExchangeRate *ExchRate `json:"exchange_rate"`
+	FillOrKill   bool      `json:"fill_or_kill"`
+	Expiration   Time      `json:"expiration"`
 }
 
 func (op *LimitOrderCreate2Operation) Type() OpType {
@@ -463,8 +463,8 @@ type EscrowTransferOperation struct {
 	Agent                string `json:"agent"`
 	Fee                  string `json:"fee"`
 	JsonMeta             string `json:"json_meta"`
-	RatificationDeadline Time 	`json:"ratification_deadline"`
-	EscrowExpiration     Time 	`json:"escrow_expiration"`
+	RatificationDeadline Time   `json:"ratification_deadline"`
+	EscrowExpiration     Time   `json:"escrow_expiration"`
 }
 
 func (op *EscrowTransferOperation) Type() OpType {

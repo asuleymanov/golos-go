@@ -309,6 +309,7 @@ func (api *Client) Post(authorname, title, body, permlink, ptag, post_image stri
 	}
 }
 
+//Subscribe to the user
 func (api *Client) Follows(follower, following string) error {
 	json_string := "[\"follow\",{\"follower\":\"" + follower + "\",\"following\":\"" + following + "\",\"what\":[\"blog\"]}]"
 	var trx []types.Operation
@@ -330,6 +331,7 @@ func (api *Client) Follows(follower, following string) error {
 	}
 }
 
+//Unsubscribe from user
 func (api *Client) Unfollow(follower, following string) error {
 	json_string := "[\"follow\",{\"follower\":\"" + follower + "\",\"following\":\"" + following + "\",\"what\":[]}]"
 	var trx []types.Operation
@@ -351,6 +353,7 @@ func (api *Client) Unfollow(follower, following string) error {
 	}
 }
 
+//Ignore user
 func (api *Client) Ignore(follower, following string) error {
 	json_string := "[\"follow\",{\"follower\":\"" + follower + "\",\"following\":\"" + following + "\",\"what\":[\"ignore\"]}]"
 	var trx []types.Operation
@@ -372,6 +375,7 @@ func (api *Client) Ignore(follower, following string) error {
 	}
 }
 
+//Undo ignore the user
 func (api *Client) Notice(follower, following string) error {
 	json_string := "[\"follow\",{\"follower\":\"" + follower + "\",\"following\":\"" + following + "\",\"what\":[]}]"
 	var trx []types.Operation
@@ -393,6 +397,7 @@ func (api *Client) Notice(follower, following string) error {
 	}
 }
 
+//Repost records
 func (api *Client) Reblog(username, authorname, permlink string) error {
 	if api.VerifyReblogs(authorname, permlink, username) {
 		return errors.New("The user already did repost")
@@ -417,6 +422,7 @@ func (api *Client) Reblog(username, authorname, permlink string) error {
 	}
 }
 
+//Operation of voting for the delegate.
 func (api *Client) AccountWitnessVote(username, witness_name string, approv bool) error {
 	var trx []types.Operation
 
@@ -436,6 +442,7 @@ func (api *Client) AccountWitnessVote(username, witness_name string, approv bool
 	}
 }
 
+//Transfer of the right to vote for delegates to another user.
 func (api *Client) AccountWitnessProxy(username, proxy string) error {
 	var trx []types.Operation
 
@@ -454,6 +461,7 @@ func (api *Client) AccountWitnessProxy(username, proxy string) error {
 	}
 }
 
+//Transfer of funds to any user.
 func (api *Client) Transfer(from_name, to_name, memo, ammount string) error {
 	var trx []types.Operation
 
@@ -474,6 +482,7 @@ func (api *Client) Transfer(from_name, to_name, memo, ammount string) error {
 	}
 }
 
+//Multiple funds transfer in one transaction.
 func (api *Client) MultiTransfer(username string, arrtrans []ArrTransfer) error {
 	var trx []types.Operation
 
@@ -496,6 +505,7 @@ func (api *Client) MultiTransfer(username string, arrtrans []ArrTransfer) error 
 	}
 }
 
+//Checking the user's key for the possibility of operations in GOLOS.
 func (api *Client) Login(username, key string) bool {
 	json_string := "[\"login\",{\"account\":\"" + username + "\",\"app\":\"golos-go\"}]"
 

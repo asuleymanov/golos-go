@@ -35,7 +35,7 @@ func (api *API) GetTicker() (*Ticker, error) {
 	}
 	var resp *Ticker
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrap(err, "golos: market_history_api: failed to unmarshal get_ticker response")
+		return nil, errors.Wrap(err, "golos: market_history: failed to unmarshal get_ticker response")
 	}
 	return resp, nil
 }
@@ -48,7 +48,7 @@ func (api *API) GetVolume() (*Volume, error) {
 	}
 	var resp *Volume
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrap(err, "golos: market_history_api: failed to unmarshal get_volume response")
+		return nil, errors.Wrap(err, "golos: market_history: failed to unmarshal get_volume response")
 	}
 	return resp, nil
 }
@@ -56,7 +56,7 @@ func (api *API) GetVolume() (*Volume, error) {
 //get_order_book
 func (api *API) GetOrderBook(limit uint32) (*OrderBook, error) {
 	if limit > 1000 {
-		return nil, errors.New("golos: market_history_api: get_order_book -> limit must not exceed 1000")
+		return nil, errors.New("golos: market_history: get_order_book -> limit must not exceed 1000")
 	}
 	raw, err := api.Raw("get_order_book", []interface{}{limit})
 	if err != nil {
@@ -64,7 +64,7 @@ func (api *API) GetOrderBook(limit uint32) (*OrderBook, error) {
 	}
 	var resp *OrderBook
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrap(err, "golos: market_history_api: failed to unmarshal get_order_book response")
+		return nil, errors.Wrap(err, "golos: market_history: failed to unmarshal get_order_book response")
 	}
 	return resp, nil
 }
@@ -72,7 +72,7 @@ func (api *API) GetOrderBook(limit uint32) (*OrderBook, error) {
 //get_trade_history
 func (api *API) GetTradeHistory(start, end string, limit uint32) ([]*Trades, error) {
 	if limit > 1000 {
-		return nil, errors.New("golos: market_history_api: get_order_book -> limit must not exceed 1000")
+		return nil, errors.New("golos: market_history: get_order_book -> limit must not exceed 1000")
 	}
 	raw, err := api.Raw("get_trade_history", []interface{}{start, end, limit})
 	if err != nil {
@@ -80,7 +80,7 @@ func (api *API) GetTradeHistory(start, end string, limit uint32) ([]*Trades, err
 	}
 	var resp []*Trades
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrap(err, "golos: market_history_api: failed to unmarshal get_trade_history response")
+		return nil, errors.Wrap(err, "golos: market_history: failed to unmarshal get_trade_history response")
 	}
 	return resp, nil
 }
@@ -88,7 +88,7 @@ func (api *API) GetTradeHistory(start, end string, limit uint32) ([]*Trades, err
 //get_recent_trades
 func (api *API) GetRecentTrades(limit uint32) ([]*Trades, error) {
 	if limit > 1000 {
-		return nil, errors.New("golos: market_history_api: get_order_book -> limit must not exceed 1000")
+		return nil, errors.New("golos: market_history: get_order_book -> limit must not exceed 1000")
 	}
 	raw, err := api.Raw("get_recent_trades", []interface{}{limit})
 	if err != nil {
@@ -96,7 +96,7 @@ func (api *API) GetRecentTrades(limit uint32) ([]*Trades, error) {
 	}
 	var resp []*Trades
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrap(err, "golos: market_history_api: failed to unmarshal get_recent_trades response")
+		return nil, errors.Wrap(err, "golos: market_history: failed to unmarshal get_recent_trades response")
 	}
 	return resp, nil
 }
@@ -109,7 +109,7 @@ func (api *API) GetMarketHistory(b_sec uint32, start, end string) ([]*MarketHist
 	}
 	var resp []*MarketHistory
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrap(err, "golos: market_history_api: failed to unmarshal get_market_history response")
+		return nil, errors.Wrap(err, "golos: market_history: failed to unmarshal get_market_history response")
 	}
 	return resp, nil
 }
@@ -122,7 +122,7 @@ func (api *API) GetMarketHistoryBuckets() ([]uint32, error) {
 	}
 	var resp []uint32
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrap(err, "golos: market_history_api: failed to unmarshal get_market_history_buckets response")
+		return nil, errors.Wrap(err, "golos: market_history: failed to unmarshal get_market_history_buckets response")
 	}
 	return resp, nil
 }

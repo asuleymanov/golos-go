@@ -621,7 +621,7 @@ func (api *API) GetPotentialSignatures(trx *types.Transaction) ([]string, error)
 }
 
 //verify_authority
-func (api *API) GetVerifyAuthoruty(trx *types.Transaction) (bool, error) {
+func (api *API) GetVerifyAuthority(trx *types.Transaction) (bool, error) {
 	raw, err := api.Raw("verify_authority", []interface{}{&trx})
 	if err != nil {
 		return false, err

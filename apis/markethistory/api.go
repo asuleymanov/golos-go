@@ -1,37 +1,27 @@
-package market
+package market_history
 
 import (
-	// Stdlib
 	"encoding/json"
 
-	// RPC
-	"github.com/asuleymanov/golos-go/internal/rpc"
 	"github.com/asuleymanov/golos-go/transports"
-
-	// Vendor
 	"github.com/pkg/errors"
 )
 
-const APIID = "market_history_api"
+const APIID = "market_history"
 
 var EmptyParams = []string{}
 
 type API struct {
-	id     int
 	caller transports.Caller
 }
 
-func NewAPI(caller transports.Caller) (*API, error) {
-	id, err := rpc.GetNumericAPIID(caller, APIID)
-	if err != nil {
-		return nil, err
-	}
-	return &API{id, caller}, nil
+func NewAPI(caller transports.Caller) *API {
+	return &API{caller}
 }
 
 func (api *API) Raw(method string, params interface{}) (*json.RawMessage, error) {
 	var resp json.RawMessage
-	if err := api.caller.Call("call", []interface{}{"market_history_api", method, params}, &resp); err != nil {
+	if err := api.caller.Call("call", []interface{}{APIID, method, params}, &resp); err != nil {
 		return nil, errors.Wrapf(err, "golos: %v: failed to call %v\n", APIID, method)
 	}
 	return &resp, nil
@@ -133,6 +123,19 @@ func (api *API) GetMarketHistoryBuckets() ([]uint32, error) {
 	var resp []uint32
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
 		return nil, errors.Wrap(err, "golos: market_history_api: failed to unmarshal get_market_history_buckets response")
+	}
+	return resp, nil
+}
+
+//get_open_orders
+func (api *API) GetOpenOrders(accountName string) ([]*OpenOrders, error) {
+	raw, err := api.Raw("get_open_orders", []string{accountName})
+	if err != nil {
+		return nil, err
+	}
+	var resp []*OpenOrders
+	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
+		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_open_orders response", APIID)
 	}
 	return resp, nil
 }

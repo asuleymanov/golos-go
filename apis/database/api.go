@@ -1,22 +1,14 @@
 package database
 
 import (
-	// Stdlib
 	"encoding/json"
 
-	// RPC
 	"github.com/asuleymanov/golos-go/transports"
 	"github.com/asuleymanov/golos-go/types"
-
-	// Vendor
 	"github.com/pkg/errors"
 )
 
-const (
-	APIID         = "database_api"
-	NumbericAPIID = "database_api"
-	//NumbericAPIID = 0
-)
+const APIID = "database_api"
 
 type API struct {
 	caller transports.Caller
@@ -30,204 +22,34 @@ var EmptyParams = []string{}
 
 func (api *API) Raw(method string, params interface{}) (*json.RawMessage, error) {
 	var resp json.RawMessage
-	//if err := api.caller.Call("call", []interface{}{"database_api", method, params}, &resp); err != nil {
-	if err := api.caller.Call(method, params, &resp); err != nil {
+	if err := api.caller.Call("call", []interface{}{APIID, method, params}, &resp); err != nil {
 		return nil, errors.Wrapf(err, "golos: %v: failed to call %v\n", APIID, method)
 	}
 	return &resp, nil
 }
 
-//set_subscribe_callback                 | *NONE* | *NONE* |
-
-//set_pending_transaction_callback       | *NONE* | *NONE* |
-
-//set_block_applied_callback             | *NONE* | *NONE* |
-
-//cancel_all_subscriptions               | *NONE* | *NONE* |
-
-//get_trending_tags
-func (api *API) GetTrendingTags(afterTag string, limit uint32) ([]*TrendingTags, error) {
-	raw, err := api.Raw("get_trending_tags", []interface{}{afterTag, limit})
+//get_active_witnesses
+func (api *API) GetActiveWitnesses() ([]string, error) {
+	raw, err := api.Raw("get_active_witnesses", EmptyParams)
 	if err != nil {
 		return nil, err
 	}
-	var resp []*TrendingTags
+	var resp []string
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_trending_tags response", APIID)
+		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_active_witnesses response", APIID)
 	}
 	return resp, nil
 }
 
-//get_tags_used_by_author
-func (api *API) GetTagsUsedByAuthor(accountName string) (*json.RawMessage, error) {
-	return api.Raw("get_tags_used_by_author", []interface{}{accountName})
-}
-
-//get_discussions_by_trending
-func (api *API) GetDiscussionsByTrending(query *DiscussionQuery) ([]*Content, error) {
-	raw, err := api.Raw("get_discussions_by_trending", query)
+//get_miner_queue
+func (api *API) GetMinerQueue() ([]string, error) {
+	raw, err := api.Raw("get_miner_queue", EmptyParams)
 	if err != nil {
 		return nil, err
 	}
-	var resp []*Content
+	var resp []string
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_discussions_by_trending response", APIID)
-	}
-	return resp, nil
-}
-
-//get_discussions_by_trending30
-func (api *API) GetDiscussionsByTrending30(query *DiscussionQuery) ([]*Content, error) {
-	raw, err := api.Raw("get_discussions_by_trending30", query)
-	if err != nil {
-		return nil, err
-	}
-	var resp []*Content
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_discussions_by_trending30 response", APIID)
-	}
-	return resp, nil
-}
-
-//get_discussions_by_created
-func (api *API) GetDiscussionsByCreated(query *DiscussionQuery) ([]*Content, error) {
-	raw, err := api.Raw("get_discussions_by_created", query)
-	if err != nil {
-		return nil, err
-	}
-	var resp []*Content
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_discussions_by_created response", APIID)
-	}
-	return resp, nil
-}
-
-//get_discussions_by_active
-func (api *API) GetDiscussionsByActive(query *DiscussionQuery) ([]*Content, error) {
-	raw, err := api.Raw("get_discussions_by_active", query)
-	if err != nil {
-		return nil, err
-	}
-	var resp []*Content
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_discussions_by_active response", APIID)
-	}
-	return resp, nil
-}
-
-//get_discussions_by_cashout
-func (api *API) GetDiscussionsByCashout(query *DiscussionQuery) ([]*Content, error) {
-	raw, err := api.Raw("get_discussions_by_cashout", query)
-	if err != nil {
-		return nil, err
-	}
-	var resp []*Content
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_discussions_by_cashout response", APIID)
-	}
-	return resp, nil
-}
-
-//get_discussions_by_payout
-func (api *API) GetDiscussionsByPayout(query *DiscussionQuery) ([]*Content, error) {
-	raw, err := api.Raw("get_discussions_by_payout", query)
-	if err != nil {
-		return nil, err
-	}
-	var resp []*Content
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_discussions_by_payout response", APIID)
-	}
-	return resp, nil
-}
-
-//get_discussions_by_votes
-func (api *API) GetDiscussionsByVotes(query *DiscussionQuery) ([]*Content, error) {
-	raw, err := api.Raw("get_discussions_by_votes", query)
-	if err != nil {
-		return nil, err
-	}
-	var resp []*Content
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_discussions_by_votes response", APIID)
-	}
-	return resp, nil
-}
-
-//get_discussions_by_children
-func (api *API) GetDiscussionsByChildren(query *DiscussionQuery) ([]*Content, error) {
-	raw, err := api.Raw("get_discussions_by_children", query)
-	if err != nil {
-		return nil, err
-	}
-	var resp []*Content
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_discussions_by_children response", APIID)
-	}
-	return resp, nil
-}
-
-//get_discussions_by_hot
-func (api *API) GetDiscussionsByHot(query *DiscussionQuery) ([]*Content, error) {
-	raw, err := api.Raw("get_discussions_by_hot", query)
-	if err != nil {
-		return nil, err
-	}
-	var resp []*Content
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_discussions_by_hot response", APIID)
-	}
-	return resp, nil
-}
-
-//get_discussions_by_feed
-func (api *API) GetDiscussionsByFeed(query *DiscussionQuery) ([]*Content, error) {
-	raw, err := api.Raw("get_discussions_by_feed", query)
-	if err != nil {
-		return nil, err
-	}
-	var resp []*Content
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_discussions_by_feed response", APIID)
-	}
-	return resp, nil
-}
-
-//get_discussions_by_blog
-func (api *API) GetDiscussionsByBlog(query *DiscussionQuery) ([]*Content, error) {
-	raw, err := api.Raw("get_discussions_by_blog", query)
-	if err != nil {
-		return nil, err
-	}
-	var resp []*Content
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_discussions_by_blog response", APIID)
-	}
-	return resp, nil
-}
-
-//get_discussions_by_comments
-func (api *API) GetDiscussionsByComments(query *DiscussionQuery) ([]*Content, error) {
-	raw, err := api.Raw("get_discussions_by_comments", query)
-	if err != nil {
-		return nil, err
-	}
-	var resp []*Content
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_discussions_by_comments response", APIID)
-	}
-	return resp, nil
-}
-
-//get_discussions_by_promoted
-func (api *API) GetDiscussionsByPromoted(query *DiscussionQuery) ([]*Content, error) {
-	raw, err := api.Raw("get_discussions_by_promoted", query)
-	if err != nil {
-		return nil, err
-	}
-	var resp []*Content
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_discussions_by_promoted response", APIID)
+		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_miner_queue response", APIID)
 	}
 	return resp, nil
 }
@@ -273,39 +95,6 @@ func (api *API) GetOpsInBlock(blockNum uint32, only_virtual bool) ([]*types.Oper
 	return resp, nil
 }
 
-//get_state
-func (api *API) GetState(path string) (*json.RawMessage, error) {
-	return api.Raw("get_state", []string{path})
-}
-
-//get_trending_categories
-func (api *API) GetTrendingCategories(after string, limit uint32) ([]*Categories, error) {
-	raw, err := api.Raw("get_trending_categories", []interface{}{after, limit})
-	if err != nil {
-		return nil, err
-	}
-	var resp []*Categories
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_trending_categories response", APIID)
-	}
-	return resp, nil
-}
-
-//get_best_categories
-func (api *API) GetBestCategories(after string, limit uint32) (*json.RawMessage, error) {
-	return api.Raw("get_best_categories", []interface{}{after, limit})
-}
-
-//get_active_categories
-func (api *API) GetActiveCategories(after string, limit uint32) (*json.RawMessage, error) {
-	return api.Raw("get_active_categories", []interface{}{after, limit})
-}
-
-//get_recent_categories
-func (api *API) GetRecentCategories(after string, limit uint32) (*json.RawMessage, error) {
-	return api.Raw("get_recent_categories", []interface{}{after, limit})
-}
-
 //get_config
 func (api *API) GetConfig() (*Config, error) {
 	raw, err := api.Raw("get_config", EmptyParams)
@@ -345,19 +134,6 @@ func (api *API) GetChainProperties() (*ChainProperties, error) {
 	return &resp, nil
 }
 
-//get_feed_history
-func (api *API) GetFeedHistory() (*FeedHistory, error) {
-	raw, err := api.Raw("get_feed_history", EmptyParams)
-	if err != nil {
-		return nil, err
-	}
-	var resp FeedHistory
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_feed_history response", APIID)
-	}
-	return &resp, nil
-}
-
 //get_current_median_history_price
 func (api *API) GetCurrentMedianHistoryPrice() (*CurrentMedianHistoryPrice, error) {
 	raw, err := api.Raw("get_current_median_history_price", EmptyParams)
@@ -367,6 +143,19 @@ func (api *API) GetCurrentMedianHistoryPrice() (*CurrentMedianHistoryPrice, erro
 	var resp CurrentMedianHistoryPrice
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
 		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_current_median_history_price response", APIID)
+	}
+	return &resp, nil
+}
+
+//get_feed_history
+func (api *API) GetFeedHistory() (*FeedHistory, error) {
+	raw, err := api.Raw("get_feed_history", EmptyParams)
+	if err != nil {
+		return nil, err
+	}
+	var resp FeedHistory
+	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
+		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_feed_history response", APIID)
 	}
 	return &resp, nil
 }
@@ -410,9 +199,6 @@ func (api *API) GetNextScheduledHardfork() (*NextScheduledHardfork, error) {
 	return &resp, nil
 }
 
-//get_key_references
-//Unfortunately to say what this command does is not possible. (Any call to it leads to an error).
-
 //get_accounts
 func (api *API) GetAccounts(accountNames []string) ([]*Account, error) {
 	raw, err := api.Raw("get_accounts", [][]string{accountNames})
@@ -425,9 +211,6 @@ func (api *API) GetAccounts(accountNames []string) ([]*Account, error) {
 	}
 	return resp, nil
 }
-
-//get_account_references
-//Unfortunately to say what this command does is not possible. (Any call to it leads to an error).
 
 //lookup_account_names
 func (api *API) LookupAccountNames(accountNames []string) (*json.RawMessage, error) {
@@ -456,48 +239,6 @@ func (api *API) GetAccountCount() (uint32, error) {
 	var resp uint32
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
 		return 0, errors.Wrapf(err, "golos: %v: failed to unmarshal get_account_count response", APIID)
-	}
-	return resp, nil
-}
-
-//get_conversion_requests
-func (api *API) GetConversionRequests(accountName string) ([]*ConversionRequests, error) {
-	raw, err := api.Raw("get_conversion_requests", []string{accountName})
-	if err != nil {
-		return nil, err
-	}
-	var resp []*ConversionRequests
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_conversion_requests response", APIID)
-	}
-	return resp, nil
-}
-
-//get_account_history
-/*func (api *API) GetAccountHistory(account string, from uint64, limit uint32) (*json.RawMessage, error) {
-	return api.Raw("get_account_history", []interface{}{account, from, limit})
-}*/
-
-func (api *API) GetAccountHistory(account string, from uint64, limit uint32) ([]*types.OperationObject, error) {
-	raw, err := api.Raw("get_account_history", []interface{}{account, from, limit})
-	if err != nil {
-		return nil, err
-	}
-	var tmp1 [][]interface{}
-	if err := json.Unmarshal([]byte(*raw), &tmp1); err != nil {
-		return nil, err
-	}
-	var resp []*types.OperationObject
-	for _, v := range tmp1 {
-		byteData, errm := json.Marshal(&v[1])
-		if errm != nil {
-			return nil, errm
-		}
-		var tmp *types.OperationObject
-		if err := json.Unmarshal(byteData, &tmp); err != nil {
-			return nil, err
-		}
-		resp = append(resp, tmp)
 	}
 	return resp, nil
 }
@@ -553,166 +294,6 @@ func (api *API) GetSavingsWithdrawTo(accountName string) ([]*SavingsWithdraw, er
 	return resp, nil
 }
 
-//get_order_book
-func (api *API) GetOrderBook(limit uint32) (*OrderBook, error) {
-	if limit > 1000 {
-		return nil, errors.New("GetOrderBook: limit must not exceed 1000")
-	}
-	raw, err := api.Raw("get_order_book", []interface{}{limit})
-	if err != nil {
-		return nil, err
-	}
-	var resp *OrderBook
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_order_book response", APIID)
-	}
-	return resp, nil
-}
-
-//get_open_orders
-func (api *API) GetOpenOrders(accountName string) ([]*OpenOrders, error) {
-	raw, err := api.Raw("get_open_orders", []string{accountName})
-	if err != nil {
-		return nil, err
-	}
-	var resp []*OpenOrders
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_open_orders response", APIID)
-	}
-	return resp, nil
-}
-
-//get_liquidity_queue
-func (api *API) GetLiquidityQueue(startAccount string, limit uint32) (*json.RawMessage, error) {
-	return api.Raw("get_liquidity_queue", []interface{}{startAccount, limit})
-}
-
-//get_transaction_hex
-func (api *API) GetTransactionHex(trx *types.Transaction) (*json.RawMessage, error) {
-	return api.Raw("get_transaction_hex", []interface{}{&trx})
-}
-
-//get_transaction
-func (api *API) GetTransaction(id string) (*types.Transaction, error) {
-	raw, err := api.Raw("get_transaction", []string{id})
-	if err != nil {
-		return nil, err
-	}
-	var resp types.Transaction
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_transaction response", APIID)
-	}
-	return &resp, nil
-}
-
-//get_required_signatures                | *NONE* | *NONE* |
-
-//get_potential_signatures
-func (api *API) GetPotentialSignatures(trx *types.Transaction) ([]string, error) {
-	raw, err := api.Raw("get_potential_signatures", []interface{}{&trx})
-	if err != nil {
-		return nil, err
-	}
-	var resp []string
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_potential_signatures response", APIID)
-	}
-	return resp, nil
-}
-
-//verify_authority
-func (api *API) GetVerifyAuthority(trx *types.Transaction) (bool, error) {
-	raw, err := api.Raw("verify_authority", []interface{}{&trx})
-	if err != nil {
-		return false, err
-	}
-	var resp bool
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return false, errors.Wrapf(err, "golos: %v: failed to unmarshal verify_authority response", APIID)
-	}
-	return resp, nil
-}
-
-//verify_account_authority               | *NONE* | *NONE* |
-
-//get_active_votes
-func (api *API) GetActiveVotes(author, permlink string) ([]*VoteState, error) {
-	raw, err := api.Raw("get_active_votes", []string{author, permlink})
-	if err != nil {
-		return nil, err
-	}
-	var resp []*VoteState
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_active_votes response", APIID)
-	}
-	return resp, nil
-}
-
-//get_account_votes
-func (api *API) GetAccountVotes(author string) ([]*Votes, error) {
-	raw, err := api.Raw("get_account_votes", []string{author})
-	if err != nil {
-		return nil, err
-	}
-	var resp []*Votes
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_account_votes response", APIID)
-	}
-	return resp, nil
-}
-
-//get_content
-func (api *API) GetContent(author, permlink string) (*Content, error) {
-	raw, err := api.Raw("get_content", []string{author, permlink})
-	if err != nil {
-		return nil, err
-	}
-	var resp Content
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_content response", APIID)
-	}
-	return &resp, nil
-}
-
-//get_content_replies
-func (api *API) GetContentReplies(parentAuthor, parentPermlink string) ([]*Content, error) {
-	raw, err := api.Raw("get_content_replies", []string{parentAuthor, parentPermlink})
-	if err != nil {
-		return nil, err
-	}
-	var resp []*Content
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_content_replies response", APIID)
-	}
-	return resp, nil
-}
-
-//get_discussions_by_author_before_date
-func (api *API) GetDiscussionsByAuthorBeforeDate(Author, Permlink, Date string, limit uint32) ([]*Content, error) {
-	raw, err := api.Raw("get_discussions_by_author_before_date", []interface{}{Author, Permlink, Date, limit})
-	if err != nil {
-		return nil, err
-	}
-	var resp []*Content
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_discussions_by_author_before_date response", APIID)
-	}
-	return resp, nil
-}
-
-//get_replies_by_last_update
-func (api *API) GetRepliesByLastUpdate(startAuthor, startPermlink string, limit uint32) ([]*Content, error) {
-	raw, err := api.Raw("get_replies_by_last_update", []interface{}{startAuthor, startPermlink, limit})
-	if err != nil {
-		return nil, err
-	}
-	var resp []*Content
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_replies_by_last_update response", APIID)
-	}
-	return resp, nil
-}
-
 //get_witnesses
 func (api *API) GetWitnesses(id []uint32) ([]*Witness, error) {
 	raw, err := api.Raw("get_witnesses", [][]uint32{id})
@@ -722,6 +303,19 @@ func (api *API) GetWitnesses(id []uint32) ([]*Witness, error) {
 	var resp []*Witness
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
 		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_witnesses response", APIID)
+	}
+	return resp, nil
+}
+
+//get_conversion_requests
+func (api *API) GetConversionRequests(accountName string) ([]*ConversionRequests, error) {
+	raw, err := api.Raw("get_conversion_requests", []string{accountName})
+	if err != nil {
+		return nil, err
+	}
+	var resp []*ConversionRequests
+	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
+		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_conversion_requests response", APIID)
 	}
 	return resp, nil
 }
@@ -784,28 +378,73 @@ func (api *API) GetWitnessCount() (uint32, error) {
 	return resp, nil
 }
 
-//get_active_witnesses
-func (api *API) GetActiveWitnesses() ([]string, error) {
-	raw, err := api.Raw("get_active_witnesses", EmptyParams)
+//get_transaction_hex
+func (api *API) GetTransactionHex(trx *types.Transaction) (*json.RawMessage, error) {
+	return api.Raw("get_transaction_hex", []interface{}{&trx})
+}
+
+//get_transaction
+func (api *API) GetTransaction(id string) (*types.Transaction, error) {
+	raw, err := api.Raw("get_transaction", []string{id})
+	if err != nil {
+		return nil, err
+	}
+	var resp types.Transaction
+	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
+		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_transaction response", APIID)
+	}
+	return &resp, nil
+}
+
+//get_required_signatures
+//get_potential_signatures
+func (api *API) GetPotentialSignatures(trx *types.Transaction) ([]string, error) {
+	raw, err := api.Raw("get_potential_signatures", []interface{}{&trx})
 	if err != nil {
 		return nil, err
 	}
 	var resp []string
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_active_witnesses response", APIID)
+		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_potential_signatures response", APIID)
 	}
 	return resp, nil
 }
 
-//get_miner_queue
-func (api *API) GetMinerQueue() ([]string, error) {
-	raw, err := api.Raw("get_miner_queue", EmptyParams)
+//verify_authority
+func (api *API) GetVerifyAuthority(trx *types.Transaction) (bool, error) {
+	raw, err := api.Raw("verify_authority", []interface{}{&trx})
+	if err != nil {
+		return false, err
+	}
+	var resp bool
+	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
+		return false, errors.Wrapf(err, "golos: %v: failed to unmarshal verify_authority response", APIID)
+	}
+	return resp, nil
+}
+
+//verify_account_authority
+//get_account_history
+func (api *API) GetAccountHistory(account string, from uint64, limit uint32) ([]*types.OperationObject, error) {
+	raw, err := api.Raw("get_account_history", []interface{}{account, from, limit})
 	if err != nil {
 		return nil, err
 	}
-	var resp []string
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_miner_queue response", APIID)
+	var tmp1 [][]interface{}
+	if err := json.Unmarshal([]byte(*raw), &tmp1); err != nil {
+		return nil, err
+	}
+	var resp []*types.OperationObject
+	for _, v := range tmp1 {
+		byteData, errm := json.Marshal(&v[1])
+		if errm != nil {
+			return nil, errm
+		}
+		var tmp *types.OperationObject
+		if err := json.Unmarshal(byteData, &tmp); err != nil {
+			return nil, err
+		}
+		resp = append(resp, tmp)
 	}
 	return resp, nil
 }

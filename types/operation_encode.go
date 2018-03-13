@@ -30,6 +30,14 @@ func (exch *ExchRate) MarshalTransaction(encoder *transaction.Encoder) error {
 	return enc.Err()
 }
 
+func (cp *ChainProperties) MarshalTransaction(encoder *transaction.Encoder) error {
+	enc := transaction.NewRollingEncoder(encoder)
+	enc.EncodeMoney(cp.AccountCreationFee)
+	enc.Encode(cp.MaximumBlockSize)
+	enc.Encode(cp.SBDInterestRate)
+	return enc.Err()
+}
+
 // encode VoteOperation{}
 func (op *VoteOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
@@ -171,9 +179,7 @@ func (op *WitnessUpdateOperation) MarshalTransaction(encoder *transaction.Encode
 	enc.Encode(op.Owner)
 	enc.Encode(op.Url)
 	enc.EncodePubKey(op.BlockSigningKey)
-	enc.EncodeMoney(op.Props.AccountCreationFee)
-	enc.Encode(op.Props.MaximumBlockSize)
-	enc.Encode(op.Props.SBDInterestRate)
+	enc.Encode(op.Props)
 	enc.EncodeMoney(op.Fee)
 	return enc.Err()
 }

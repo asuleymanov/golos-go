@@ -778,7 +778,7 @@ func (api *Client) WitnessUpdate(owner, url, blocksigningkey, accountcreationfee
 		Owner:           owner,
 		Url:             url,
 		BlockSigningKey: blocksigningkey,
-		Props: types.ChainProperties{
+		Props: &types.ChainProperties{
 			AccountCreationFee: accountcreationfee,
 			MaximumBlockSize:   maxblocksize,
 			SBDInterestRate:    sbdinterestrate,

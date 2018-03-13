@@ -220,11 +220,11 @@ func (op *AccountUpdateOperation) Data() interface{} {
 
 // struct WitnessUpdateOperation{}
 type WitnessUpdateOperation struct {
-	Owner           string          `json:"owner"`
-	Url             string          `json:"url"`
-	BlockSigningKey string          `json:"block_signing_key"`
-	Props           ChainProperties `json:"props"`
-	Fee             string          `json:"fee"`
+	Owner           string           `json:"owner"`
+	Url             string           `json:"url"`
+	BlockSigningKey string           `json:"block_signing_key"`
+	Props           *ChainProperties `json:"props"`
+	Fee             string           `json:"fee"`
 }
 
 func (op *WitnessUpdateOperation) Type() OpType {

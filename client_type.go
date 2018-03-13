@@ -9,7 +9,7 @@ type Keys struct {
 	MKey string
 }
 
-//Type of response when using operations.
+//Type of response when sending a transaction.
 type BResp struct {
 	ID       string
 	BlockNum uint32
@@ -17,14 +17,17 @@ type BResp struct {
 	Expired  bool
 }
 
+//The type is returned when the operation is performed.
+type OperResp struct {
+	NameOper string
+	PermLink string
+	Bresp    *BResp
+}
+
 //Type for the Comment and Post functions.
 //Sets the water to receive payment for a comment or post.
 type PCOptions struct {
 	Percent uint16
-}
-
-type PCVote struct {
-	Weight int
 }
 
 //Type for MultiTransfer function

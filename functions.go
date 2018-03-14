@@ -583,3 +583,55 @@ func (api *Client) WitnessUpdate(owner, url, blocksigningkey, accountcreationfee
 	resp, err := api.SendTrx(owner, trx)
 	return &OperResp{NameOper: "WitnessUpdate", Bresp: resp}, err
 }
+
+func (api *Client) AccountCreate(creator, newaccountname, password string) (*OperResp, error) {
+	type Keys struct {
+		Private string
+		Public  string
+	}
+
+	var trx []types.Operation
+	var list_keys = make(map[string]Keys)
+
+	empty := map[string]int64{}
+	roles := [4]string{"owner", "active", "posting", "memo"}
+
+	for _, val := range roles {
+		priv := GetPrivateKey(newaccountname, val, password)
+		pub := GetPublicKey("GLS", priv)
+		list_keys[val] = Keys{Private: priv, Public: pub}
+	}
+
+	owner := types.Authority{
+		WeightThreshold: 1,
+		AccountAuths:    empty,
+		KeyAuths:        map[string]int64{list_keys["owner"].Public: 1},
+	}
+
+	active := types.Authority{
+		WeightThreshold: 1,
+		AccountAuths:    empty,
+		KeyAuths:        map[string]int64{list_keys["active"].Public: 1},
+	}
+
+	posting := types.Authority{
+		WeightThreshold: 1,
+		AccountAuths:    empty,
+		KeyAuths:        map[string]int64{list_keys["posting"].Public: 1},
+	}
+
+	tx := &types.AccountCreateOperation{
+		Fee:            "0.000 GOLOS",
+		Creator:        creator,
+		NewAccountName: newaccountname,
+		Owner:          &owner,
+		Active:         &active,
+		Posting:        &posting,
+		MemoKey:        list_keys["memo"].Public,
+		JsonMetadata:   "",
+	}
+
+	trx = append(trx, tx)
+	resp, err := api.SendTrx(creator, trx)
+	return &OperResp{NameOper: "AccountCreate", Bresp: resp}, err
+}

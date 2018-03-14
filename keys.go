@@ -1,6 +1,7 @@
 package client
 
 import (
+	crand "crypto/rand"
 	"crypto/sha256"
 	"math/rand"
 	"time"
@@ -10,7 +11,19 @@ import (
 	"golang.org/x/crypto/ripemd160"
 )
 
-var src = rand.NewSource(time.Now().UnixNano())
+var src rand.Source
+
+func init() {
+	seed := time.Now().UnixNano()
+
+	reader := crand.Reader
+	i, err := crand.Prime(reader, 64)
+	if err != nil {
+		seed = seed ^ i.Int64()
+	}
+
+	src = rand.NewSource(seed)
+}
 
 const (
 	letterBytes   = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"

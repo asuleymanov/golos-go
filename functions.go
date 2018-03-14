@@ -100,6 +100,22 @@ func (api *Client) Comment(username, authorname, ppermlink, body string, o *PCOp
 			PSD = 0
 		}
 
+		var ext []interface{}
+		if len(o.BeneficiarieList) > 0 {
+			var ben_list []types.Beneficiarie
+			var benef types.CommentPayoutBeneficiaries
+			for _, val := range o.BeneficiarieList {
+				ben_list = append(ben_list, types.Beneficiarie{val.Account, val.Weight})
+			}
+			benef.Beneficiaries = ben_list
+			ext = append(ext, 0)
+			ext = append(ext, benef)
+		}
+		Extens := []interface{}{}
+		if len(ext) > 0 {
+			Extens = []interface{}{ext}
+		}
+
 		txo := &types.CommentOptionsOperation{
 			Author:               username,
 			Permlink:             permlink,
@@ -107,7 +123,7 @@ func (api *Client) Comment(username, authorname, ppermlink, body string, o *PCOp
 			PercentSteemDollars:  PSD,
 			AllowVotes:           true,
 			AllowCurationRewards: true,
-			Extensions:           []interface{}{},
+			Extensions:           Extens,
 		}
 		trx = append(trx, txo)
 	}
@@ -167,6 +183,22 @@ func (api *Client) Post(authorname, title, body, permlink, ptag, post_image stri
 			PSD = 0
 		}
 
+		var ext []interface{}
+		if len(o.BeneficiarieList) > 0 {
+			var ben_list []types.Beneficiarie
+			var benef types.CommentPayoutBeneficiaries
+			for _, val := range o.BeneficiarieList {
+				ben_list = append(ben_list, types.Beneficiarie{val.Account, val.Weight})
+			}
+			benef.Beneficiaries = ben_list
+			ext = append(ext, 0)
+			ext = append(ext, benef)
+		}
+		Extens := []interface{}{}
+		if len(ext) > 0 {
+			Extens = []interface{}{ext}
+		}
+
 		txo := &types.CommentOptionsOperation{
 			Author:               authorname,
 			Permlink:             permlink,
@@ -174,7 +206,7 @@ func (api *Client) Post(authorname, title, body, permlink, ptag, post_image stri
 			PercentSteemDollars:  PSD,
 			AllowVotes:           true,
 			AllowCurationRewards: true,
-			Extensions:           []interface{}{},
+			Extensions:           Extens,
 		}
 		trx = append(trx, txo)
 	}

@@ -584,7 +584,7 @@ func (api *Client) WitnessUpdate(owner, url, blocksigningkey, accountcreationfee
 	return &OperResp{NameOper: "WitnessUpdate", Bresp: resp}, err
 }
 
-func (api *Client) AccountCreate(creator, newAccountName, password string, fee string) (*OperResp, error) {
+func (api *Client) AccountCreate(creator, newAccountName, password , fee string) (*OperResp, error) {
 	type Keys struct {
 		Private string
 		Public  string

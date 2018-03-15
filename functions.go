@@ -622,7 +622,7 @@ func (api *Client) AccountCreate(creator, newaccountname, password string, fee f
 
 	feeStr := strconv.FormatFloat(fee, 'f', 3, 32)
 	tx := &types.AccountCreateOperation{
-		Fee:            feeStr+" GOLOS",
+		Fee:            feeStr + " GOLOS",
 		Creator:        creator,
 		NewAccountName: newaccountname,
 		Owner:          &owner,

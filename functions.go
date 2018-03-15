@@ -616,7 +616,7 @@ func (api *Client) WitnessUpdate(owner, url, blocksigningkey, accountcreationfee
 	return &OperResp{NameOper: "WitnessUpdate", Bresp: resp}, err
 }
 
-func (api *Client) AccountCreate(creator, newaccountname, password string) (*OperResp, error) {
+func (api *Client) AccountCreate(creator, newaccountname, password string, fee float64) (*OperResp, error) {
 	type Keys struct {
 		Private string
 		Public  string
@@ -652,8 +652,10 @@ func (api *Client) AccountCreate(creator, newaccountname, password string) (*Ope
 		KeyAuths:        map[string]int64{list_keys["posting"].Public: 1},
 	}
 
+	feeStr := strconv.FormatFloat(fee, 'f', 3, 32)
+
 	tx := &types.AccountCreateOperation{
-		Fee:            "0.000 GOLOS",
+		Fee:            feeStr + " GOLOS",
 		Creator:        creator,
 		NewAccountName: newaccountname,
 		Owner:          &owner,

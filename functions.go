@@ -584,51 +584,50 @@ func (api *Client) WitnessUpdate(owner, url, blocksigningkey, accountcreationfee
 	return &OperResp{NameOper: "WitnessUpdate", Bresp: resp}, err
 }
 
-func (api *Client) AccountCreate(creator, newaccountname, password string, fee float64) (*OperResp, error) {
+func (api *Client) AccountCreate(creator, newAccountName, password string, fee string) (*OperResp, error) {
 	type Keys struct {
 		Private string
 		Public  string
 	}
 
 	var trx []types.Operation
-	var list_keys = make(map[string]Keys)
+	var listKeys = make(map[string]Keys)
 
 	empty := map[string]int64{}
 	roles := [4]string{"owner", "active", "posting", "memo"}
 
 	for _, val := range roles {
-		priv := GetPrivateKey(newaccountname, val, password)
+		priv := GetPrivateKey(newAccountName, val, password)
 		pub := GetPublicKey("GLS", priv)
-		list_keys[val] = Keys{Private: priv, Public: pub}
+		listKeys[val] = Keys{Private: priv, Public: pub}
 	}
 
 	owner := types.Authority{
 		WeightThreshold: 1,
 		AccountAuths:    empty,
-		KeyAuths:        map[string]int64{list_keys["owner"].Public: 1},
+		KeyAuths:        map[string]int64{listKeys["owner"].Public: 1},
 	}
 
 	active := types.Authority{
 		WeightThreshold: 1,
 		AccountAuths:    empty,
-		KeyAuths:        map[string]int64{list_keys["active"].Public: 1},
+		KeyAuths:        map[string]int64{listKeys["active"].Public: 1},
 	}
 
 	posting := types.Authority{
 		WeightThreshold: 1,
 		AccountAuths:    empty,
-		KeyAuths:        map[string]int64{list_keys["posting"].Public: 1},
+		KeyAuths:        map[string]int64{listKeys["posting"].Public: 1},
 	}
 
-	feeStr := strconv.FormatFloat(fee, 'f', 3, 32)
 	tx := &types.AccountCreateOperation{
-		Fee:            feeStr+" GOLOS",
+		Fee:            fee,
 		Creator:        creator,
-		NewAccountName: newaccountname,
+		NewAccountName: newAccountName,
 		Owner:          &owner,
 		Active:         &active,
 		Posting:        &posting,
-		MemoKey:        list_keys["memo"].Public,
+		MemoKey:        listKeys["memo"].Public,
 		JsonMetadata:   "",
 	}
 

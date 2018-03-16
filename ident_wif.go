@@ -77,30 +77,30 @@ func init() {
 //In accordance with the used opera.
 func (api *Client) SigningKeys(username string, trx types.Operation) [][]byte {
 	var keys [][]byte
-	if _, ok := Key_List[username]; ok {
+	if _, ok := KeyList[username]; ok {
 		op_keys := OpTypeKey[trx.Type()]
 		for _, val := range op_keys {
 			switch {
 			case val == "posting":
-				privKey, err := wif.Decode(Key_List[username].PKey)
+				privKey, err := wif.Decode(KeyList[username].PKey)
 				if err != nil {
 					log.Println(errors.Wrapf(err, "Error decode Key: "))
 				}
 				keys = append(keys, privKey)
 			case val == "active":
-				privKey, err := wif.Decode(Key_List[username].AKey)
+				privKey, err := wif.Decode(KeyList[username].AKey)
 				if err != nil {
 					log.Println(errors.Wrapf(err, "Error decode Key: "))
 				}
 				keys = append(keys, privKey)
 			case val == "owner":
-				privKey, err := wif.Decode(Key_List[username].OKey)
+				privKey, err := wif.Decode(KeyList[username].OKey)
 				if err != nil {
 					log.Println(errors.Wrapf(err, "Error decode Key: "))
 				}
 				keys = append(keys, privKey)
 			case val == "memo":
-				privKey, err := wif.Decode(Key_List[username].MKey)
+				privKey, err := wif.Decode(KeyList[username].MKey)
 				if err != nil {
 					log.Println(errors.Wrapf(err, "Error decode Key: "))
 				}

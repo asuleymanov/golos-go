@@ -502,3 +502,78 @@ type Bandwidth struct {
 	LifetimeBandwidth   *types.Int64 `json:"lifetime_bandwidth"`
 	LastBandwidthUpdate *types.Time  `json:"last_bandwidth_update"`
 }
+
+type LookupAccountNames struct {
+	ID                            int           `json:"id"`
+	Name                          string        `json:"name"`
+	Owner                         *AccountKeys  `json:"owner"`
+	Active                        *AccountKeys  `json:"active"`
+	Posting                       *AccountKeys  `json:"posting"`
+	MemoKey                       string        `json:"memo_key"`
+	JSONMetadata                  string        `json:"json_metadata"`
+	Proxy                         string        `json:"proxy"`
+	LastOwnerUpdate               string        `json:"last_owner_update"`
+	LastAccountUpdate             string        `json:"last_account_update"`
+	Created                       string        `json:"created"`
+	Mined                         bool          `json:"mined"`
+	OwnerChallenged               bool          `json:"owner_challenged"`
+	ActiveChallenged              bool          `json:"active_challenged"`
+	LastOwnerProved               string        `json:"last_owner_proved"`
+	LastActiveProved              string        `json:"last_active_proved"`
+	RecoveryAccount               string        `json:"recovery_account"`
+	LastAccountRecovery           string        `json:"last_account_recovery"`
+	ResetAccount                  string        `json:"reset_account"`
+	CommentCount                  *types.Int    `json:"comment_count"`
+	LifetimeVoteCount             *types.Int    `json:"lifetime_vote_count"`
+	PostCount                     *types.Int    `json:"post_count"`
+	CanVote                       bool          `json:"can_vote"`
+	VotingPower                   *types.Int    `json:"voting_power"`
+	LastVoteTime                  string        `json:"last_vote_time"`
+	Balance                       string        `json:"balance"`
+	SavingsBalance                string        `json:"savings_balance"`
+	SbdBalance                    string        `json:"sbd_balance"`
+	SbdSeconds                    string        `json:"sbd_seconds"`
+	SbdSecondsLastUpdate          string        `json:"sbd_seconds_last_update"`
+	SbdLastInterestPayment        string        `json:"sbd_last_interest_payment"`
+	SavingsSbdBalance             string        `json:"savings_sbd_balance"`
+	SavingsSbdSeconds             string        `json:"savings_sbd_seconds"`
+	SavingsSbdSecondsLastUpdate   string        `json:"savings_sbd_seconds_last_update"`
+	SavingsSbdLastInterestPayment string        `json:"savings_sbd_last_interest_payment"`
+	SavingsWithdrawRequests       *types.Int    `json:"savings_withdraw_requests"`
+	VestingShares                 string        `json:"vesting_shares"`
+	VestingWithdrawRate           string        `json:"vesting_withdraw_rate"`
+	NextVestingWithdrawal         string        `json:"next_vesting_withdrawal"`
+	Withdrawn                     *types.Int    `json:"withdrawn"`
+	ToWithdraw                    *types.Int    `json:"to_withdraw"`
+	WithdrawRoutes                *types.Int    `json:"withdraw_routes"`
+	CurationRewards               *types.Int    `json:"curation_rewards"`
+	PostingRewards                *types.Int    `json:"posting_rewards"`
+	ProxiedVsfVotes               []interface{} `json:"proxied_vsf_votes"`
+	WitnessesVotedFor             *types.Int    `json:"witnesses_voted_for"`
+	AverageBandwidth              *types.Int    `json:"average_bandwidth"`
+	LifetimeBandwidth             string        `json:"lifetime_bandwidth"`
+	LastBandwidthUpdate           string        `json:"last_bandwidth_update"`
+	AverageMarketBandwidth        *types.Int    `json:"average_market_bandwidth"`
+	LastMarketBandwidthUpdate     string        `json:"last_market_bandwidth_update"`
+	LastPost                      string        `json:"last_post"`
+	LastRootPost                  string        `json:"last_root_post"`
+	PostBandwidth                 *types.Int    `json:"post_bandwidth"`
+	NewAverageBandwidth           string        `json:"new_average_bandwidth"`
+	NewAverageMarketBandwidth     string        `json:"new_average_market_bandwidth"`
+}
+
+type OwnerHistory struct {
+	ID                     int          `json:"id"`
+	Account                string       `json:"account"`
+	PreviousOwnerAuthority *AccountKeys `json:"previous_owner_authority"`
+	LastValidTime          string       `json:"last_valid_time"`
+}
+
+type AccountBandwidth struct {
+	ID                  int        `json:"id"`
+	Account             string     `json:"account"`
+	Type                string     `json:"type"`
+	AverageBandwidth    *types.Int `json:"average_bandwidth"`
+	LifetimeBandwidth   *types.Int `json:"lifetime_bandwidth"`
+	LastBandwidthUpdate string     `json:"last_bandwidth_update"`
+}

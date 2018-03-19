@@ -59,16 +59,8 @@ func (api *API) GetTrendingTags(afterTag string, limit uint32) ([]*TrendingTags,
 }
 
 //get_tags_used_by_author
-func (api *API) GetTagsUsedByAuthor(accountName string) (*[]string, error) {
-	raw, err := api.Raw("get_tags_used_by_author", []interface{}{accountName})
-	if err != nil {
-		return &[]string{}, err
-	}
-	var resp []string
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return &[]string{}, errors.Wrapf(err, "golos: %v: failed to unmarshal get_hardfork_version response", APIID)
-	}
-	return &resp, nil
+func (api *API) GetTagsUsedByAuthor(accountName string) (*json.RawMessage, error) {
+	return api.Raw("get_tags_used_by_author", []interface{}{accountName})
 }
 
 //get_discussions_by_trending
@@ -438,8 +430,16 @@ func (api *API) GetAccounts(accountNames []string) ([]*Account, error) {
 //Unfortunately to say what this command does is not possible. (Any call to it leads to an error).
 
 //lookup_account_names
-func (api *API) LookupAccountNames(accountNames []string) (*json.RawMessage, error) {
-	return api.Raw("lookup_account_names", [][]string{accountNames})
+func (api *API) LookupAccountNames(accountNames []string) ([]*LookupAccountNames, error) {
+	raw, err := api.Raw("lookup_account_names", [][]string{accountNames})
+	if err != nil {
+		return nil, err
+	}
+	var resp []*LookupAccountNames
+	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
+		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal lookup_account_names response", APIID)
+	}
+	return resp, nil
 }
 
 //lookup_accounts
@@ -482,9 +482,6 @@ func (api *API) GetConversionRequests(accountName string) ([]*ConversionRequests
 }
 
 //get_account_history
-/*func (api *API) GetAccountHistory(account string, from uint64, limit uint32) (*json.RawMessage, error) {
-	return api.Raw("get_account_history", []interface{}{account, from, limit})
-}*/
 
 func (api *API) GetAccountHistory(account string, from uint64, limit uint32) ([]*types.OperationObject, error) {
 	raw, err := api.Raw("get_account_history", []interface{}{account, from, limit})
@@ -511,8 +508,16 @@ func (api *API) GetAccountHistory(account string, from uint64, limit uint32) ([]
 }
 
 //get_owner_history
-func (api *API) GetOwnerHistory(accountName string) (*json.RawMessage, error) {
-	return api.Raw("get_owner_history", []interface{}{accountName})
+func (api *API) GetOwnerHistory(accountName string) ([]*OwnerHistory, error) {
+	raw, err := api.Raw("get_owner_history", []interface{}{accountName})
+	if err != nil {
+		return nil, err
+	}
+	var resp []*OwnerHistory
+	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
+		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_owner_history response", APIID)
+	}
+	return resp, nil
 }
 
 //get_recovery_request
@@ -539,12 +544,12 @@ market = 2
 old_forum = 3
 old_market = 4
 */
-func (api *API) GetAccountBandwidth(accountName string, bandwidth_type uint32) (*Bandwidth, error) {
+func (api *API) GetAccountBandwidth(accountName string, bandwidth_type uint32) (*AccountBandwidth, error) {
 	raw, err := api.Raw("get_account_bandwidth", []interface{}{accountName, bandwidth_type})
 	if err != nil {
 		return nil, err
 	}
-	var resp *Bandwidth
+	var resp *AccountBandwidth
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
 		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_account_bandwidth response", APIID)
 	}

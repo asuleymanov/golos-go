@@ -59,8 +59,16 @@ func (api *API) GetTrendingTags(afterTag string, limit uint32) ([]*TrendingTags,
 }
 
 //get_tags_used_by_author
-func (api *API) GetTagsUsedByAuthor(accountName string) (*json.RawMessage, error) {
-	return api.Raw("get_tags_used_by_author", []interface{}{accountName})
+func (api *API) GetTagsUsedByAuthor(accountName string) (*[]string, error) {
+	raw, err := api.Raw("get_tags_used_by_author", []interface{}{accountName})
+	if err != nil {
+		return &[]string{}, err
+	}
+	var resp []string
+	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
+		return &[]string{}, errors.Wrapf(err, "golos: %v: failed to unmarshal get_hardfork_version response", APIID)
+	}
+	return &resp, nil
 }
 
 //get_discussions_by_trending
@@ -544,12 +552,12 @@ market = 2
 old_forum = 3
 old_market = 4
 */
-func (api *API) GetAccountBandwidth(accountName string, bandwidth_type uint32) (*AccountBandwidth, error) {
+func (api *API) GetAccountBandwidth(accountName string, bandwidth_type uint32) (*Bandwidth, error) {
 	raw, err := api.Raw("get_account_bandwidth", []interface{}{accountName, bandwidth_type})
 	if err != nil {
 		return nil, err
 	}
-	var resp *AccountBandwidth
+	var resp *Bandwidth
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
 		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_account_bandwidth response", APIID)
 	}

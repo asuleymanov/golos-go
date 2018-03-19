@@ -568,12 +568,3 @@ type OwnerHistory struct {
 	PreviousOwnerAuthority *AccountKeys `json:"previous_owner_authority"`
 	LastValidTime          string       `json:"last_valid_time"`
 }
-
-type AccountBandwidth struct {
-	ID                  int        `json:"id"`
-	Account             string     `json:"account"`
-	Type                string     `json:"type"`
-	AverageBandwidth    *types.Int `json:"average_bandwidth"`
-	LifetimeBandwidth   *types.Int `json:"lifetime_bandwidth"`
-	LastBandwidthUpdate string     `json:"last_bandwidth_update"`
-}

@@ -10,9 +10,31 @@ import (
 	"github.com/asuleymanov/golos-go/transactions"
 	"github.com/asuleymanov/golos-go/transports"
 	"github.com/asuleymanov/golos-go/transports/websocket"
+	"github.com/asuleymanov/golos-go/types"
 )
 
-var Key_List = make(map[string]Keys)
+var KeyList = make(map[string]Keys)
+
+func InitPrivateKey(username string, typeOfKey types.OpType, privKey string) {
+	var keys Keys
+
+	switch typeOfKey {
+	case "active":
+		keys.AKey = privKey
+	case "owner":
+		keys.OKey = privKey
+	case "posting":
+		keys.PKey = privKey
+	case "memo":
+		keys.MKey = privKey
+	}
+
+	InitPrivateKeys(username, keys)
+}
+
+func InitPrivateKeys(username string, keys Keys) {
+	KeyList[username] = keys
+}
 
 // Client can be used to access Golos remote APIs.
 // There is a public field for every Golos API available,

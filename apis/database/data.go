@@ -493,3 +493,12 @@ type Categories struct {
 	Discussions  *types.Int `json:"discussions"`
 	LastUpdate   string     `json:"last_update"`
 }
+
+type Bandwidth struct {
+	ID                  *types.Int   `json:"id"`
+	Account             string       `json:"account"`
+	Type                string       `json:"type"`
+	AverageBandwidth    *types.Int   `json:"average_bandwidth"`
+	LifetimeBandwidth   *types.Int64 `json:"lifetime_bandwidth"`
+	LastBandwidthUpdate *types.Time  `json:"last_bandwidth_update"`
+}

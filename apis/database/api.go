@@ -31,6 +31,7 @@ func (api *API) Raw(method string, params interface{}) (*json.RawMessage, error)
 //get_active_witnesses
 func (api *API) GetActiveWitnesses() ([]string, error) {
 	raw, err := api.Raw("get_active_witnesses", EmptyParams)
+
 	if err != nil {
 		return nil, err
 	}
@@ -213,8 +214,16 @@ func (api *API) GetAccounts(accountNames []string) ([]*Account, error) {
 }
 
 //lookup_account_names
-func (api *API) LookupAccountNames(accountNames []string) (*json.RawMessage, error) {
-	return api.Raw("lookup_account_names", [][]string{accountNames})
+func (api *API) LookupAccountNames(accountNames []string) ([]*LookupAccountNames, error) {
+	raw, err := api.Raw("lookup_account_names", [][]string{accountNames})
+	if err != nil {
+		return nil, err
+	}
+	var resp []*LookupAccountNames
+	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
+		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal lookup_account_names response", APIID)
+	}
+	return resp, nil
 }
 
 //lookup_accounts
@@ -243,9 +252,57 @@ func (api *API) GetAccountCount() (uint32, error) {
 	return resp, nil
 }
 
+
+//get_conversion_requests
+func (api *API) GetConversionRequests(accountName string) ([]*ConversionRequests, error) {
+	raw, err := api.Raw("get_conversion_requests", []string{accountName})
+	if err != nil {
+		return nil, err
+	}
+	var resp []*ConversionRequests
+	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
+		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_conversion_requests response", APIID)
+	}
+	return resp, nil
+}
+
+//get_account_history
+
+func (api *API) GetAccountHistory(account string, from uint64, limit uint32) ([]*types.OperationObject, error) {
+	raw, err := api.Raw("get_account_history", []interface{}{account, from, limit})
+	if err != nil {
+		return nil, err
+	}
+	var tmp1 [][]interface{}
+	if err := json.Unmarshal([]byte(*raw), &tmp1); err != nil {
+		return nil, err
+	}
+	var resp []*types.OperationObject
+	for _, v := range tmp1 {
+		byteData, errm := json.Marshal(&v[1])
+		if errm != nil {
+			return nil, errm
+		}
+		var tmp *types.OperationObject
+		if err := json.Unmarshal(byteData, &tmp); err != nil {
+			return nil, err
+		}
+		resp = append(resp, tmp)
+	}
+	return resp, nil
+}
+
 //get_owner_history
-func (api *API) GetOwnerHistory(accountName string) (*json.RawMessage, error) {
-	return api.Raw("get_owner_history", []interface{}{accountName})
+func (api *API) GetOwnerHistory(accountName string) ([]*OwnerHistory, error) {
+	raw, err := api.Raw("get_owner_history", []interface{}{accountName})
+	if err != nil {
+		return nil, err
+	}
+	var resp []*OwnerHistory
+	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
+		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_owner_history response", APIID)
+	}
+	return resp, nil
 }
 
 //get_recovery_request
@@ -264,8 +321,24 @@ func (api *API) GetWithdrawRoutes(accountName string, withdraw_route_type string
 }
 
 //get_account_bandwidth
-func (api *API) GetAccountBandwidth(accountName string, bandwidth_type uint32) (*json.RawMessage, error) {
-	return api.Raw("get_account_bandwidth", []interface{}{accountName, bandwidth_type})
+/*
+bandwidth_type:
+post = 0
+forum = 1
+market = 2
+old_forum = 3
+old_market = 4
+*/
+func (api *API) GetAccountBandwidth(accountName string, bandwidth_type uint32) (*Bandwidth, error) {
+	raw, err := api.Raw("get_account_bandwidth", []interface{}{accountName, bandwidth_type})
+	if err != nil {
+		return nil, err
+	}
+	var resp *Bandwidth
+	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
+		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_account_bandwidth response", APIID)
+	}
+	return resp, nil
 }
 
 //get_savings_withdraw_from

@@ -16,7 +16,7 @@ import (
 //We check whether there is a voter on the list of those who have already voted for the weight of the vote.
 
 func (client *Client) VerifyVoterWeight(author, permlink, voter string, weight int) bool {
-	ans, err := client.Database.GetActiveVotes(author, permlink)
+	ans, err := client.SocialNetwork.GetActiveVotes(author, permlink)
 
 	if err != nil {
 		log.Println(errors.Wrapf(err, "Error Verify Voter: "))
@@ -34,7 +34,7 @@ func (client *Client) VerifyVoterWeight(author, permlink, voter string, weight i
 //We check whether there is a voter on the list of those who have already voted without taking into account the weight of the vote.
 
 func (client *Client) VerifyVoter(author, permlink, voter string) bool {
-	ans, err := client.Database.GetActiveVotes(author, permlink)
+	ans, err := client.SocialNetwork.GetActiveVotes(author, permlink)
 
 	if err != nil {
 		log.Println(errors.Wrapf(err, "Error Verify Voter: "))
@@ -52,7 +52,7 @@ func (client *Client) VerifyVoter(author, permlink, voter string) bool {
 //We check whether there are voted
 
 func (client *Client) VerifyVotes(author, permlink string) bool {
-	ans, err := client.Database.GetActiveVotes(author, permlink)
+	ans, err := client.SocialNetwork.GetActiveVotes(author, permlink)
 
 	if err != nil {
 		log.Println(errors.Wrapf(err, "Error Verify Votes: "))
@@ -68,7 +68,7 @@ func (client *Client) VerifyVotes(author, permlink string) bool {
 
 //We check whether the entry in GOLOS is a comment.
 func (client *Client) VerifyComments(author, permlink string) bool {
-	ans, err := client.Database.GetContentReplies(author, permlink)
+	ans, err := client.SocialNetwork.GetContentReplies(author, permlink)
 
 	if err != nil {
 		log.Println(errors.Wrapf(err, "Error Verify Comments: "))
@@ -119,7 +119,7 @@ func (client *Client) VerifyFollow(follower, following string) bool {
 //Check if there is an entry in GOLOS
 
 func (client *Client) VerifyPost(author, permlink string) bool {
-	ans, err := client.Database.GetContent(author, permlink)
+	ans, err := client.SocialNetwork.GetContent(author, permlink)
 
 	if err != nil {
 		log.Println(errors.Wrapf(err, "Error Verify Post: "))
@@ -158,7 +158,7 @@ func (client *Client) VerifyDelegatePostingKeySign(from_user, to_user string) bo
 //Check whether the post of the user is his first post in GOLOS
 func (client *Client) VerifyFirstPost(username string) bool {
 	d := time.Now()
-	cont, err := client.Database.GetDiscussionsByAuthorBeforeDate(username, "", d.Format("2006-01-02T00:00:00"), 100)
+	cont, err := client.SocialNetwork.GetDiscussionsByAuthorBeforeDate(username, "", d.Format("2006-01-02T00:00:00"), 100)
 	if err != nil {
 		log.Println(errors.Wrapf(err, "Error Verify First Post: "))
 		return false

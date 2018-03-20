@@ -1,6 +1,7 @@
 package client
 
 import (
+	crand "crypto/rand"
 	"crypto/sha256"
 	"math/rand"
 	crand "crypto/rand"

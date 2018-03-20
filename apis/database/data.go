@@ -1,25 +1,32 @@
 package database
 
 import (
-	// Stdlib
-	"encoding/json"
-	"strconv"
-	"strings"
-
-	// RPC
 	"github.com/asuleymanov/golos-go/types"
 )
 
-type DiscussionQuery struct {
-	Tag            string   `json:"tag"`
-	Limit          uint32   `json:"limit"`
-	FilterTags     []string `json:"filter_tags"`
-	StartAuthor    string   `json:"start_author,omitempty"`
-	StartPermlink  string   `json:"start_permlink,omitempty"`
-	ParentAuthor   string   `json:"parent_author,omitempty"`
-	ParentPermlink string   `json:"parent_permlink"`
+//BlockHeader
+type BlockHeader struct {
+	Number                uint32        `json:"-"`
+	Previous              string        `json:"previous"`
+	Timestamp             string        `json:"timestamp"`
+	Witness               string        `json:"witness"`
+	TransactionMerkleRoot string        `json:"transaction_merkle_root"`
+	Extensions            []interface{} `json:"extensions"`
 }
 
+//Block
+type Block struct {
+	Number                uint32               `json:"-"`
+	Timestamp             *types.Time          `json:"timestamp"`
+	Witness               string               `json:"witness"`
+	WitnessSignature      string               `json:"witness_signature"`
+	TransactionMerkleRoot string               `json:"transaction_merkle_root"`
+	Previous              string               `json:"previous"`
+	Extensions            [][]interface{}      `json:"extensions"`
+	Transactions          []*types.Transaction `json:"transactions"`
+}
+
+//Config
 type Config struct {
 	SteemitBuildTestnet                   bool       `json:"STEEMIT_BUILD_TESTNET"`
 	GrapheneCurrentDBVersion              string     `json:"GRAPHENE_CURRENT_DB_VERSION"`
@@ -130,6 +137,7 @@ type Config struct {
 	BlockchainName                        string     `json:"BLOCKCHAIN_NAME"`
 }
 
+//DynamicGlobalProperties
 type DynamicGlobalProperties struct {
 	Time                     *types.Time `json:"time"`
 	TotalPow                 *types.Int  `json:"total_pow"`
@@ -159,200 +167,48 @@ type DynamicGlobalProperties struct {
 	MaxVirtualBandwidth      *types.Int  `json:"max_virtual_bandwidth"`
 }
 
-type Block struct {
-	Number                uint32               `json:"-"`
-	Timestamp             *types.Time          `json:"timestamp"`
-	Witness               string               `json:"witness"`
-	WitnessSignature      string               `json:"witness_signature"`
-	TransactionMerkleRoot string               `json:"transaction_merkle_root"`
-	Previous              string               `json:"previous"`
-	Extensions            [][]interface{}      `json:"extensions"`
-	Transactions          []*types.Transaction `json:"transactions"`
-}
-
-type Content struct {
-	ID                      *types.ID        `json:"id"`
-	Author                  string           `json:"author"`
-	Permlink                string           `json:"permlink"`
-	Category                string           `json:"category"`
-	ParentAuthor            string           `json:"parent_author"`
-	ParentPermlink          string           `json:"parent_permlink"`
-	Title                   string           `json:"title"`
-	Body                    string           `json:"body"`
-	JsonMetadata            *ContentMetadata `json:"json_metadata"`
-	LastUpdate              *types.Time      `json:"last_update"`
-	Created                 *types.Time      `json:"created"`
-	Active                  *types.Time      `json:"active"`
-	LastPayout              *types.Time      `json:"last_payout"`
-	Depth                   *types.Int       `json:"depth"`
-	Children                *types.Int       `json:"children"`
-	ChildrenRshares2        *types.Int       `json:"children_rshares2"`
-	NetRshares              *types.Int       `json:"net_rshares"`
-	AbsRshares              *types.Int       `json:"abs_rshares"`
-	VoteRshares             *types.Int       `json:"vote_rshares"`
-	ChildrenAbsRshares      *types.Int       `json:"children_abs_rshares"`
-	CashoutTime             *types.Time      `json:"cashout_time"`
-	MaxCashoutTime          *types.Time      `json:"max_cashout_time"`
-	TotalVoteWeight         *types.Int       `json:"total_vote_weight"`
-	RewardWeight            *types.Int       `json:"reward_weight"`
-	TotalPayoutValue        string           `json:"total_payout_value"`
-	CuratorPayoutValue      string           `json:"curator_payout_value"`
-	AuthorRewards           *types.Int       `json:"author_rewards"`
-	NetVotes                *types.Int       `json:"net_votes"`
-	RootComment             *types.Int       `json:"root_comment"`
-	Mode                    string           `json:"mode"`
-	MaxAcceptedPayout       string           `json:"max_accepted_payout"`
-	PercentSteemDollars     *types.Int       `json:"percent_steem_dollars"`
-	AllowReplies            bool             `json:"allow_replies"`
-	AllowVotes              bool             `json:"allow_votes"`
-	AllowCurationRewards    bool             `json:"allow_curation_rewards"`
-	URL                     string           `json:"url"`
-	RootTitle               string           `json:"root_title"`
-	PendingPayoutValue      string           `json:"pending_payout_value"`
-	TotalPendingPayoutValue string           `json:"total_pending_payout_value"`
-	ActiveVotes             []*VoteState     `json:"active_votes"`
-	Replies                 []*Content       `json:"replies"`
-	AuthorReputation        *types.Int       `json:"author_reputation"`
-	Promoted                string           `json:"promoted"`
-	BodyLength              *types.Int       `json:"body_length"`
-	RebloggedBy             []interface{}    `json:"reblogged_by"`
-}
-
-func (content *Content) IsStory() bool {
-	return content.ParentAuthor == ""
-}
-
-type ContentMetadata struct {
-	Flag  bool
-	Users []string
-	Tags  []string
-	Image []string
-}
-
-type ContentMetadataRaw struct {
-	Users types.StringSlice `json:"users"`
-	Tags  types.StringSlice `json:"tags"`
-	Image types.StringSlice `json:"image"`
-}
-
-func (metadata *ContentMetadata) UnmarshalJSON(data []byte) error {
-	unquoted, err := strconv.Unquote(string(data))
-	if err != nil {
-		return err
-	}
-
-	switch unquoted {
-	case "true":
-		metadata.Flag = true
-		return nil
-	case "false":
-		metadata.Flag = false
-		return nil
-	}
-
-	if len(unquoted) == 0 {
-		var value ContentMetadata
-		metadata = &value
-		return nil
-	}
-
-	var raw ContentMetadataRaw
-	if err := json.NewDecoder(strings.NewReader(unquoted)).Decode(&raw); err != nil {
-		return err
-	}
-
-	metadata.Users = raw.Users
-	metadata.Tags = raw.Tags
-	metadata.Image = raw.Image
-
-	return nil
-}
-
-type VoteState struct {
-	Voter   string      `json:"voter"`
-	Weight  *types.Int  `json:"weight"`
-	Rshares *types.Int  `json:"rshares"`
-	Percent int         `json:"percent"`
-	Time    *types.Time `json:"time"`
-}
-
+//ChainProperties
 type ChainProperties struct {
 	AccountCreationFee string     `json:"account_creation_fee"`
 	MaximumBlockSize   *types.Int `json:"maximum_block_size"`
 	SbdInterestRate    *types.Int `json:"sbd_interest_rate"`
 }
 
-type NextScheduledHardfork struct {
-	HfVersion string      `json:"hf_version"`
-	LiveTime  *types.Time `json:"live_time"`
-}
-
+//CurrentMedianHistoryPrice
 type CurrentMedianHistoryPrice struct {
 	Base  string `json:"base"`
 	Quote string `json:"quote"`
 }
 
-type ConversionRequests struct {
-	ID             *types.Int  `json:"id"`
-	Owner          string      `json:"owner"`
-	Requestid      *types.Int  `json:"requestid"`
-	Amount         string      `json:"amount"`
-	ConversionDate *types.Time `json:"conversion_date"`
+//FeedHistory
+type FeedHistory struct {
+	ID                   *types.Int                   `json:"id"`
+	CurrentMedianHistory *CurrentMedianHistoryPrice   `json:"current_median_history"`
+	PriceHistory         []*CurrentMedianHistoryPrice `json:"price_history"`
 }
 
-type Votes struct {
-	Authorperm string      `json:"authorperm"`
-	Weight     *types.Int  `json:"weight"`
-	Rshares    *types.Int  `json:"rshares"`
-	Percent    uint        `json:"percent"`
-	Time       *types.Time `json:"time"`
+//WitnessSchedule
+type WitnessSchedule struct {
+	ID                            *types.Int       `json:"id"`
+	CurrentVirtualTime            string           `json:"current_virtual_time"`
+	NextShuffleBlockNum           *types.Int       `json:"next_shuffle_block_num"`
+	CurrentShuffledWitnesses      string           `json:"current_shuffled_witnesses"`
+	NumScheduledWitnesses         *types.Int       `json:"num_scheduled_witnesses"`
+	Top19Weight                   *types.Int       `json:"top19_weight"`
+	TimeshareWeight               *types.Int       `json:"timeshare_weight"`
+	MinerWeight                   *types.Int       `json:"miner_weight"`
+	WitnessPayNormalizationFactor *types.Int       `json:"witness_pay_normalization_factor"`
+	MedianProps                   *ChainProperties `json:"median_props"`
+	MajorityVersion               string           `json:"majority_version"`
 }
 
-type BlockHeader struct {
-	Number                uint32        `json:"-"`
-	Previous              string        `json:"previous"`
-	Timestamp             string        `json:"timestamp"`
-	Witness               string        `json:"witness"`
-	TransactionMerkleRoot string        `json:"transaction_merkle_root"`
-	Extensions            []interface{} `json:"extensions"`
+//NextScheduledHardfork
+type NextScheduledHardfork struct {
+	HfVersion string      `json:"hf_version"`
+	LiveTime  *types.Time `json:"live_time"`
 }
 
-type OrderBook struct {
-	Ask []*OrderBookAB `json:"asks"`
-	Bid []*OrderBookAB `json:"bids"`
-}
-
-type OrderBookAB struct {
-	OrderPrice *OrderPrice `json:"order_price"`
-	RealPrice  string      `json:"real_price"`
-	Steem      *types.Int  `json:"steem"`
-	Sbd        *types.Int  `json:"sbd"`
-	Created    string      `json:"created"`
-}
-
-type OrderPrice struct {
-	Base  string `json:"base"`
-	Quote string `json:"quote"`
-}
-
-type OpenOrders struct {
-	ID         *types.ID   `json:"id"`
-	Created    types.Time  `json:"created"`
-	Expiration types.Time  `json:"expiration"`
-	Seller     string      `json:"seller"`
-	Orderid    *types.Int  `json:"orderid"`
-	ForSale    *types.Int  `json:"for_sale"`
-	SellPrice  *OrderPrice `json:"sell_price"`
-	RealPrice  string      `json:"real_price"`
-	Rewarded   bool        `json:"rewarded"`
-}
-
-type AccountKeys struct {
-	WeightThreshold *types.Int    `json:"weight_threshold"`
-	AccountAuths    []interface{} `json:"account_auths"`
-	KeyAuths        []interface{} `json:"key_auths"`
-}
-
+//Account
 type Account struct {
 	ID                            *types.Int    `json:"id"`
 	Name                          string        `json:"name"`
@@ -423,26 +279,25 @@ type Account struct {
 	BlogCategory                  interface{}   `json:"blog_category"`
 }
 
-type WitnessSchedule struct {
-	ID                            *types.Int       `json:"id"`
-	CurrentVirtualTime            string           `json:"current_virtual_time"`
-	NextShuffleBlockNum           *types.Int       `json:"next_shuffle_block_num"`
-	CurrentShuffledWitnesses      string           `json:"current_shuffled_witnesses"`
-	NumScheduledWitnesses         *types.Int       `json:"num_scheduled_witnesses"`
-	Top19Weight                   *types.Int       `json:"top19_weight"`
-	TimeshareWeight               *types.Int       `json:"timeshare_weight"`
-	MinerWeight                   *types.Int       `json:"miner_weight"`
-	WitnessPayNormalizationFactor *types.Int       `json:"witness_pay_normalization_factor"`
-	MedianProps                   *ChainProperties `json:"median_props"`
-	MajorityVersion               string           `json:"majority_version"`
+//AccountKeys
+type AccountKeys struct {
+	WeightThreshold *types.Int    `json:"weight_threshold"`
+	AccountAuths    []interface{} `json:"account_auths"`
+	KeyAuths        []interface{} `json:"key_auths"`
 }
 
-type FeedHistory struct {
-	ID                   *types.Int                   `json:"id"`
-	CurrentMedianHistory *CurrentMedianHistoryPrice   `json:"current_median_history"`
-	PriceHistory         []*CurrentMedianHistoryPrice `json:"price_history"`
+//SavingsWithdraw
+type SavingsWithdraw struct {
+	ID        *types.ID   `json:"id"`
+	From      string      `json:"from"`
+	To        string      `json:"to"`
+	Memo      string      `json:"memo"`
+	RequestID *types.Int  `json:"request_id"`
+	Amount    string      `json:"amount"`
+	Complete  *types.Time `json:"complete"`
 }
 
+//Witness
 type Witness struct {
 	ID                    *types.Int                 `json:"id"`
 	Owner                 string                     `json:"owner"`
@@ -466,32 +321,13 @@ type Witness struct {
 	HardforkTimeVote      *types.Time                `json:"hardfork_time_vote"`
 }
 
-type SavingsWithdraw struct {
-	ID        *types.ID   `json:"id"`
-	From      string      `json:"from"`
-	To        string      `json:"to"`
-	Memo      string      `json:"memo"`
-	RequestID *types.Int  `json:"request_id"`
-	Amount    string      `json:"amount"`
-	Complete  *types.Time `json:"complete"`
-}
-
-type TrendingTags struct {
-	Name                  string     `json:"name"`
-	TotalChildrenRshares2 string     `json:"total_children_rshares2"`
-	TotalPayouts          string     `json:"total_payouts"`
-	NetVotes              *types.Int `json:"net_votes"`
-	TopPosts              *types.Int `json:"top_posts"`
-	Comments              *types.Int `json:"comments"`
-}
-
-type Categories struct {
-	ID           *types.Int `json:"id"`
-	Name         string     `json:"name"`
-	AbsRshares   string     `json:"abs_rshares"`
-	TotalPayouts string     `json:"total_payouts"`
-	Discussions  *types.Int `json:"discussions"`
-	LastUpdate   string     `json:"last_update"`
+//ConversionRequests
+type ConversionRequests struct {
+	ID             *types.Int  `json:"id"`
+	Owner          string      `json:"owner"`
+	Requestid      *types.Int  `json:"requestid"`
+	Amount         string      `json:"amount"`
+	ConversionDate *types.Time `json:"conversion_date"`
 }
 
 type Bandwidth struct {

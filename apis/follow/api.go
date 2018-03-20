@@ -1,25 +1,35 @@
 package follow
 
 import (
+	// Stdlib
 	"encoding/json"
 
+	// RPC
 	"github.com/asuleymanov/golos-go/transports"
+	"github.com/asuleymanov/golos-go/internal/rpc"
+
+	// Vendor
 	"github.com/pkg/errors"
 )
 
-const APIID = "follow"
+const APIID = "follow_api"
 
 type API struct {
+	id     int
 	caller transports.Caller
 }
 
-func NewAPI(caller transports.Caller) *API {
-	return &API{caller}
+func NewAPI(caller transports.Caller) (*API, error) {
+	id, err := rpc.GetNumericAPIID(caller, APIID)
+	if err != nil {
+		return nil, err
+	}
+	return &API{id, caller}, nil
 }
 
 func (api *API) Raw(method string, params interface{}) (*json.RawMessage, error) {
 	var resp json.RawMessage
-	if err := api.caller.Call("call", []interface{}{APIID, method, params}, &resp); err != nil {
+	if err := api.caller.Call("call", []interface{}{api.id, method, params}, &resp); err != nil {
 		return nil, errors.Wrapf(err, "golos: %v: failed to call %v\n", APIID, method)
 	}
 	return &resp, nil

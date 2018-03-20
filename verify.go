@@ -14,10 +14,8 @@ import (
 )
 
 //We check whether there is a voter on the list of those who have already voted for the weight of the vote.
-
 func (client *Client) VerifyVoterWeight(author, permlink, voter string, weight int) bool {
 	ans, err := client.Database.GetActiveVotes(author, permlink)
-
 	if err != nil {
 		log.Println(errors.Wrapf(err, "Error Verify Voter: "))
 		return false
@@ -32,10 +30,8 @@ func (client *Client) VerifyVoterWeight(author, permlink, voter string, weight i
 }
 
 //We check whether there is a voter on the list of those who have already voted without taking into account the weight of the vote.
-
 func (client *Client) VerifyVoter(author, permlink, voter string) bool {
 	ans, err := client.Database.GetActiveVotes(author, permlink)
-
 	if err != nil {
 		log.Println(errors.Wrapf(err, "Error Verify Voter: "))
 		return false
@@ -50,10 +46,8 @@ func (client *Client) VerifyVoter(author, permlink, voter string) bool {
 }
 
 //We check whether there are voted
-
 func (client *Client) VerifyVotes(author, permlink string) bool {
 	ans, err := client.Database.GetActiveVotes(author, permlink)
-
 	if err != nil {
 		log.Println(errors.Wrapf(err, "Error Verify Votes: "))
 		return false
@@ -69,7 +63,6 @@ func (client *Client) VerifyVotes(author, permlink string) bool {
 //We check whether the entry in GOLOS is a comment.
 func (client *Client) VerifyComments(author, permlink string) bool {
 	ans, err := client.Database.GetContentReplies(author, permlink)
-
 	if err != nil {
 		log.Println(errors.Wrapf(err, "Error Verify Comments: "))
 		return false
@@ -117,10 +110,8 @@ func (client *Client) VerifyFollow(follower, following string) bool {
 }
 
 //Check if there is an entry in GOLOS
-
 func (client *Client) VerifyPost(author, permlink string) bool {
 	ans, err := client.Database.GetContent(author, permlink)
-
 	if err != nil {
 		log.Println(errors.Wrapf(err, "Error Verify Post: "))
 		return false

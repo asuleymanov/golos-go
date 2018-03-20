@@ -1,9 +1,5 @@
 package client
 
-import (
-	"github.com/asuleymanov/golos-go/types"
-)
-
 //The type is used as a keystroke for a specific user.
 //Only a few keys can be set.
 type Keys struct {
@@ -31,8 +27,7 @@ type OperResp struct {
 //Type for the Comment and Post functions.
 //Sets the water to receive payment for a comment or post.
 type PCOptions struct {
-	Percent          uint16
-	BeneficiarieList []types.Beneficiarie
+	Percent uint16
 }
 
 //Type for MultiTransfer function

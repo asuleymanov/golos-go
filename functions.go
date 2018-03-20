@@ -100,22 +100,6 @@ func (client *Client) Comment(username, authorname, ppermlink, body string, o *P
 			PSD = 0
 		}
 
-		var ext []interface{}
-		if len(o.BeneficiarieList) > 0 {
-			var ben_list []types.Beneficiarie
-			var benef types.CommentPayoutBeneficiaries
-			for _, val := range o.BeneficiarieList {
-				ben_list = append(ben_list, types.Beneficiarie{val.Account, val.Weight})
-			}
-			benef.Beneficiaries = ben_list
-			ext = append(ext, 0)
-			ext = append(ext, benef)
-		}
-		Extens := []interface{}{}
-		if len(ext) > 0 {
-			Extens = []interface{}{ext}
-		}
-
 		txo := &types.CommentOptionsOperation{
 			Author:               username,
 			Permlink:             permlink,
@@ -123,7 +107,7 @@ func (client *Client) Comment(username, authorname, ppermlink, body string, o *P
 			PercentSteemDollars:  PSD,
 			AllowVotes:           true,
 			AllowCurationRewards: true,
-			Extensions:           Extens,
+			Extensions:           []interface{}{},
 		}
 		trx = append(trx, txo)
 	}
@@ -183,22 +167,6 @@ func (client *Client) Post(authorname, title, body, permlink, ptag, post_image s
 			PSD = 0
 		}
 
-		var ext []interface{}
-		if len(o.BeneficiarieList) > 0 {
-			var ben_list []types.Beneficiarie
-			var benef types.CommentPayoutBeneficiaries
-			for _, val := range o.BeneficiarieList {
-				ben_list = append(ben_list, types.Beneficiarie{val.Account, val.Weight})
-			}
-			benef.Beneficiaries = ben_list
-			ext = append(ext, 0)
-			ext = append(ext, benef)
-		}
-		Extens := []interface{}{}
-		if len(ext) > 0 {
-			Extens = []interface{}{ext}
-		}
-
 		txo := &types.CommentOptionsOperation{
 			Author:               authorname,
 			Permlink:             permlink,
@@ -206,7 +174,7 @@ func (client *Client) Post(authorname, title, body, permlink, ptag, post_image s
 			PercentSteemDollars:  PSD,
 			AllowVotes:           true,
 			AllowCurationRewards: true,
-			Extensions:           Extens,
+			Extensions:           []interface{}{},
 		}
 		trx = append(trx, txo)
 	}
@@ -616,9 +584,7 @@ func (client *Client) WitnessUpdate(owner, url, blocksigningkey, accountcreation
 	return &OperResp{NameOper: "WitnessUpdate", Bresp: resp}, err
 }
 
-
 func (client *Client) AccountCreate(creator, newAccountName, password , fee string) (*OperResp, error) {
-
 	type Keys struct {
 		Private string
 		Public  string

@@ -1,4 +1,4 @@
-package market_history
+package market
 
 import (
 	"github.com/asuleymanov/golos-go/types"
@@ -56,16 +56,4 @@ type MarketHistory struct {
 	CloseSbd    int         `json:"close_sbd"`
 	SteemVolume int         `json:"steem_volume"`
 	SbdVolume   int         `json:"sbd_volume"`
-}
-
-type OpenOrders struct {
-	ID         *types.ID   `json:"id"`
-	Created    types.Time  `json:"created"`
-	Expiration types.Time  `json:"expiration"`
-	Seller     string      `json:"seller"`
-	Orderid    *types.Int  `json:"orderid"`
-	ForSale    *types.Int  `json:"for_sale"`
-	SellPrice  *OrderPrice `json:"sell_price"`
-	RealPrice  string      `json:"real_price"`
-	Rewarded   bool        `json:"rewarded"`
 }

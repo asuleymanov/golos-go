@@ -10,7 +10,6 @@ import (
 	"github.com/asuleymanov/golos-go/transactions"
 	"github.com/asuleymanov/golos-go/transports"
 	"github.com/asuleymanov/golos-go/transports/websocket"
-	"github.com/asuleymanov/golos-go/types"
 )
 
 // Client can be used to access Golos remote APIs.

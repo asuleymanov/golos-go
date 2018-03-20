@@ -1,8 +1,6 @@
 package client
 
 import (
-	"log"
-
 	"github.com/pkg/errors"
 
 	"github.com/asuleymanov/golos-go/encoding/wif"

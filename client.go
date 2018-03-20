@@ -34,7 +34,7 @@ type Client struct {
 	Chain *transactions.Chain
 
 	// Current keys for operations
-	CurrentKeys	*Keys
+	CurrentKeys *Keys
 }
 
 // NewClient creates a new RPC client that use the given CallCloser internally.

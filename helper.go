@@ -5,13 +5,13 @@ import (
 )
 
 //Returns the subscriber's list of subscribers
-func (client *Client) FollowersList(username string) ([]string, error) {
+func (api *Client) FollowersList(username string) ([]string, error) {
 	var followers []string
-	fc, _ := client.Follow.GetFollowCount(username)
+	fc, _ := api.Follow.GetFollowCount(username)
 	fccount := fc.FollowerCount
 	i := 0
 	for i < fccount {
-		req, err := client.Follow.GetFollowers(username, "", "blog", 1000)
+		req, err := api.Follow.GetFollowers(username, "", "blog", 1000)
 		if err != nil {
 			return followers, err
 		}
@@ -26,13 +26,13 @@ func (client *Client) FollowersList(username string) ([]string, error) {
 }
 
 //Returns the list of user subscriptions
-func (client *Client) FollowingList(username string) ([]string, error) {
+func (api *Client) FollowingList(username string) ([]string, error) {
 	var following []string
-	fc, _ := client.Follow.GetFollowCount(username)
+	fc, _ := api.Follow.GetFollowCount(username)
 	fccount := fc.FollowingCount
 	i := 0
 	for i < fccount {
-		req, err := client.Follow.GetFollowing(username, "", "blog", 100)
+		req, err := api.Follow.GetFollowing(username, "", "blog", 100)
 		if err != nil {
 			return following, err
 		}
@@ -47,13 +47,13 @@ func (client *Client) FollowingList(username string) ([]string, error) {
 }
 
 //Returns the POWER of the user based on the time of the last vote.
-func (client *Client) GetVotingPower(username string) (int, error) {
-	conf, errc := client.Database.GetConfig()
+func (api *Client) GetVotingPower(username string) (int, error) {
+	conf, errc := api.Database.GetConfig()
 	if errc != nil {
 		return 0, errc
 	}
 
-	acc, erra := client.Database.GetAccounts([]string{username})
+	acc, erra := api.Database.GetAccounts([]string{username})
 	if erra != nil {
 		return 0, erra
 	}

@@ -14,10 +14,8 @@ import (
 )
 
 //We check whether there is a voter on the list of those who have already voted for the weight of the vote.
-
-func (client *Client) VerifyVoterWeight(author, permlink, voter string, weight int) bool {
-	ans, err := client.Database.GetActiveVotes(author, permlink)
-
+func (api *Client) VerifyVoterWeight(author, permlink, voter string, weight int) bool {
+	ans, err := api.SocialNetwork.GetActiveVotes(author, permlink)
 	if err != nil {
 		log.Println(errors.Wrapf(err, "Error Verify Voter: "))
 		return false
@@ -32,10 +30,8 @@ func (client *Client) VerifyVoterWeight(author, permlink, voter string, weight i
 }
 
 //We check whether there is a voter on the list of those who have already voted without taking into account the weight of the vote.
-
-func (client *Client) VerifyVoter(author, permlink, voter string) bool {
-	ans, err := client.Database.GetActiveVotes(author, permlink)
-
+func (api *Client) VerifyVoter(author, permlink, voter string) bool {
+	ans, err := api.SocialNetwork.GetActiveVotes(author, permlink)
 	if err != nil {
 		log.Println(errors.Wrapf(err, "Error Verify Voter: "))
 		return false
@@ -50,10 +46,8 @@ func (client *Client) VerifyVoter(author, permlink, voter string) bool {
 }
 
 //We check whether there are voted
-
-func (client *Client) VerifyVotes(author, permlink string) bool {
-	ans, err := client.Database.GetActiveVotes(author, permlink)
-
+func (api *Client) VerifyVotes(author, permlink string) bool {
+	ans, err := api.SocialNetwork.GetActiveVotes(author, permlink)
 	if err != nil {
 		log.Println(errors.Wrapf(err, "Error Verify Votes: "))
 		return false
@@ -67,9 +61,8 @@ func (client *Client) VerifyVotes(author, permlink string) bool {
 }
 
 //We check whether the entry in GOLOS is a comment.
-func (client *Client) VerifyComments(author, permlink string) bool {
-	ans, err := client.Database.GetContentReplies(author, permlink)
-
+func (api *Client) VerifyComments(author, permlink string) bool {
+	ans, err := api.SocialNetwork.GetContentReplies(author, permlink)
 	if err != nil {
 		log.Println(errors.Wrapf(err, "Error Verify Comments: "))
 		return false
@@ -83,8 +76,8 @@ func (client *Client) VerifyComments(author, permlink string) bool {
 }
 
 //Check if the user made a repost entry in GOLOS
-func (client *Client) VerifyReblogs(author, permlink, rebloger string) bool {
-	ans, err := client.Follow.GetRebloggedBy(author, permlink)
+func (api *Client) VerifyReblogs(author, permlink, rebloger string) bool {
+	ans, err := api.Follow.GetRebloggedBy(author, permlink)
 	if err != nil {
 		log.Println(errors.Wrapf(err, "Error Verify Reblogs: "))
 		return false
@@ -99,8 +92,8 @@ func (client *Client) VerifyReblogs(author, permlink, rebloger string) bool {
 }
 
 //Check if one user is signed for the second in GOLOS
-func (client *Client) VerifyFollow(follower, following string) bool {
-	ans, err := client.Follow.GetFollowing(follower, following, "blog", 1)
+func (api *Client) VerifyFollow(follower, following string) bool {
+	ans, err := api.Follow.GetFollowing(follower, following, "blog", 1)
 	if err != nil {
 		log.Println(errors.Wrapf(err, "Error Verify Follow: "))
 		return false
@@ -117,10 +110,8 @@ func (client *Client) VerifyFollow(follower, following string) bool {
 }
 
 //Check if there is an entry in GOLOS
-
-func (client *Client) VerifyPost(author, permlink string) bool {
-	ans, err := client.Database.GetContent(author, permlink)
-
+func (api *Client) VerifyPost(author, permlink string) bool {
+	ans, err := api.SocialNetwork.GetContent(author, permlink)
 	if err != nil {
 		log.Println(errors.Wrapf(err, "Error Verify Post: "))
 		return false
@@ -135,8 +126,8 @@ func (client *Client) VerifyPost(author, permlink string) bool {
 }
 
 //We check whether the user has delegated the opportunity to use his post by using operations from a given user.
-func (client *Client) VerifyDelegatePostingKeySign(from_user, to_user string) bool {
-	acc, err := client.Database.GetAccounts([]string{from_user})
+func (api *Client) VerifyDelegatePostingKeySign(from_user, to_user string) bool {
+	acc, err := api.Database.GetAccounts([]string{from_user})
 	if err != nil {
 		log.Println(errors.Wrapf(err, "Error Verify Delegate Vote Sign: "))
 		return false
@@ -156,9 +147,9 @@ func (client *Client) VerifyDelegatePostingKeySign(from_user, to_user string) bo
 }
 
 //Check whether the post of the user is his first post in GOLOS
-func (client *Client) VerifyFirstPost(username string) bool {
+func (api *Client) VerifyFirstPost(username string) bool {
 	d := time.Now()
-	cont, err := client.Database.GetDiscussionsByAuthorBeforeDate(username, "", d.Format("2006-01-02T00:00:00"), 100)
+	cont, err := api.SocialNetwork.GetDiscussionsByAuthorBeforeDate(username, "", d.Format("2006-01-02T00:00:00"), 100)
 	if err != nil {
 		log.Println(errors.Wrapf(err, "Error Verify First Post: "))
 		return false
@@ -173,8 +164,8 @@ func (client *Client) VerifyFirstPost(username string) bool {
 }
 
 //Check if the user exists in GOLOS
-func (client *Client) VerifyUser(username string) bool {
-	acc, err := client.Database.GetAccounts([]string{username})
+func (api *Client) VerifyUser(username string) bool {
+	acc, err := api.Database.GetAccounts([]string{username})
 	if err != nil {
 		log.Println(errors.Wrapf(err, "Error Verify User: "))
 		return false
@@ -187,9 +178,9 @@ func (client *Client) VerifyUser(username string) bool {
 
 //We check the possibility of execution of the signed transaction for its execution in GOLOS.
 //The check is performed using the standard GetVerifyAuthority API.
-func (client *Client) VerifyTrx(username string, strx types.Operation) (bool, error) {
+func (api *Client) VerifyTrx(username string, strx types.Operation) (bool, error) {
 	// Получение необходимых параметров
-	props, err := client.Database.GetDynamicGlobalProperties()
+	props, err := api.Database.GetDynamicGlobalProperties()
 	if err != nil {
 		return false, err
 	}
@@ -208,18 +199,15 @@ func (client *Client) VerifyTrx(username string, strx types.Operation) (bool, er
 	tx.PushOperation(strx)
 
 	// Получаем необходимый для подписи ключ
-	privKeys, err := client.SigningKeys(strx)
-	if err != nil {
-		return false, err
-	}
+	privKeys := api.SigningKeys(username, strx)
 
 	// Подписываем транзакцию
-	if err := tx.Sign(privKeys, client.Chain); err != nil {
+	if err := tx.Sign(privKeys, api.Chain); err != nil {
 		return false, err
 	}
 
 	// Отправка транзакции
-	resp, err := client.Database.GetVerifyAuthority(tx.Transaction)
+	resp, err := api.Database.GetVerifyAuthority(tx.Transaction)
 
 	if err != nil {
 		return false, err

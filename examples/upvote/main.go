@@ -7,33 +7,29 @@ import (
 	"log"
 
 	// RPC
-	client "github.com/asuleymanov/golos-go"
+	"github.com/asuleymanov/golos-go/client"
 
 	// Vendor
 	"github.com/pkg/errors"
 )
 
 var (
+	cls   = client.NewApi([]string{"wss://api.golos.cf", "wss://ws.golos.io"}, "golos")
 	voter = ""
 	key   = ""
 )
 
 func main() {
-	cls, err := client.NewClient([]string{"wss://api.golos.cf", "wss://ws.golos.io"}, "golos")
-	if err != nil {
-		log.Fatalln("Error:", err)
-	}
-
-	defer cls.Close()
+	defer cls.Rpc.Close()
 
 	client.Key_List[voter] = client.Keys{PKey: key}
 
-	if err := run(cls); err != nil {
+	if err := run(); err != nil {
 		log.Fatalln("Error:", err)
 	}
 }
 
-func run(cls *client.Client) (err error) {
+func run() (err error) {
 	flag.Parse()
 	// Process args.
 	args := flag.Args()

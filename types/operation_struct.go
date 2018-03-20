@@ -370,7 +370,7 @@ func (op *SetWithdrawVestingRouteOperation) Data() interface{} {
 
 // struct LimitOrderCreate2Operation{}
 type LimitOrderCreate2Operation struct {
-	Owner        string    `json:"owner"`
+	Qwner        string    `json:"owner"`
 	Orderid      uint32    `json:"orderid"`
 	AmountToSell string    `json:"amount_to_sell"`
 	ExchangeRate *ExchRate `json:"exchange_rate"`

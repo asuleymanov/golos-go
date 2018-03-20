@@ -14,6 +14,8 @@ import (
 	"github.com/asuleymanov/golos-go/transports/websocket"
 )
 
+var Key_List = make(map[string]Keys)
+
 // Client can be used to access Golos remote APIs.
 // There is a public field for every Golos API available,
 // e.g. Client.Database corresponds to database_api.
@@ -40,9 +42,6 @@ type Client struct {
 
 	//Chain Id
 	Chain *transactions.Chain
-
-	// Current keys for operations
-	CurrentKeys *Keys
 }
 
 // NewClient creates a new RPC client that use the given CallCloser internally.
@@ -78,10 +77,6 @@ func NewClient(url []string, chain string) (*Client, error) {
 // It simply calls Close() on the underlying CallCloser.
 func (client *Client) Close() error {
 	return client.cc.Close()
-}
-
-func (client *Client) SetKeys(keys *Keys) {
-	client.CurrentKeys = keys
 }
 
 func initclient(url []string) (*websocket.Transport, error) {

@@ -4,31 +4,29 @@ import (
 	"log"
 	"time"
 
-	client "github.com/asuleymanov/golos-go"
+	"github.com/asuleymanov/golos-go/client"
 	"github.com/asuleymanov/golos-go/types"
 )
 
+var cls = client.NewApi([]string{"wss://api.golos.cf", "wss://ws.golos.io"}, "golos")
+
 func main() {
-	cls, err := client.NewClient([]string{"wss://api.golos.cf", "wss://ws.golos.io"}, "golos")
-	if err != nil {
-		log.Fatalln("Error:", err)
-	}
-	defer cls.Close()
-	if err := run(cls); err != nil {
+	defer cls.Rpc.Close()
+	if err := run(); err != nil {
 		log.Fatalln("Error:", err)
 	}
 }
 
-func run(cls *client.Client) (err error) {
+func run() (err error) {
 	// Get config.
 	log.Println("---> GetConfig()")
-	config, err := cls.Database.GetConfig()
+	config, err := cls.Rpc.Database.GetConfig()
 	if err != nil {
 		return err
 	}
 
 	// Use the last irreversible block number as the initial last block number.
-	props, err := cls.Database.GetDynamicGlobalProperties()
+	props, err := cls.Rpc.Database.GetDynamicGlobalProperties()
 	if err != nil {
 		return err
 	}
@@ -38,14 +36,14 @@ func run(cls *client.Client) (err error) {
 	log.Printf("---> Entering the block processing loop (last block = %v)\n", lastBlock)
 	for {
 		// Get current properties.
-		props, err := cls.Database.GetDynamicGlobalProperties()
+		props, err := cls.Rpc.Database.GetDynamicGlobalProperties()
 		if err != nil {
 			return err
 		}
 
 		// Process new blocks.
 		for props.LastIrreversibleBlockNum-lastBlock > 0 {
-			block, err := cls.Database.GetBlock(lastBlock)
+			block, err := cls.Rpc.Database.GetBlock(lastBlock)
 			if err != nil {
 				return err
 			}

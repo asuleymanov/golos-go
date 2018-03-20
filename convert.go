@@ -6,8 +6,8 @@ import (
 )
 
 //Returns the average cost of GBG when converting GOLOS.
-func (client *Client) SbdMedianPrice() (float64, error) {
-	smpreq, errsmp := client.Database.GetFeedHistory()
+func (api *Client) SbdMedianPrice() (float64, error) {
+	smpreq, errsmp := api.Database.GetFeedHistory()
 	if errsmp != nil {
 		return 0, errsmp
 	}
@@ -34,8 +34,8 @@ func (client *Client) SbdMedianPrice() (float64, error) {
 }
 
 //Returns the ratio of TotalVersingFundSteem to TotalVestingShares.
-func (client *Client) SteemPerMvest() (float64, error) {
-	dgp, errdgp := client.Database.GetDynamicGlobalProperties()
+func (api *Client) SteemPerMvest() (float64, error) {
+	dgp, errdgp := api.Database.GetDynamicGlobalProperties()
 	if errdgp != nil {
 		return 0, errdgp
 	}

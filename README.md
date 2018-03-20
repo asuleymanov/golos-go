@@ -11,7 +11,7 @@ Golang RPC client library for [Golos](https://golos.io).
 ## Usage
 
 ```go
-import client "github.com/asuleymanov/golos-go"
+import "github.com/asuleymanov/golos-go/client"
 ```
 
 
@@ -23,7 +23,7 @@ for more complete and ready to use examples.
 ```go
 	cls,_ := client.NewClient([]string{"wss://ws.golos.io"},"golos")
 	defer cls.Close()
-
+	
 	// Get config.
 	log.Println("---> GetConfig()")
 	config, err := cls.Database.GetConfig()

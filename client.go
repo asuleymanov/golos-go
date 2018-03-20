@@ -13,29 +13,6 @@ import (
 	"github.com/asuleymanov/golos-go/types"
 )
 
-var KeyList = make(map[string]Keys)
-
-func InitPrivateKey(username string, typeOfKey types.OpType, privKey string) {
-	var keys Keys
-
-	switch typeOfKey {
-	case "active":
-		keys.AKey = privKey
-	case "owner":
-		keys.OKey = privKey
-	case "posting":
-		keys.PKey = privKey
-	case "memo":
-		keys.MKey = privKey
-	}
-
-	InitPrivateKeys(username, keys)
-}
-
-func InitPrivateKeys(username string, keys Keys) {
-	KeyList[username] = keys
-}
-
 // Client can be used to access Golos remote APIs.
 // There is a public field for every Golos API available,
 // e.g. Client.Database corresponds to database_api.
@@ -56,6 +33,9 @@ type Client struct {
 
 	//Chain Id
 	Chain *transactions.Chain
+
+	// Current keys for operations
+	CurrentKeys	*Keys
 }
 
 // NewClient creates a new RPC client that use the given CallCloser internally.
@@ -96,6 +76,10 @@ func NewClient(url []string, chain string) (*Client, error) {
 // It simply calls Close() on the underlying CallCloser.
 func (client *Client) Close() error {
 	return client.cc.Close()
+}
+
+func (client *Client) SetKeys(keys *Keys) {
+	client.CurrentKeys = keys
 }
 
 func initclient(url []string) (*websocket.Transport, error) {

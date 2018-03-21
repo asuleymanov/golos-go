@@ -73,11 +73,12 @@ func (client *Client) GetVotingPower(username string) (int, error) {
 	return power, nil
 }
 
-func (client *Client) GetAuthorReward(username, permlink string) (*types.AuthorRewardOperation, error) {
-	resp, err := client.Database.GetAccountHistory(username, -1, 1000)
-	if err != nil {
-		return nil, err
-	} else {
+func (client *Client) GetAuthorReward(username, permlink string, full bool) (*types.AuthorRewardOperation, error) {
+	if !full {
+		resp, err := client.Database.GetAccountHistory(username, -1, 1000)
+		if err != nil {
+			return nil, err
+		}
 		for k, v := range resp {
 			if v.OperationType == "author_reward" {
 				op := resp[k].Operation.Data()
@@ -87,5 +88,36 @@ func (client *Client) GetAuthorReward(username, permlink string) (*types.AuthorR
 			}
 		}
 		return nil, errors.New("In the last 1000 entries from the user's history, no data was found.")
+	} else {
+		from := 1000
+		limit := 1000
+		var lastBlock uint32 = 0
+		for {
+			ans, err := client.Database.GetAccountHistory(username, int64(from), uint32(limit))
+			if err != nil {
+				return nil, err
+			}
+
+			if len(ans) == 0 {
+				break
+			}
+			for k, v := range ans {
+				if v.OperationType == "author_reward" {
+					op := ans[k].Operation.Data()
+					if op.(*types.AuthorRewardOperation).Permlink == permlink {
+						return op.(*types.AuthorRewardOperation), nil
+					}
+				}
+			}
+			s := ans[len(ans)-1:]
+			block := s[0].BlockNumber
+			if block == lastBlock {
+				break
+			}
+
+			lastBlock = block
+			from = from + limit
+		}
+		return nil, errors.New("Data about the publication is not found in the entire history of the user's actions.")
 	}
 }

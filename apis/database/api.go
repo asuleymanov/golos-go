@@ -490,8 +490,11 @@ func (api *API) GetConversionRequests(accountName string) ([]*ConversionRequests
 }
 
 //get_account_history
-
-func (api *API) GetAccountHistory(account string, from uint64, limit uint32) ([]*types.OperationObject, error) {
+/*
+When from = -1, the last {limit + 1} history items will be displayed.
+The limit parameter must not exceed from (the exception is from = -1), since the previous {from} elements of the history are displayed.
+*/
+func (api *API) GetAccountHistory(account string, from int64, limit uint32) ([]*types.OperationObject, error) {
 	raw, err := api.Raw("get_account_history", []interface{}{account, from, limit})
 	if err != nil {
 		return nil, err

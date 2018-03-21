@@ -1,7 +1,10 @@
 package client
 
 import (
+	"errors"
 	"time"
+
+	"github.com/asuleymanov/golos-go/types"
 )
 
 //Returns the subscriber's list of subscribers
@@ -68,4 +71,21 @@ func (client *Client) GetVotingPower(username string) (int, error) {
 		power = 10000
 	}
 	return power, nil
+}
+
+func (client *Client) GetAuthorReward(username, permlink string) (*types.AuthorRewardOperation, error) {
+	resp, err := client.Database.GetAccountHistory(username, -1, 1000)
+	if err != nil {
+		return nil, err
+	} else {
+		for k, v := range resp {
+			if v.OperationType == "author_reward" {
+				op := resp[k].Operation.Data()
+				if op.(*types.AuthorRewardOperation).Permlink == permlink {
+					return op.(*types.AuthorRewardOperation), nil
+				}
+			}
+		}
+		return nil, errors.New("In the last 1000 entries from the user's history, no data was found.")
+	}
 }

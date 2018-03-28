@@ -63,7 +63,7 @@ func NewClient(url []string, chain string) (*Client, error) {
 		client.NetworkBroadcast = nil
 	}
 
-	client.Chain, err = initChainId(chain)
+	client.Chain, err = initChainID(chain)
 	if err != nil {
 		client.Chain = transactions.GolosChain
 	}
@@ -77,6 +77,7 @@ func (client *Client) Close() error {
 	return client.cc.Close()
 }
 
+//SetKeys you can specify keys for signing transactions.
 func (client *Client) SetKeys(keys *Keys) {
 	client.CurrentKeys = keys
 }
@@ -91,16 +92,16 @@ func initclient(url []string) (*websocket.Transport, error) {
 	return t, nil
 }
 
-func initChainId(str string) (*transactions.Chain, error) {
-	var ChainId transactions.Chain
+func initChainID(str string) (*transactions.Chain, error) {
+	var ChainID transactions.Chain
 	// Определяем ChainId
 	switch str {
 	case "golos":
-		ChainId = *transactions.GolosChain
+		ChainID = *transactions.GolosChain
 	case "test":
-		ChainId = *transactions.TestChain
+		ChainID = *transactions.TestChain
 	default:
 		return nil, errors.New("Chain not found")
 	}
-	return &ChainId, nil
+	return &ChainID, nil
 }

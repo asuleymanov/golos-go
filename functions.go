@@ -19,6 +19,7 @@ import (
 
 const fdt = `"20060102t150405"`
 
+//Vote for publication
 func (client *Client) Vote(username, authorname, permlink string, weight int) (*OperResp, error) {
 	if weight > 10000 {
 		weight = 10000
@@ -41,6 +42,8 @@ func (client *Client) Vote(username, authorname, permlink string, weight int) (*
 	return &OperResp{NameOper: "Vote", Bresp: resp}, err
 }
 
+//MultiVote mass voting for publication.
+//Using the opportunity to delegate the rights to sign.
 func (client *Client) MultiVote(username, author, permlink string, arrvote []ArrVote) (*OperResp, error) {
 	var trx []types.Operation
 	var arrvotes []ArrVote
@@ -52,7 +55,7 @@ func (client *Client) MultiVote(username, author, permlink string, arrvote []Arr
 	}
 
 	if len(arrvotes) == 0 {
-		return nil, errors.New("Error Multi_Vote : All users from the list have already voted.")
+		return nil, errors.New("Error Multi_Vote : All users from the list have already voted")
 	}
 
 	for _, val := range arrvotes {
@@ -69,6 +72,7 @@ func (client *Client) MultiVote(username, author, permlink string, arrvote []Arr
 	return &OperResp{NameOper: "MultiVote", Bresp: resp}, err
 }
 
+//Comment for publication
 func (client *Client) Comment(username, authorname, ppermlink, body string, o *PCOptions) (*OperResp, error) {
 	var trx []types.Operation
 
@@ -116,7 +120,8 @@ func (client *Client) Comment(username, authorname, ppermlink, body string, o *P
 	return &OperResp{NameOper: "Comment", PermLink: permlink, Bresp: resp}, err
 }
 
-func (client *Client) Post(authorname, title, body, permlink, ptag, post_image string, tags []string, o *PCOptions) (*OperResp, error) {
+//Post creating a publication
+func (client *Client) Post(authorname, title, body, permlink, ptag, postImage string, tags []string, o *PCOptions) (*OperResp, error) {
 	if permlink == "" {
 		permlink = translit.EncodeTitle(title)
 	} else {
@@ -129,18 +134,18 @@ func (client *Client) Post(authorname, title, body, permlink, ptag, post_image s
 		ptag = translit.EncodeTag(ptag)
 	}
 
-	json_meta := "{\"tags\":["
+	jsonMeta := "{\"tags\":["
 	for k, v := range tag {
 		if k != len(tags)-1 {
-			json_meta = json_meta + "\"" + v + "\","
+			jsonMeta = jsonMeta + "\"" + v + "\","
 		} else {
-			json_meta = json_meta + "\"" + v + "\"]"
+			jsonMeta = jsonMeta + "\"" + v + "\"]"
 		}
 	}
-	if post_image != "" {
-		json_meta = json_meta + ",\"image\":[\"" + post_image + "\"]"
+	if postImage != "" {
+		jsonMeta = jsonMeta + ",\"image\":[\"" + postImage + "\"]"
 	}
-	json_meta = json_meta + ",\"app\":\"golos\"}"
+	jsonMeta = jsonMeta + ",\"app\":\"golos\"}"
 
 	var trx []types.Operation
 	txp := &types.CommentOperation{
@@ -150,7 +155,7 @@ func (client *Client) Post(authorname, title, body, permlink, ptag, post_image s
 		Permlink:       permlink,
 		Title:          title,
 		Body:           body,
-		JsonMetadata:   json_meta,
+		JsonMetadata:   jsonMeta,
 	}
 	trx = append(trx, txp)
 
@@ -183,6 +188,7 @@ func (client *Client) Post(authorname, title, body, permlink, ptag, post_image s
 	return &OperResp{NameOper: "Post", PermLink: permlink, Bresp: resp}, err
 }
 
+//DeleteComment deleting a publication or comment
 func (client *Client) DeleteComment(authorname, permlink string) (*OperResp, error) {
 	if client.VerifyVotes(authorname, permlink) {
 		return nil, errors.New("You can not delete already there are voted")
@@ -202,16 +208,16 @@ func (client *Client) DeleteComment(authorname, permlink string) (*OperResp, err
 	return &OperResp{NameOper: "Delete Comment/Post", Bresp: resp}, err
 }
 
-//Subscribe to the user
+//Follows subscribe to the user
 func (client *Client) Follows(follower, following string) (*OperResp, error) {
-	json_string := "[\"follow\",{\"follower\":\"" + follower + "\",\"following\":\"" + following + "\",\"what\":[\"blog\"]}]"
+	jsonString := "[\"follow\",{\"follower\":\"" + follower + "\",\"following\":\"" + following + "\",\"what\":[\"blog\"]}]"
 	var trx []types.Operation
 
 	tx := &types.CustomJSONOperation{
 		RequiredAuths:        []string{},
 		RequiredPostingAuths: []string{follower},
 		ID:                   "follow",
-		JSON:                 json_string,
+		JSON:                 jsonString,
 	}
 
 	trx = append(trx, tx)
@@ -219,16 +225,16 @@ func (client *Client) Follows(follower, following string) (*OperResp, error) {
 	return &OperResp{NameOper: "Follows", Bresp: resp}, err
 }
 
-//Unsubscribe from user
+//Unfollow unsubscribe from user
 func (client *Client) Unfollow(follower, following string) (*OperResp, error) {
-	json_string := "[\"follow\",{\"follower\":\"" + follower + "\",\"following\":\"" + following + "\",\"what\":[]}]"
+	jsonString := "[\"follow\",{\"follower\":\"" + follower + "\",\"following\":\"" + following + "\",\"what\":[]}]"
 	var trx []types.Operation
 
 	tx := &types.CustomJSONOperation{
 		RequiredAuths:        []string{},
 		RequiredPostingAuths: []string{follower},
 		ID:                   "follow",
-		JSON:                 json_string,
+		JSON:                 jsonString,
 	}
 
 	trx = append(trx, tx)
@@ -238,14 +244,14 @@ func (client *Client) Unfollow(follower, following string) (*OperResp, error) {
 
 //Ignore user
 func (client *Client) Ignore(follower, following string) (*OperResp, error) {
-	json_string := "[\"follow\",{\"follower\":\"" + follower + "\",\"following\":\"" + following + "\",\"what\":[\"ignore\"]}]"
+	jsonString := "[\"follow\",{\"follower\":\"" + follower + "\",\"following\":\"" + following + "\",\"what\":[\"ignore\"]}]"
 	var trx []types.Operation
 
 	tx := &types.CustomJSONOperation{
 		RequiredAuths:        []string{},
 		RequiredPostingAuths: []string{follower},
 		ID:                   "follow",
-		JSON:                 json_string,
+		JSON:                 jsonString,
 	}
 
 	trx = append(trx, tx)
@@ -253,16 +259,16 @@ func (client *Client) Ignore(follower, following string) (*OperResp, error) {
 	return &OperResp{NameOper: "Unfollow", Bresp: resp}, err
 }
 
-//Undo ignore the user
+//Notice undo ignore the user
 func (client *Client) Notice(follower, following string) (*OperResp, error) {
-	json_string := "[\"follow\",{\"follower\":\"" + follower + "\",\"following\":\"" + following + "\",\"what\":[]}]"
+	jsonString := "[\"follow\",{\"follower\":\"" + follower + "\",\"following\":\"" + following + "\",\"what\":[]}]"
 	var trx []types.Operation
 
 	tx := &types.CustomJSONOperation{
 		RequiredAuths:        []string{},
 		RequiredPostingAuths: []string{follower},
 		ID:                   "follow",
-		JSON:                 json_string,
+		JSON:                 jsonString,
 	}
 
 	trx = append(trx, tx)
@@ -270,19 +276,19 @@ func (client *Client) Notice(follower, following string) (*OperResp, error) {
 	return &OperResp{NameOper: "Notice", Bresp: resp}, err
 }
 
-//Repost records
+//Reblog repost records
 func (client *Client) Reblog(username, authorname, permlink string) (*OperResp, error) {
 	if client.VerifyReblogs(authorname, permlink, username) {
 		return nil, errors.New("The user already did repost")
 	}
-	json_string := "[\"reblog\",{\"account\":\"" + username + "\",\"author\":\"" + authorname + "\",\"permlink\":\"" + permlink + "\"}]"
+	jsonString := "[\"reblog\",{\"account\":\"" + username + "\",\"author\":\"" + authorname + "\",\"permlink\":\"" + permlink + "\"}]"
 	var trx []types.Operation
 
 	tx := &types.CustomJSONOperation{
 		RequiredAuths:        []string{},
 		RequiredPostingAuths: []string{username},
 		ID:                   "follow",
-		JSON:                 json_string,
+		JSON:                 jsonString,
 	}
 
 	trx = append(trx, tx)
@@ -290,13 +296,13 @@ func (client *Client) Reblog(username, authorname, permlink string) (*OperResp, 
 	return &OperResp{NameOper: "Reblog", Bresp: resp}, err
 }
 
-//Operation of voting for the delegate.
-func (client *Client) AccountWitnessVote(username, witness_name string, approv bool) (*OperResp, error) {
+//AccountWitnessVote of voting for the delegate.
+func (client *Client) AccountWitnessVote(username, witnessName string, approv bool) (*OperResp, error) {
 	var trx []types.Operation
 
 	tx := &types.AccountWitnessVoteOperation{
 		Account: username,
-		Witness: witness_name,
+		Witness: witnessName,
 		Approve: approv,
 	}
 
@@ -305,7 +311,7 @@ func (client *Client) AccountWitnessVote(username, witness_name string, approv b
 	return &OperResp{NameOper: "AccountWitnessVote", Bresp: resp}, err
 }
 
-//Transfer of the right to vote for delegates to another user.
+//AccountWitnessProxy transfer of the right to vote for delegates to another user.
 func (client *Client) AccountWitnessProxy(username, proxy string) (*OperResp, error) {
 	var trx []types.Operation
 
@@ -320,22 +326,22 @@ func (client *Client) AccountWitnessProxy(username, proxy string) (*OperResp, er
 }
 
 //Transfer of funds to any user.
-func (client *Client) Transfer(from_name, to_name, memo, ammount string) (*OperResp, error) {
+func (client *Client) Transfer(fromName, toName, memo, ammount string) (*OperResp, error) {
 	var trx []types.Operation
 
 	tx := &types.TransferOperation{
-		From:   from_name,
-		To:     to_name,
+		From:   fromName,
+		To:     toName,
 		Amount: ammount,
 		Memo:   memo,
 	}
 
 	trx = append(trx, tx)
-	resp, err := client.SendTrx(from_name, trx)
+	resp, err := client.SendTrx(fromName, trx)
 	return &OperResp{NameOper: "Transfer", Bresp: resp}, err
 }
 
-//Multiple funds transfer in one transaction.
+//MultiTransfer multiple funds transfer in one transaction.
 func (client *Client) MultiTransfer(username string, arrtrans []ArrTransfer) (*OperResp, error) {
 	var trx []types.Operation
 
@@ -353,15 +359,15 @@ func (client *Client) MultiTransfer(username string, arrtrans []ArrTransfer) (*O
 	return &OperResp{NameOper: "MultiTransfer", Bresp: resp}, err
 }
 
-//Checking the user's key for the possibility of operations in GOLOS.
+//Login checking the user's key for the possibility of operations in GOLOS.
 func (client *Client) Login(username, key string) bool {
-	json_string := "[\"login\",{\"account\":\"" + username + "\",\"app\":\"golos-go\"}]"
+	jsonString := "[\"login\",{\"account\":\"" + username + "\",\"app\":\"golos-go\"}]"
 
 	strx := &types.CustomJSONOperation{
 		RequiredAuths:        []string{},
 		RequiredPostingAuths: []string{username},
 		ID:                   "login",
-		JSON:                 json_string,
+		JSON:                 jsonString,
 	}
 
 	props, err := client.Database.GetDynamicGlobalProperties()
@@ -397,12 +403,12 @@ func (client *Client) Login(username, key string) bool {
 
 	if err != nil {
 		return false
-	} else {
-		log.Println("[Login] Block -> ", resp.BlockNum, " User -> ", username)
-		return true
 	}
+	log.Println("[Login] Block -> ", resp.BlockNum, " User -> ", username)
+	return true
 }
 
+//LimitOrderCancel restrict order Cancel
 func (client *Client) LimitOrderCancel(owner string, orderid uint32) (*OperResp, error) {
 	var trx []types.Operation
 
@@ -416,6 +422,7 @@ func (client *Client) LimitOrderCancel(owner string, orderid uint32) (*OperResp,
 	return &OperResp{NameOper: "LimitOrderCancel", Bresp: resp}, err
 }
 
+//LimitOrderCreate Creating a limit order
 func (client *Client) LimitOrderCreate(owner, sell, buy string, orderid uint32) (*OperResp, error) {
 	var trx []types.Operation
 
@@ -436,6 +443,7 @@ func (client *Client) LimitOrderCreate(owner, sell, buy string, orderid uint32) 
 	return &OperResp{NameOper: "LimitOrderCreate", Bresp: resp}, err
 }
 
+//Convert conversion
 func (client *Client) Convert(owner, amount string, requestid uint32) (*OperResp, error) {
 	var trx []types.Operation
 
@@ -450,6 +458,7 @@ func (client *Client) Convert(owner, amount string, requestid uint32) (*OperResp
 	return &OperResp{NameOper: "Convert", Bresp: resp}, err
 }
 
+//TransferToVesting transfer to POWER
 func (client *Client) TransferToVesting(from, to, amount string) (*OperResp, error) {
 	var trx []types.Operation
 
@@ -464,6 +473,7 @@ func (client *Client) TransferToVesting(from, to, amount string) (*OperResp, err
 	return &OperResp{NameOper: "TransferToVesting", Bresp: resp}, err
 }
 
+//WithdrawVesting down POWER
 func (client *Client) WithdrawVesting(account, vshares string) (*OperResp, error) {
 	var trx []types.Operation
 
@@ -477,6 +487,7 @@ func (client *Client) WithdrawVesting(account, vshares string) (*OperResp, error
 	return &OperResp{NameOper: "WithdrawVesting", Bresp: resp}, err
 }
 
+//ChangeRecoveryAccount change account with which you can restore access
 func (client *Client) ChangeRecoveryAccount(accounttorecover, newrecoveryaccount string) (*OperResp, error) {
 	var trx []types.Operation
 
@@ -491,6 +502,7 @@ func (client *Client) ChangeRecoveryAccount(accounttorecover, newrecoveryaccount
 	return &OperResp{NameOper: "ChangeRecoveryAccount", Bresp: resp}, err
 }
 
+//TransferToSavings transfer to safe
 func (client *Client) TransferToSavings(from, to, amount, memo string) (*OperResp, error) {
 	var trx []types.Operation
 
@@ -506,6 +518,7 @@ func (client *Client) TransferToSavings(from, to, amount, memo string) (*OperRes
 	return &OperResp{NameOper: "TransferToSavings", Bresp: resp}, err
 }
 
+//TransferFromSavings transfer from safe
 func (client *Client) TransferFromSavings(from, to, amount, memo string, requestid uint32) (*OperResp, error) {
 	var trx []types.Operation
 
@@ -522,6 +535,7 @@ func (client *Client) TransferFromSavings(from, to, amount, memo string, request
 	return &OperResp{NameOper: "TransferFromSavings", Bresp: resp}, err
 }
 
+//CancelTransferFromSavings cancel transfer to safe
 func (client *Client) CancelTransferFromSavings(from string, requestid uint32) (*OperResp, error) {
 	var trx []types.Operation
 
@@ -535,6 +549,8 @@ func (client *Client) CancelTransferFromSavings(from string, requestid uint32) (
 	return &OperResp{NameOper: "CancelTransferFromSavings", Bresp: resp}, err
 }
 
+//DeclineVotingRights disabling the possibility of any vote.
+//It is impossible to restore the possibility of voting
 func (client *Client) DeclineVotingRights(account string, decline bool) (*OperResp, error) {
 	var trx []types.Operation
 
@@ -548,6 +564,7 @@ func (client *Client) DeclineVotingRights(account string, decline bool) (*OperRe
 	return &OperResp{NameOper: "DeclineVotingRights", Bresp: resp}, err
 }
 
+//FeedPublish update course data
 func (client *Client) FeedPublish(publisher, base, quote string) (*OperResp, error) {
 	var trx []types.Operation
 
@@ -564,6 +581,7 @@ func (client *Client) FeedPublish(publisher, base, quote string) (*OperResp, err
 	return &OperResp{NameOper: "FeedPublish", Bresp: resp}, err
 }
 
+//WitnessUpdate updating delegate data
 func (client *Client) WitnessUpdate(owner, url, blocksigningkey, accountcreationfee string, maxblocksize uint32, sbdinterestrate uint16) (*OperResp, error) {
 	var trx []types.Operation
 
@@ -584,7 +602,8 @@ func (client *Client) WitnessUpdate(owner, url, blocksigningkey, accountcreation
 	return &OperResp{NameOper: "WitnessUpdate", Bresp: resp}, err
 }
 
-func (client *Client) AccountCreate(creator, newAccountName, password , fee string) (*OperResp, error) {
+//AccountCreate creating a user in systems
+func (client *Client) AccountCreate(creator, newAccountName, password, fee string) (*OperResp, error) {
 	type Keys struct {
 		Private string
 		Public  string

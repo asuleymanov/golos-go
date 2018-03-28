@@ -8,6 +8,7 @@ import (
 )
 
 var (
+	//OpTypeKey include a description of the operation and the key needed to sign it
 	OpTypeKey = make(map[types.OpType][]string)
 )
 
@@ -71,12 +72,12 @@ func init() {
 
 }
 
-//Returns the key from the CurrentKeys
+//SigningKeys returns the key from the CurrentKeys
 func (client *Client) SigningKeys(trx types.Operation) ([][]byte, error) {
 	var keys [][]byte
 
 	if client.CurrentKeys == nil {
-		return nil, errors.New("client Keys not initialized. Use SetKeys method.")
+		return nil, errors.New("client Keys not initialized. Use SetKeys method")
 	}
 
 	opKeys := OpTypeKey[trx.Type()]
@@ -85,25 +86,25 @@ func (client *Client) SigningKeys(trx types.Operation) ([][]byte, error) {
 		case val == "posting":
 			privKey, err := wif.Decode(client.CurrentKeys.PKey)
 			if err != nil {
-				return nil, errors.New("error decode Posting Key: "+err.Error())
+				return nil, errors.New("error decode Posting Key: " + err.Error())
 			}
 			keys = append(keys, privKey)
 		case val == "active":
 			privKey, err := wif.Decode(client.CurrentKeys.AKey)
 			if err != nil {
-				return nil, errors.New("error decode Access Key: "+err.Error())
+				return nil, errors.New("error decode Access Key: " + err.Error())
 			}
 			keys = append(keys, privKey)
 		case val == "owner":
 			privKey, err := wif.Decode(client.CurrentKeys.OKey)
 			if err != nil {
-				return nil, errors.New("error decode Owner Key: "+err.Error())
+				return nil, errors.New("error decode Owner Key: " + err.Error())
 			}
 			keys = append(keys, privKey)
 		case val == "memo":
 			privKey, err := wif.Decode(client.CurrentKeys.MKey)
 			if err != nil {
-				return nil, errors.New("error decode Memo Key: "+err.Error())
+				return nil, errors.New("error decode Memo Key: " + err.Error())
 			}
 			keys = append(keys, privKey)
 		}

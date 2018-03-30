@@ -7,10 +7,10 @@ import (
 //The type is used as a keystroke for a specific user.
 //Only a few keys can be set.
 type Keys struct {
-	PKey string
-	AKey string
-	OKey string
-	MKey string
+	PKey []string
+	AKey []string
+	OKey []string
+	MKey []string
 }
 
 //Type of response when sending a transaction.

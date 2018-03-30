@@ -95,7 +95,7 @@ func (client *Client) SigningKeys(trx types.Operation) ([][]byte, error) {
 			for _, keyStr := range client.CurrentKeys.AKey {
 				privKey, err := wif.Decode(keyStr)
 				if err != nil {
-					return nil, errors.New("error decode Access Key: " + err.Error())
+					return nil, errors.New("error decode Active Key: " + err.Error())
 				}
 				keys = append(keys, privKey)
 			}

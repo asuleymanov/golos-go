@@ -80,6 +80,8 @@ func (client *Client) Comment(username, authorname, ppermlink, body string, o *P
 	permlink := "re-" + authorname + "-" + ppermlink + "-" + times
 	permlink = strings.Replace(permlink, ".", "-", -1)
 
+	jsonMeta := "{\"lib\":\"golos-go\"}"
+
 	tx := &types.CommentOperation{
 		ParentAuthor:   authorname,
 		ParentPermlink: ppermlink,
@@ -87,7 +89,7 @@ func (client *Client) Comment(username, authorname, ppermlink, body string, o *P
 		Permlink:       permlink,
 		Title:          "",
 		Body:           body,
-		JsonMetadata:   "{\"app\":\"golos\"}",
+		JsonMetadata:   jsonMeta,
 	}
 	trx = append(trx, tx)
 
@@ -145,7 +147,7 @@ func (client *Client) Post(authorname, title, body, permlink, ptag, postImage st
 	if postImage != "" {
 		jsonMeta = jsonMeta + ",\"image\":[\"" + postImage + "\"]"
 	}
-	jsonMeta = jsonMeta + ",\"app\":\"golos\"}"
+	jsonMeta = jsonMeta + ",\"lib\":\"golos-go\"}"
 
 	var trx []types.Operation
 	txp := &types.CommentOperation{
@@ -639,6 +641,8 @@ func (client *Client) AccountCreate(creator, newAccountName, password, fee strin
 		KeyAuths:        map[string]int64{listKeys["posting"].Public: 1},
 	}
 
+	jsonMeta := "{\"lib\":\"golos-go\"}"
+
 	tx := &types.AccountCreateOperation{
 		Fee:            fee,
 		Creator:        creator,
@@ -647,7 +651,7 @@ func (client *Client) AccountCreate(creator, newAccountName, password, fee strin
 		Active:         &active,
 		Posting:        &posting,
 		MemoKey:        listKeys["memo"].Public,
-		JsonMetadata:   "",
+		JsonMetadata:   jsonMeta,
 	}
 
 	trx = append(trx, tx)

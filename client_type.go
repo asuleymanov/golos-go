@@ -3,10 +3,10 @@ package client
 //Keys is used as a keystroke for a specific user.
 //Only a few keys can be set.
 type Keys struct {
-	PKey string
-	AKey string
-	OKey string
-	MKey string
+	PKey []string
+	AKey []string
+	OKey []string
+	MKey []string
 }
 
 //BResp of response when sending a transaction.

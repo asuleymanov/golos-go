@@ -10,6 +10,8 @@ import (
 	"github.com/asuleymanov/golos-go/transports"
 	"github.com/asuleymanov/golos-go/transports/websocket"
 	"github.com/asuleymanov/golos-go/apis/market"
+	"github.com/asuleymanov/golos-go/apis/account_by_key"
+	"github.com/asuleymanov/golos-go/apis/social_network"
 )
 
 // Client can be used to access Golos remote APIs.
@@ -30,6 +32,12 @@ type Client struct {
 	// NetworkBroadcast represents network_broadcast_api.
 	NetworkBroadcast *networkbroadcast.API
 
+	// AccountByKey represents account_by_key.
+	AccountByKey *account_by_key.API
+
+	// SocialNetwork represents social_network.
+	SocialNetwork *social_network.API
+	
 	//Chain Id
 	Chain *transactions.Chain
 

@@ -32,7 +32,7 @@ const (
 	letterIdxMax  = 63 / letterIdxBits   // # of letter indices fitting in 63 bits
 )
 
-// The function allows to generate a 52-character password of the evil system.
+//GenPassword allows to generate a 52-character password of the evil system.
 func GenPassword() string {
 	b := make([]byte, 51)
 	for i, cache, remain := 51-1, src.Int63(), letterIdxMax; i >= 0; {
@@ -49,7 +49,7 @@ func GenPassword() string {
 	return "P" + string(b)
 }
 
-//The function generates a private key based on the specified parameters.
+//GetPrivateKey generates a private key based on the specified parameters.
 func GetPrivateKey(user, role, password string) string {
 	hashSha256 := sha256.Sum256([]byte(user + role + password))
 	pk := append([]byte{0x80}, hashSha256[:]...)
@@ -59,7 +59,7 @@ func GetPrivateKey(user, role, password string) string {
 	return base58.Encode(b58)
 }
 
-//The function generates a public key based on the prefix and the private key.
+//GetPublicKey generates a public key based on the prefix and the private key.
 func GetPublicKey(prefix, privatekey string) string {
 	b58 := base58.Decode(privatekey)
 	tpk := b58[:len(b58)-4]
@@ -68,14 +68,13 @@ func GetPublicKey(prefix, privatekey string) string {
 	nchs = sha256.Sum256(nchs[:])
 	if string(chs) != string(nchs[:4]) {
 		return "Invalid WIF key (checksum miss-match)"
-	} else {
-		privKeyBytes := [32]byte{}
-		copy(privKeyBytes[:], tpk[1:])
-		priv, _ := btcec.PrivKeyFromBytes(btcec.S256(), privKeyBytes[:])
-		ch_hash := ripemd160.New()
-		ch_hash.Write(priv.PubKey().SerializeCompressed())
-		nc := ch_hash.Sum(nil)
-		pk := append(priv.PubKey().SerializeCompressed(), nc[:4]...)
-		return prefix + base58.Encode(pk)
 	}
+	privKeyBytes := [32]byte{}
+	copy(privKeyBytes[:], tpk[1:])
+	priv, _ := btcec.PrivKeyFromBytes(btcec.S256(), privKeyBytes[:])
+	chHash := ripemd160.New()
+	chHash.Write(priv.PubKey().SerializeCompressed())
+	nc := chHash.Sum(nil)
+	pk := append(priv.PubKey().SerializeCompressed(), nc[:4]...)
+	return prefix + base58.Encode(pk)
 }

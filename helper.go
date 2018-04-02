@@ -1,10 +1,13 @@
 package client
 
 import (
+	"errors"
 	"time"
+
+	"github.com/asuleymanov/golos-go/types"
 )
 
-//Returns the subscriber's list of subscribers
+//FollowersList returns the subscriber's list of subscribers
 func (client *Client) FollowersList(username string) ([]string, error) {
 	var followers []string
 	fc, _ := client.Follow.GetFollowCount(username)
@@ -25,7 +28,7 @@ func (client *Client) FollowersList(username string) ([]string, error) {
 	return followers, nil
 }
 
-//Returns the list of user subscriptions
+//FollowingList returns the list of user subscriptions
 func (client *Client) FollowingList(username string) ([]string, error) {
 	var following []string
 	fc, _ := client.Follow.GetFollowCount(username)
@@ -46,7 +49,7 @@ func (client *Client) FollowingList(username string) ([]string, error) {
 	return following, nil
 }
 
-//Returns the POWER of the user based on the time of the last vote.
+//GetVotingPower returns the POWER of the user based on the time of the last vote.
 func (client *Client) GetVotingPower(username string) (int, error) {
 	conf, errc := client.Database.GetConfig()
 	if errc != nil {
@@ -68,4 +71,53 @@ func (client *Client) GetVotingPower(username string) (int, error) {
 		power = 10000
 	}
 	return power, nil
+}
+
+//GetAuthorReward returns information about the reward received for publication.
+func (client *Client) GetAuthorReward(username, permlink string, full bool) (*types.AuthorRewardOperation, error) {
+	if !full {
+		resp, err := client.Database.GetAccountHistory(username, -1, 1000)
+		if err != nil {
+			return nil, err
+		}
+		for k, v := range resp {
+			if v.OperationType == "author_reward" {
+				op := resp[k].Operation.Data()
+				if op.(*types.AuthorRewardOperation).Permlink == permlink {
+					return op.(*types.AuthorRewardOperation), nil
+				}
+			}
+		}
+		return nil, errors.New("In the last 1000 entries from the user's history, no data was found")
+	}
+	from := 1000
+	limit := 1000
+	var lastBlock uint32
+	for {
+		ans, err := client.Database.GetAccountHistory(username, int64(from), uint32(limit))
+		if err != nil {
+			return nil, err
+		}
+
+		if len(ans) == 0 {
+			break
+		}
+		for k, v := range ans {
+			if v.OperationType == "author_reward" {
+				op := ans[k].Operation.Data()
+				if op.(*types.AuthorRewardOperation).Permlink == permlink {
+					return op.(*types.AuthorRewardOperation), nil
+				}
+			}
+		}
+		s := ans[len(ans)-1:]
+		block := s[0].BlockNumber
+		if block == lastBlock {
+			break
+		}
+
+		lastBlock = block
+		from = from + limit
+	}
+	return nil, errors.New("Data about the publication is not found in the entire history of the user's actions")
 }

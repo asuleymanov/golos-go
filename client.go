@@ -23,20 +23,14 @@ type Client struct {
 	// Database represents database_api.
 	Database *database.API
 
-	// Follow represents follow.
+	// Follow represents follow_api.
 	Follow *follow.API
 
-	// MarketHistory represents market_history.
-	MarketHistory *market_history.API
+	// Follow represents market_history_api.
+	Market *market.API
 
 	// NetworkBroadcast represents network_broadcast_api.
-	NetworkBroadcast *network_broadcast.API
-
-	// AccountByKey represents account_by_key.
-	AccountByKey *account_by_key.API
-
-	// SocialNetwork represents social_network.
-	SocialNetwork *social_network.API
+	NetworkBroadcast *networkbroadcast.API
 
 	//Chain Id
 	Chain *transactions.Chain
@@ -56,17 +50,22 @@ func NewClient(url []string, chain string) (*Client, error) {
 
 	client.Database = database.NewAPI(client.cc)
 
-	client.Follow = follow.NewAPI(client.cc)
+	client.Follow, err = follow.NewAPI(client.cc)
+	if err != nil {
+		client.Follow = nil
+	}
 
-	client.MarketHistory = market_history.NewAPI(client.cc)
+	client.Market, err = market.NewAPI(client.cc)
+	if err != nil {
+		client.Market = nil
+	}
 
-	client.NetworkBroadcast = network_broadcast.NewAPI(client.cc)
+	client.NetworkBroadcast, err = networkbroadcast.NewAPI(client.cc)
+	if err != nil {
+		client.NetworkBroadcast = nil
+	}
 
-	client.AccountByKey = account_by_key.NewAPI(client.cc)
-
-	client.SocialNetwork = social_network.NewAPI(client.cc)
-
-	client.Chain, err = initChainId(chain)
+	client.Chain, err = initChainID(chain)
 	if err != nil {
 		client.Chain = transactions.GolosChain
 	}
@@ -80,6 +79,7 @@ func (client *Client) Close() error {
 	return client.cc.Close()
 }
 
+//SetKeys you can specify keys for signing transactions.
 func (client *Client) SetKeys(keys *Keys) {
 	client.CurrentKeys = keys
 }
@@ -94,16 +94,16 @@ func initclient(url []string) (*websocket.Transport, error) {
 	return t, nil
 }
 
-func initChainId(str string) (*transactions.Chain, error) {
-	var ChainId transactions.Chain
+func initChainID(str string) (*transactions.Chain, error) {
+	var ChainID transactions.Chain
 	// Определяем ChainId
 	switch str {
 	case "golos":
-		ChainId = *transactions.GolosChain
+		ChainID = *transactions.GolosChain
 	case "test":
-		ChainId = *transactions.TestChain
+		ChainID = *transactions.TestChain
 	default:
 		return nil, errors.New("Chain not found")
 	}
-	return &ChainId, nil
+	return &ChainID, nil
 }

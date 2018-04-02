@@ -8,6 +8,7 @@ import (
 )
 
 var (
+	//OpTypeKey include a description of the operation and the key needed to sign it
 	OpTypeKey = make(map[types.OpType][]string)
 )
 
@@ -71,12 +72,12 @@ func init() {
 
 }
 
-//Returns the key from the CurrentKeys
+//SigningKeys returns the key from the CurrentKeys
 func (client *Client) SigningKeys(trx types.Operation) ([][]byte, error) {
 	var keys [][]byte
 
 	if client.CurrentKeys == nil {
-		return nil, errors.New("client Keys not initialized. Use SetKeys method.")
+		return nil, errors.New("client Keys not initialized. Use SetKeys method")
 	}
 
 	opKeys := OpTypeKey[trx.Type()]
@@ -94,7 +95,7 @@ func (client *Client) SigningKeys(trx types.Operation) ([][]byte, error) {
 			for _, keyStr := range client.CurrentKeys.AKey {
 				privKey, err := wif.Decode(keyStr)
 				if err != nil {
-					return nil, errors.New("error decode Access Key: " + err.Error())
+					return nil, errors.New("error decode Active Key: " + err.Error())
 				}
 				keys = append(keys, privKey)
 			}

@@ -1,10 +1,6 @@
 package client
 
-import (
-	"github.com/asuleymanov/golos-go/types"
-)
-
-//The type is used as a keystroke for a specific user.
+//Keys is used as a keystroke for a specific user.
 //Only a few keys can be set.
 type Keys struct {
 	PKey []string
@@ -13,7 +9,7 @@ type Keys struct {
 	MKey []string
 }
 
-//Type of response when sending a transaction.
+//BResp of response when sending a transaction.
 type BResp struct {
 	ID       string
 	BlockNum uint32
@@ -21,28 +17,27 @@ type BResp struct {
 	Expired  bool
 }
 
-//The type is returned when the operation is performed.
+//OperResp type is returned when the operation is performed.
 type OperResp struct {
 	NameOper string
 	PermLink string
 	Bresp    *BResp
 }
 
-//Type for the Comment and Post functions.
+//PCOptions for the Comment and Post functions.
 //Sets the water to receive payment for a comment or post.
 type PCOptions struct {
-	Percent          uint16
-	BeneficiarieList []types.Beneficiarie
+	Percent uint16
 }
 
-//Type for MultiTransfer function
+//ArrTransfer for MultiTransfer function
 type ArrTransfer struct {
 	To      string
 	Memo    string
 	Ammount string
 }
 
-//Type for MultiVote function
+//ArrVote for MultiVote function
 type ArrVote struct {
 	User   string
 	Weight int

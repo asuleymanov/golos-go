@@ -1,25 +1,35 @@
-package network_broadcast
+package networkbroadcast
 
 import (
+	// Stdlib
 	"encoding/json"
 
+	// RPC
 	"github.com/asuleymanov/golos-go/transports"
+	"github.com/asuleymanov/golos-go/internal/rpc"
 	"github.com/asuleymanov/golos-go/types"
+
+	// Vendor
 	"github.com/pkg/errors"
 )
 
 const APIID = "network_broadcast_api"
 
 type API struct {
+	id     int
 	caller transports.Caller
 }
 
-func NewAPI(caller transports.Caller) *API {
-	return &API{caller}
+func NewAPI(caller transports.Caller) (*API, error) {
+	id, err := rpc.GetNumericAPIID(caller, APIID)
+	if err != nil {
+		return nil, err
+	}
+	return &API{id, caller}, nil
 }
 
 func (api *API) call(method string, params, resp interface{}) error {
-	return api.caller.Call("call", []interface{}{APIID, method, params}, resp)
+	return api.caller.Call("call", []interface{}{api.id, method, params}, resp)
 }
 
 /*

@@ -5,7 +5,7 @@ import (
 	"github.com/asuleymanov/golos-go/types"
 )
 
-//Generates and sends an array of transactions to GOLOS.
+//SendTrx generates and sends an array of transactions to GOLOS.
 func (client *Client) SendTrx(username string, strx []types.Operation) (*BResp, error) {
 	// Получение необходимых параметров
 	props, err := client.Database.GetDynamicGlobalProperties()
@@ -44,14 +44,13 @@ func (client *Client) SendTrx(username string, strx []types.Operation) (*BResp, 
 
 	if err != nil {
 		return nil, err
-	} else {
-		var bresp BResp
-
-		bresp.ID = resp.ID
-		bresp.BlockNum = resp.BlockNum
-		bresp.TrxNum = resp.TrxNum
-		bresp.Expired = resp.Expired
-
-		return &bresp, nil
 	}
+	var bresp BResp
+
+	bresp.ID = resp.ID
+	bresp.BlockNum = resp.BlockNum
+	bresp.TrxNum = resp.TrxNum
+	bresp.Expired = resp.Expired
+
+	return &bresp, nil
 }

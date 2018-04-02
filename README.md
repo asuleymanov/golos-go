@@ -6,7 +6,7 @@ Golang RPC client library for [Golos](https://golos.io).
 
 ## Compatibility
 
-`golosd 0.16.0`
+`golosd 0.17.0`
 
 ## Usage
 
@@ -79,13 +79,13 @@ for more complete and ready to use examples.
 
 
 You need to create a `Client` object to be able to do anything.
-Then you just need to call `NewApi()`.
+Then you just need to call `NewClient()`.
 
 Once you create a `Client` object, you can start calling the methods exported
 via `golosd`'s RPC endpoint by invoking associated methods on the client object.
-There are multiple APIs that can be exported, e.g. `database_api` and `login_api`,
+There are multiple APIs that can be exported, e.g. `database` and `network_broadcast`,
 so the methods on the Client object are also namespaced accoding to these APIs.
-For example, to call `get_block` from `database_api`, you need to use
+For example, to call `get_block` from `database`, you need to use
 `Client.Database.GetBlock` method.
 
 When looking for a method to call, all you need is to turn the method name into

@@ -83,29 +83,37 @@ func (client *Client) SigningKeys(trx types.Operation) ([][]byte, error) {
 	for _, val := range opKeys {
 		switch {
 		case val == "posting":
-			privKey, err := wif.Decode(client.CurrentKeys.PKey)
-			if err != nil {
-				return nil, errors.New("error decode Posting Key: "+err.Error())
+			for _, keyStr := range client.CurrentKeys.PKey {
+				privKey, err := wif.Decode(keyStr)
+				if err != nil {
+					return nil, errors.New("error decode Posting Key: " + err.Error())
+				}
+				keys = append(keys, privKey)
 			}
-			keys = append(keys, privKey)
 		case val == "active":
-			privKey, err := wif.Decode(client.CurrentKeys.AKey)
-			if err != nil {
-				return nil, errors.New("error decode Access Key: "+err.Error())
+			for _, keyStr := range client.CurrentKeys.AKey {
+				privKey, err := wif.Decode(keyStr)
+				if err != nil {
+					return nil, errors.New("error decode Access Key: " + err.Error())
+				}
+				keys = append(keys, privKey)
 			}
-			keys = append(keys, privKey)
 		case val == "owner":
-			privKey, err := wif.Decode(client.CurrentKeys.OKey)
-			if err != nil {
-				return nil, errors.New("error decode Owner Key: "+err.Error())
+			for _, keyStr := range client.CurrentKeys.OKey {
+				privKey, err := wif.Decode(keyStr)
+				if err != nil {
+					return nil, errors.New("error decode Owner Key: " + err.Error())
+				}
+				keys = append(keys, privKey)
 			}
-			keys = append(keys, privKey)
 		case val == "memo":
-			privKey, err := wif.Decode(client.CurrentKeys.MKey)
-			if err != nil {
-				return nil, errors.New("error decode Memo Key: "+err.Error())
+			for _, keyStr := range client.CurrentKeys.MKey {
+				privKey, err := wif.Decode(keyStr)
+				if err != nil {
+					return nil, errors.New("error decode Memo Key: " + err.Error())
+				}
+				keys = append(keys, privKey)
 			}
-			keys = append(keys, privKey)
 		}
 	}
 

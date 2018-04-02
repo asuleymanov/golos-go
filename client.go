@@ -3,15 +3,13 @@ package client
 import (
 	"errors"
 	// RPC
-	"github.com/asuleymanov/golos-go/apis/account_by_key"
 	"github.com/asuleymanov/golos-go/apis/database"
 	"github.com/asuleymanov/golos-go/apis/follow"
-	"github.com/asuleymanov/golos-go/apis/market_history"
 	"github.com/asuleymanov/golos-go/apis/network_broadcast"
-	"github.com/asuleymanov/golos-go/apis/social_network"
 	"github.com/asuleymanov/golos-go/transactions"
 	"github.com/asuleymanov/golos-go/transports"
 	"github.com/asuleymanov/golos-go/transports/websocket"
+	"github.com/asuleymanov/golos-go/apis/market"
 )
 
 // Client can be used to access Golos remote APIs.

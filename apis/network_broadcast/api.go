@@ -8,7 +8,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-const APIID = "network_broadcast_api"
+const apiID = "network_broadcast_api"
 
 type API struct {
 	caller transports.Caller
@@ -19,7 +19,7 @@ func NewAPI(caller transports.Caller) *API {
 }
 
 func (api *API) call(method string, params, resp interface{}) error {
-	return api.caller.Call("call", []interface{}{APIID, method, params}, resp)
+	return api.caller.Call("call", []interface{}{apiID, method, params}, resp)
 }
 
 /*

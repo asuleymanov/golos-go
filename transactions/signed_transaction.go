@@ -68,27 +68,25 @@ func (tx *SignedTransaction) Digest(chain *Chain) ([]byte, error) {
 	return digest[:], nil
 }
 
-// get rid of cgo and lsecp256k1
+//Sign get rid of cgo and lsecp256k1
 func (tx *SignedTransaction) Sign(privKeys [][]byte, chain *Chain) error {
 	var buf bytes.Buffer
 	chainid, _ := hex.DecodeString(chain.ID)
-	//fmt.Println(tx.Operations[0])
-	//fmt.Println(" ")
-	tx_raw, err := tx.Serialize()
+
+	txRaw, err := tx.Serialize()
 	if err != nil {
 		return err
 	}
-	//fmt.Println(tx_raw)
-	//fmt.Println(" ")
+
 	buf.Write(chainid)
-	buf.Write(tx_raw)
+	buf.Write(txRaw)
 	data := buf.Bytes()
 	//msg_sha := crypto.Sha256(buf.Bytes())
 
 	var sigsHex []string
 
-	for _, priv_b := range privKeys {
-		sigBytes := tx.Sign_Single(priv_b, data)
+	for _, privB := range privKeys {
+		sigBytes := tx.SignSingle(privB, data)
 		sigsHex = append(sigsHex, hex.EncodeToString(sigBytes))
 	}
 

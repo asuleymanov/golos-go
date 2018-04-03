@@ -23,11 +23,11 @@ func SignECDSA(priv *ecdsa.PrivateKey, hash []byte, alg func() hash.Hash, nonce 
 	//log.Println("e=", hex.EncodeToString(hash)) 		 // OK
 	//log.Println("N=", hex.EncodeToString(N.Bytes()))	 // OK
 
-	var hash_clone = make([]byte, len(hash))
-	copy(hash_clone, hash)
+	var hashClone = make([]byte, len(hash))
+	copy(hashClone, hash)
 
 	//log.Println("generateSecret- nonce=", nonce)
-	generateSecret(priv /* N, priv.D, */, alg, hash_clone, func(k *big.Int) bool {
+	generateSecret(priv /* N, priv.D, */, alg, hashClone, func(k *big.Int) bool {
 		inv := new(big.Int).ModInverse(k, N)
 		r, _ = priv.Curve.ScalarBaseMult(k.Bytes())
 		r.Mod(r, N)
@@ -37,7 +37,7 @@ func SignECDSA(priv *ecdsa.PrivateKey, hash []byte, alg func() hash.Hash, nonce 
 			return false
 		}
 
-		e := hashToInt(hash_clone, c)
+		e := hashToInt(hashClone, c)
 		s = new(big.Int).Mul(priv.D, r)
 		s.Add(s, e)
 		s.Mul(s, inv)
@@ -53,8 +53,8 @@ func SignECDSA(priv *ecdsa.PrivateKey, hash []byte, alg func() hash.Hash, nonce 
 
 	//log.Println("enforce low S values, see bip62: 'low s values in signatures'");
 	// enforce low S values, see bip62: 'low s values in signatures'
-	N_OVER_TWO := new(big.Int).Div(N, big.NewInt(2))
-	if s.Cmp(N_OVER_TWO) > 0 {
+	NOverTwo := new(big.Int).Div(N, big.NewInt(2))
+	if s.Cmp(NOverTwo) > 0 {
 		s = new(big.Int).Sub(N, s)
 	}
 
@@ -63,17 +63,17 @@ func SignECDSA(priv *ecdsa.PrivateKey, hash []byte, alg func() hash.Hash, nonce 
 
 // copied from crypto/ecdsa
 func hashToInt(hash []byte, c elliptic.Curve) *big.Int {
-	var hash_clone = make([]byte, len(hash))
-	copy(hash_clone, hash)
+	var hashClone = make([]byte, len(hash))
+	copy(hashClone, hash)
 
 	orderBits := c.Params().N.BitLen()
 	orderBytes := (orderBits + 7) / 8
-	if len(hash_clone) > orderBytes {
-		hash_clone = hash_clone[:orderBytes]
+	if len(hashClone) > orderBytes {
+		hashClone = hashClone[:orderBytes]
 	}
 
-	ret := new(big.Int).SetBytes(hash_clone)
-	excess := len(hash_clone)*8 - orderBits
+	ret := new(big.Int).SetBytes(hashClone)
+	excess := len(hashClone)*8 - orderBits
 	if excess > 0 {
 		ret.Rsh(ret, uint(excess))
 	}

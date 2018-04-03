@@ -29,7 +29,7 @@ type Content struct {
 	ParentPermlink          string           `json:"parent_permlink"`
 	Title                   string           `json:"title"`
 	Body                    string           `json:"body"`
-	JsonMetadata            *ContentMetadata `json:"json_metadata"`
+	JSONMetadata            *ContentMetadata `json:"json_metadata"`
 	LastUpdate              *types.Time      `json:"last_update"`
 	Created                 *types.Time      `json:"created"`
 	Active                  *types.Time      `json:"active"`

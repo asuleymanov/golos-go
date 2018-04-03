@@ -51,7 +51,7 @@ type Config struct {
 	SteemitBlocksPerHour                  *types.Int `json:"STEEMIT_BLOCKS_PER_HOUR"`
 	SteemitBlocksPerYear                  *types.Int `json:"STEEMIT_BLOCKS_PER_YEAR"`
 	SteemitCashoutWindowSeconds           *types.Int `json:"STEEMIT_CASHOUT_WINDOW_SECONDS"`
-	SteemitChainId                        string     `json:"STEEMIT_CHAIN_ID"`
+	SteemitChainID                        string     `json:"STEEMIT_CHAIN_ID"`
 	SteemitContentAprPercent              *types.Int `json:"STEEMIT_CONTENT_APR_PERCENT"`
 	SteemitConversionDelay                string     `json:"STEEMIT_CONVERSION_DELAY"`
 	SteemitCurateAprPercent               *types.Int `json:"STEEMIT_CURATE_APR_PERCENT"`
@@ -78,7 +78,7 @@ type Config struct {
 	SteemitMaxCashoutWindowSeconds        *types.Int `json:"STEEMIT_MAX_CASHOUT_WINDOW_SECONDS"`
 	SteemitMaxCommentDepth                *types.Int `json:"STEEMIT_MAX_COMMENT_DEPTH"`
 	SteemitMaxFeedAge                     *types.Int `json:"STEEMIT_MAX_FEED_AGE"`
-	SteemitMaxInstanceId                  string     `json:"STEEMIT_MAX_INSTANCE_ID"`
+	SteemitMaxInstanceID                  string     `json:"STEEMIT_MAX_INSTANCE_ID"`
 	SteemitMaxMemoSize                    *types.Int `json:"STEEMIT_MAX_MEMO_SIZE"`
 	SteemitMaxWitnesses                   *types.Int `json:"STEEMIT_MAX_WITNESSES"`
 	SteemitMaxMinerWitnesses              *types.Int `json:"STEEMIT_MAX_MINER_WITNESSES"`
@@ -91,11 +91,11 @@ type Config struct {
 	SteemitMaxTimeUntilExpiration         *types.Int `json:"STEEMIT_MAX_TIME_UNTIL_EXPIRATION"`
 	SteemitMaxTransactionSize             *types.Int `json:"STEEMIT_MAX_TRANSACTION_SIZE"`
 	SteemitMaxUndoHistory                 *types.Int `json:"STEEMIT_MAX_UNDO_HISTORY"`
-	SteemitMaxUrlLength                   *types.Int `json:"STEEMIT_MAX_URL_LENGTH"`
+	SteemitMaxURLLength                   *types.Int `json:"STEEMIT_MAX_URL_LENGTH"`
 	SteemitMaxVoteChanges                 *types.Int `json:"STEEMIT_MAX_VOTE_CHANGES"`
 	SteemitMaxVotedWitnesses              *types.Int `json:"STEEMIT_MAX_VOTED_WITNESSES"`
 	SteemitMaxWithdrawRoutes              *types.Int `json:"STEEMIT_MAX_WITHDRAW_ROUTES"`
-	SteemitMaxWitnessUrlLength            *types.Int `json:"STEEMIT_MAX_WITNESS_URL_LENGTH"`
+	SteemitMaxWitnessURLLength            *types.Int `json:"STEEMIT_MAX_WITNESS_URL_LENGTH"`
 	SteemitMinAccountCreationFee          *types.Int `json:"STEEMIT_MIN_ACCOUNT_CREATION_FEE"`
 	SteemitMinAccountNameLength           *types.Int `json:"STEEMIT_MIN_ACCOUNT_NAME_LENGTH"`
 	SteemitMinBlockSizeLimit              *types.Int `json:"STEEMIT_MIN_BLOCK_SIZE_LIMIT"`

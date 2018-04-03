@@ -89,7 +89,7 @@ func (client *Client) Comment(username, authorname, ppermlink, body string, o *P
 		Permlink:       permlink,
 		Title:          "",
 		Body:           body,
-		JsonMetadata:   jsonMeta,
+		JSONMetadata:   jsonMeta,
 	}
 	trx = append(trx, tx)
 
@@ -157,7 +157,7 @@ func (client *Client) Post(authorname, title, body, permlink, ptag, postImage st
 		Permlink:       permlink,
 		Title:          title,
 		Body:           body,
-		JsonMetadata:   jsonMeta,
+		JSONMetadata:   jsonMeta,
 	}
 	trx = append(trx, txp)
 
@@ -526,7 +526,7 @@ func (client *Client) TransferFromSavings(from, to, amount, memo string, request
 
 	tx := &types.TransferFromSavingsOperation{
 		From:      from,
-		RequestId: requestid,
+		RequestID: requestid,
 		To:        to,
 		Amount:    amount,
 		Memo:      memo,
@@ -543,7 +543,7 @@ func (client *Client) CancelTransferFromSavings(from string, requestid uint32) (
 
 	tx := &types.CancelTransferFromSavingsOperation{
 		From:      from,
-		RequestId: requestid,
+		RequestID: requestid,
 	}
 
 	trx = append(trx, tx)
@@ -589,7 +589,7 @@ func (client *Client) WitnessUpdate(owner, url, blocksigningkey, accountcreation
 
 	tx := &types.WitnessUpdateOperation{
 		Owner:           owner,
-		Url:             url,
+		URL:             url,
 		BlockSigningKey: blocksigningkey,
 		Props: &types.ChainProperties{
 			AccountCreationFee: accountcreationfee,
@@ -651,7 +651,7 @@ func (client *Client) AccountCreate(creator, newAccountName, password, fee strin
 		Active:         &active,
 		Posting:        &posting,
 		MemoKey:        listKeys["memo"].Public,
-		JsonMetadata:   jsonMeta,
+		JSONMetadata:   jsonMeta,
 	}
 
 	trx = append(trx, tx)

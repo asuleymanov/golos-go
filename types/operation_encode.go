@@ -63,7 +63,7 @@ func (op *CommentOperation) MarshalTransaction(encoder *transaction.Encoder) err
 	enc.Encode(op.Permlink)
 	enc.Encode(op.Title)
 	enc.Encode(op.Body)
-	enc.Encode(op.JsonMetadata)
+	enc.Encode(op.JSONMetadata)
 	return enc.Err()
 }
 
@@ -149,7 +149,7 @@ func (op *AccountCreateOperation) MarshalTransaction(encoder *transaction.Encode
 	enc.Encode(op.Active)
 	enc.Encode(op.Posting)
 	enc.EncodePubKey(op.MemoKey)
-	enc.EncodeString(op.JsonMetadata)
+	enc.EncodeString(op.JSONMetadata)
 	return enc.Err()
 }
 
@@ -168,7 +168,7 @@ func (op *AccountUpdateOperation) MarshalTransaction(encoder *transaction.Encode
 		enc.Encode(op.Posting)
 	}
 	enc.EncodePubKey(op.MemoKey)
-	enc.EncodeString(op.JsonMetadata)
+	enc.EncodeString(op.JSONMetadata)
 	return enc.Err()
 }
 
@@ -177,7 +177,7 @@ func (op *WitnessUpdateOperation) MarshalTransaction(encoder *transaction.Encode
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeWitnessUpdate.Code()))
 	enc.Encode(op.Owner)
-	enc.Encode(op.Url)
+	enc.Encode(op.URL)
 	enc.EncodePubKey(op.BlockSigningKey)
 	enc.Encode(op.Props)
 	enc.EncodeMoney(op.Fee)
@@ -277,7 +277,7 @@ func (op *TransferFromSavingsOperation) MarshalTransaction(encoder *transaction.
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeTransferFromSavings.Code()))
 	enc.Encode(op.From)
-	enc.Encode(op.RequestId)
+	enc.Encode(op.RequestID)
 	enc.Encode(op.To)
 	enc.EncodeMoney(op.Amount)
 	enc.Encode(op.Memo)
@@ -289,7 +289,7 @@ func (op *CancelTransferFromSavingsOperation) MarshalTransaction(encoder *transa
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeCancelTransferFromSavings.Code()))
 	enc.Encode(op.From)
-	enc.Encode(op.RequestId)
+	enc.Encode(op.RequestID)
 	return enc.Err()
 }
 

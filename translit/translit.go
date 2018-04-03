@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+//EncodeTags transliteration of an array of tags
 func EncodeTags(tag []string) []string {
 	var arrEncTag []string
 	for _, val := range tag {
@@ -19,6 +20,7 @@ func EncodeTags(tag []string) []string {
 	return arrEncTag
 }
 
+//EncodeTag transliteration of a tag
 func EncodeTag(tag string) string {
 	str, count := encode(tag)
 	if count > 0 {
@@ -27,6 +29,7 @@ func EncodeTag(tag string) string {
 	return str
 }
 
+//EncodeTitle transliteration of the title
 func EncodeTitle(title string) string {
 	var str string
 	reg, err := regexp.Compile("[^a-zA-Z0-9а-яА-Я.,]+")
@@ -43,10 +46,6 @@ func EncodeTitle(title string) string {
 		str = strings.Join(s3, "")
 	}
 	return str
-}
-
-func Tsenc(text string) (string, int) {
-	return encode(text)
 }
 
 func encode(text string) (string, int) {

@@ -7,9 +7,9 @@ import (
 	"github.com/pkg/errors"
 )
 
-const APIID = "market_history"
+const apiID = "market_history"
 
-var EmptyParams = []string{}
+var emptyParams = []string{}
 
 type API struct {
 	caller transports.Caller
@@ -19,17 +19,17 @@ func NewAPI(caller transports.Caller) *API {
 	return &API{caller}
 }
 
-func (api *API) Raw(method string, params interface{}) (*json.RawMessage, error) {
+func (api *API) raw(method string, params interface{}) (*json.RawMessage, error) {
 	var resp json.RawMessage
-	if err := api.caller.Call("call", []interface{}{APIID, method, params}, &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to call %v\n", APIID, method)
+	if err := api.caller.Call("call", []interface{}{apiID, method, params}, &resp); err != nil {
+		return nil, errors.Wrapf(err, "golos: %v: failed to call %v\n", apiID, method)
 	}
 	return &resp, nil
 }
 
-//get_ticker
+//GetTicker api request get_ticker
 func (api *API) GetTicker() (*Ticker, error) {
-	raw, err := api.Raw("get_ticker", EmptyParams)
+	raw, err := api.raw("get_ticker", emptyParams)
 	if err != nil {
 		return nil, err
 	}
@@ -40,9 +40,9 @@ func (api *API) GetTicker() (*Ticker, error) {
 	return resp, nil
 }
 
-//get_volume
+//GetVolume api request get_volume
 func (api *API) GetVolume() (*Volume, error) {
-	raw, err := api.Raw("get_volume", EmptyParams)
+	raw, err := api.raw("get_volume", emptyParams)
 	if err != nil {
 		return nil, err
 	}
@@ -53,12 +53,12 @@ func (api *API) GetVolume() (*Volume, error) {
 	return resp, nil
 }
 
-//get_order_book
+//GetOrderBook api request get_order_book
 func (api *API) GetOrderBook(limit uint32) (*OrderBook, error) {
 	if limit > 1000 {
 		return nil, errors.New("golos: market_history: get_order_book -> limit must not exceed 1000")
 	}
-	raw, err := api.Raw("get_order_book", []interface{}{limit})
+	raw, err := api.raw("get_order_book", []interface{}{limit})
 	if err != nil {
 		return nil, err
 	}
@@ -69,12 +69,12 @@ func (api *API) GetOrderBook(limit uint32) (*OrderBook, error) {
 	return resp, nil
 }
 
-//get_trade_history
+//GetTradeHistory api request get_trade_history
 func (api *API) GetTradeHistory(start, end string, limit uint32) ([]*Trades, error) {
 	if limit > 1000 {
 		return nil, errors.New("golos: market_history: get_order_book -> limit must not exceed 1000")
 	}
-	raw, err := api.Raw("get_trade_history", []interface{}{start, end, limit})
+	raw, err := api.raw("get_trade_history", []interface{}{start, end, limit})
 	if err != nil {
 		return nil, err
 	}
@@ -85,12 +85,12 @@ func (api *API) GetTradeHistory(start, end string, limit uint32) ([]*Trades, err
 	return resp, nil
 }
 
-//get_recent_trades
+//GetRecentTrades api request get_recent_trades
 func (api *API) GetRecentTrades(limit uint32) ([]*Trades, error) {
 	if limit > 1000 {
 		return nil, errors.New("golos: market_history: get_order_book -> limit must not exceed 1000")
 	}
-	raw, err := api.Raw("get_recent_trades", []interface{}{limit})
+	raw, err := api.raw("get_recent_trades", []interface{}{limit})
 	if err != nil {
 		return nil, err
 	}
@@ -101,9 +101,9 @@ func (api *API) GetRecentTrades(limit uint32) ([]*Trades, error) {
 	return resp, nil
 }
 
-//get_market_history
-func (api *API) GetMarketHistory(b_sec uint32, start, end string) ([]*MarketHistory, error) {
-	raw, err := api.Raw("get_market_history", []interface{}{b_sec, start, end})
+//GetMarketHistory api request get_market_history
+func (api *API) GetMarketHistory(bSec uint32, start, end string) ([]*MarketHistory, error) {
+	raw, err := api.raw("get_market_history", []interface{}{bSec, start, end})
 	if err != nil {
 		return nil, err
 	}
@@ -114,9 +114,9 @@ func (api *API) GetMarketHistory(b_sec uint32, start, end string) ([]*MarketHist
 	return resp, nil
 }
 
-//get_market_history_buckets
+//GetMarketHistoryBuckets api request get_market_history_buckets
 func (api *API) GetMarketHistoryBuckets() ([]uint32, error) {
-	raw, err := api.Raw("get_market_history_buckets", EmptyParams)
+	raw, err := api.raw("get_market_history_buckets", emptyParams)
 	if err != nil {
 		return nil, err
 	}
@@ -127,15 +127,15 @@ func (api *API) GetMarketHistoryBuckets() ([]uint32, error) {
 	return resp, nil
 }
 
-//get_open_orders
+//GetOpenOrders api request get_open_orders
 func (api *API) GetOpenOrders(accountName string) ([]*OpenOrders, error) {
-	raw, err := api.Raw("get_open_orders", []string{accountName})
+	raw, err := api.raw("get_open_orders", []string{accountName})
 	if err != nil {
 		return nil, err
 	}
 	var resp []*OpenOrders
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_open_orders response", APIID)
+		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_open_orders response", apiID)
 	}
 	return resp, nil
 }

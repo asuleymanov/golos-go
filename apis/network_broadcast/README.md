@@ -4,10 +4,13 @@ This package adds support for `network_broadcast_api`.
 
 ## State
 
-| Method Name                           | Raw Version | Full Version |
-| ------------------------------------- |:-----------:|:------------:|
-| `broadcast_transaction`               | SKIPPED     | DONE         |
-| `broadcast_transaction_with_callback` |             |              |
-| `broadcast_transaction_synchronous`   | DONE        | DONE         |
-| `broadcast_block`                     |             |              |
-| `set_bcd_trigger`                     |             |              |
+| **ID** | **Command Name** | **Version** |
+|:-- |:--------------------------------:|---------:|
+| 1  | broadcast_transaction			| **DONE** |
+| 2  | broadcast_transaction_synchronous| **DONE** |
+| 3  | broadcast_block					| **NONE** |
+
+## License
+
+MIT, see the `LICENSE` file.
+

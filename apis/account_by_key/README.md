@@ -6,7 +6,7 @@ This package adds support for `account_by_key`.
 
 | **ID** | **Command Name** | **Version** |
 |:-- |:--------------------:|---------:|
-| 1  | get_key_references	| **NONE** |
+| 1  | get_key_references	| **RAW**  |
 
 ## License
 

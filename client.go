@@ -3,15 +3,15 @@ package client
 import (
 	"errors"
 	// RPC
+	"github.com/asuleymanov/golos-go/apis/account_by_key"
 	"github.com/asuleymanov/golos-go/apis/database"
 	"github.com/asuleymanov/golos-go/apis/follow"
+	"github.com/asuleymanov/golos-go/apis/market_history"
 	"github.com/asuleymanov/golos-go/apis/network_broadcast"
+	"github.com/asuleymanov/golos-go/apis/social_network"
 	"github.com/asuleymanov/golos-go/transactions"
 	"github.com/asuleymanov/golos-go/transports"
 	"github.com/asuleymanov/golos-go/transports/websocket"
-	"github.com/asuleymanov/golos-go/apis/market"
-	"github.com/asuleymanov/golos-go/apis/account_by_key"
-	"github.com/asuleymanov/golos-go/apis/social_network"
 )
 
 // Client can be used to access Golos remote APIs.
@@ -27,17 +27,17 @@ type Client struct {
 	Follow *follow.API
 
 	// Follow represents market_history_api.
-	Market *market.API
+	MarketHistory *market_history.API
 
 	// NetworkBroadcast represents network_broadcast_api.
-	NetworkBroadcast *networkbroadcast.API
+	NetworkBroadcast *network_broadcast.API
 
 	// AccountByKey represents account_by_key.
 	AccountByKey *account_by_key.API
 
 	// SocialNetwork represents social_network.
 	SocialNetwork *social_network.API
-	
+
 	//Chain Id
 	Chain *transactions.Chain
 
@@ -56,20 +56,15 @@ func NewClient(url []string, chain string) (*Client, error) {
 
 	client.Database = database.NewAPI(client.cc)
 
-	client.Follow, err = follow.NewAPI(client.cc)
-	if err != nil {
-		client.Follow = nil
-	}
+	client.Follow = follow.NewAPI(client.cc)
 
-	client.Market, err = market.NewAPI(client.cc)
-	if err != nil {
-		client.Market = nil
-	}
+	client.MarketHistory = market_history.NewAPI(client.cc)
 
-	client.NetworkBroadcast, err = networkbroadcast.NewAPI(client.cc)
-	if err != nil {
-		client.NetworkBroadcast = nil
-	}
+	client.NetworkBroadcast = network_broadcast.NewAPI(client.cc)
+
+	client.AccountByKey = account_by_key.NewAPI(client.cc)
+
+	client.SocialNetwork = social_network.NewAPI(client.cc)
 
 	client.Chain, err = initChainID(chain)
 	if err != nil {

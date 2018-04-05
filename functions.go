@@ -94,28 +94,7 @@ func (client *Client) Comment(username, authorname, ppermlink, body string, o *P
 	trx = append(trx, tx)
 
 	if o != nil {
-		symbol := "GBG"
-		MAP := "1000000.000 " + symbol
-		PSD := o.Percent
-		if o.Percent == 0 {
-			MAP = "0.000 " + symbol
-			PSD = 10000
-		} else if o.Percent == 50 {
-			PSD = 10000
-		} else {
-			PSD = 0
-		}
-
-		txo := &types.CommentOptionsOperation{
-			Author:               username,
-			Permlink:             permlink,
-			MaxAcceptedPayout:    MAP,
-			PercentSteemDollars:  PSD,
-			AllowVotes:           true,
-			AllowCurationRewards: true,
-			Extensions:           []interface{}{},
-		}
-		trx = append(trx, txo)
+		trx = append(trx, GetCommentOptionsOperation(username, permlink, *o))
 	}
 
 	resp, err := client.SendTrx(username, trx)
@@ -162,28 +141,7 @@ func (client *Client) Post(authorname, title, body, permlink, ptag, postImage st
 	trx = append(trx, txp)
 
 	if o != nil {
-		symbol := "GBG"
-		MAP := "1000000.000 " + symbol
-		PSD := o.Percent
-		if o.Percent == 0 {
-			MAP = "0.000 " + symbol
-			PSD = 10000
-		} else if o.Percent == 50 {
-			PSD = 10000
-		} else {
-			PSD = 0
-		}
-
-		txo := &types.CommentOptionsOperation{
-			Author:               authorname,
-			Permlink:             permlink,
-			MaxAcceptedPayout:    MAP,
-			PercentSteemDollars:  PSD,
-			AllowVotes:           true,
-			AllowCurationRewards: true,
-			Extensions:           []interface{}{},
-		}
-		trx = append(trx, txo)
+		trx = append(trx, GetCommentOptionsOperation(authorname, permlink, *o))
 	}
 
 	resp, err := client.SendTrx(authorname, trx)

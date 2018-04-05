@@ -1,6 +1,8 @@
 package types
 
 import (
+	"encoding/json"
+
 	"github.com/asuleymanov/golos-go/encoding/transaction"
 )
 
@@ -226,7 +228,25 @@ func (op *CommentOptionsOperation) MarshalTransaction(encoder *transaction.Encod
 	enc.Encode(op.PercentSteemDollars)
 	enc.EncodeBool(op.AllowVotes)
 	enc.EncodeBool(op.AllowCurationRewards)
-	enc.Encode(byte(0))
+	if len(op.Extensions) > 0 {
+		//Parse Beneficiaries
+		z, _ := json.Marshal(op.Extensions[0])
+		var l []interface{}
+		_ = json.Unmarshal(z, &l)
+		z1, _ := json.Marshal(l[1])
+		var d CommentPayoutBeneficiaries
+		_ = json.Unmarshal(z1, &d)
+
+		enc.Encode(byte(1))
+		enc.Encode(byte(0))
+		enc.EncodeUVarint(uint64(len(d.Beneficiaries)))
+		for _, val := range d.Beneficiaries {
+			enc.Encode(val.Account)
+			enc.Encode(val.Weight)
+		}
+	} else {
+		enc.Encode(byte(0))
+	}
 	return enc.Err()
 }
 

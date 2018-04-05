@@ -1,5 +1,16 @@
 package client
 
+import (
+	"github.com/asuleymanov/golos-go/types"
+)
+
+var (
+	//OptionsTrue variable for type PCOptions
+	OptionsTrue bool = true
+	//OptionsFalse variable for type PCOptions
+	OptionsFalse bool = false
+)
+
 //Keys is used as a keystroke for a specific user.
 //Only a few keys can be set.
 type Keys struct {
@@ -27,7 +38,10 @@ type OperResp struct {
 //PCOptions for the Comment and Post functions.
 //Sets the water to receive payment for a comment or post.
 type PCOptions struct {
-	Percent uint16
+	Percent              uint16
+	AllowVotes           *bool
+	AllowCurationRewards *bool
+	BeneficiarieList     *[]types.Beneficiarie
 }
 
 //ArrTransfer for MultiTransfer function

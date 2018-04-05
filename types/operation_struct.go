@@ -35,6 +35,15 @@ type POW2Input struct {
 	Nonce         uint64 `json:"nonce"`
 }
 
+type Beneficiarie struct {
+	Account string `json:"account"`
+	Weight  uint16 `json:"weight"`
+}
+
+type CommentPayoutBeneficiaries struct {
+	Beneficiaries []Beneficiarie `json:"beneficiaries"`
+}
+
 // struct VoteOperation{}
 type VoteOperation struct {
 	Voter    string `json:"voter"`

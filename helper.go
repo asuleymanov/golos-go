@@ -121,3 +121,55 @@ func (client *Client) GetAuthorReward(username, permlink string, full bool) (*ty
 	}
 	return nil, errors.New("Data about the publication is not found in the entire history of the user's actions")
 }
+
+//GetCommentOptionsOperation generates CommentOptionsOperation depending on the incoming data
+func GetCommentOptionsOperation(username, permlink string, options PCOptions) *types.CommentOptionsOperation {
+	var ext []interface{}
+	var AV, ACR bool
+	symbol := "GBG"
+	MAP := "1000000.000 " + symbol
+	PSD := options.Percent
+	Extens := []interface{}{}
+
+	if options.Percent == 0 {
+		MAP = "0.000 " + symbol
+		PSD = 10000
+	} else if options.Percent == 50 {
+		PSD = 10000
+	} else {
+		PSD = 0
+	}
+
+	if options.AllowVotes == nil || *options.AllowVotes {
+		AV = OptionsTrue
+	}
+
+	if options.AllowCurationRewards == nil || *options.AllowCurationRewards {
+		ACR = OptionsTrue
+	}
+
+	if options.BeneficiarieList != nil && len(*options.BeneficiarieList) > 0 {
+		var benList []types.Beneficiarie
+		var benef types.CommentPayoutBeneficiaries
+		for _, val := range *options.BeneficiarieList {
+			benList = append(benList, types.Beneficiarie{val.Account, val.Weight})
+		}
+		benef.Beneficiaries = benList
+		ext = append(ext, 0)
+		ext = append(ext, benef)
+	}
+
+	if len(ext) > 0 {
+		Extens = []interface{}{ext}
+	}
+
+	return &types.CommentOptionsOperation{
+		Author:               username,
+		Permlink:             permlink,
+		MaxAcceptedPayout:    MAP,
+		PercentSteemDollars:  PSD,
+		AllowVotes:           AV,
+		AllowCurationRewards: ACR,
+		Extensions:           Extens,
+	}
+}

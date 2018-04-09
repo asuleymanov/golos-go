@@ -2,6 +2,7 @@ package client
 
 import (
 	// Stdlib
+	"encoding/hex"
 	"log"
 	"strconv"
 	"strings"
@@ -216,8 +217,8 @@ func (client *Client) Reblog(username, authorname, permlink string) (*OperResp, 
 	}
 
 	js := types.ReblogOperation{
-		Account:  follower,
-		Author:   following,
+		Account:  username,
+		Author:   authorname,
 		Permlink: permlink,
 	}
 
@@ -601,17 +602,27 @@ func (client *Client) AccountCreate(creator, newAccountName, password, fee strin
 	return &OperResp{NameOper: "AccountCreate", Bresp: resp}, err
 }
 
-/*func (client *Client) SendPrivateMessage(from string) (*OperResp, error) {
-	jsonString := "[\"private_message\"," +
-		"{\"from\":\"" + from +
-		"\",\"to\":\"gbot\"" +
-		",\"from_memo_key\":\"GLS5kc9FKrjBsPchpTeX84KdDVHa9pJ21PgLZCux8uDfFyqWBGZWx\"" +
-		",\"to_memo_key\":\"GLS5SVBL6qTTiaD1qbxNFqksfxzdenAok2ToNc4uCTXKXLVrNQRnx\"" +
-		",\"sent_time\":0" +
-		",\"checksum\":0" +
-		",\"encrypted_message\":\"" + hex.EncodeToString([]byte("test")) + "\"}]"
-
+//SendPrivateMessage allows you to send a private message to another user.
+//Attention. I do not recommend yet to use this function, the private_message plugin is not stable.
+func (client *Client) SendPrivateMessage(from, to, message string) (*OperResp, error) {
 	var trx []types.Operation
+
+	resp, _ := client.Database.GetAccounts([]string{from, to})
+
+	js := types.PrivateMessageOperation{
+		From:             from,
+		To:               to,
+		FromMemoKey:      resp[0].MemoKey,
+		ToMemoKey:        resp[1].MemoKey,
+		SentTime:         0,
+		Checksum:         0,
+		EncryptedMessage: hex.EncodeToString([]byte(message)),
+	}
+
+	jsonString, errj := types.MarshalCustomJSON(js)
+	if errj != nil {
+		return nil, errj
+	}
 
 	tx := &types.CustomJSONOperation{
 		RequiredAuths:        []string{},
@@ -623,5 +634,4 @@ func (client *Client) AccountCreate(creator, newAccountName, password, fee strin
 	trx = append(trx, tx)
 	resp, err := client.SendTrx(from, trx)
 	return &OperResp{NameOper: "SendPrivateMessage", Bresp: resp}, err
-
-}*/
+}

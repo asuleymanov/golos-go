@@ -2,7 +2,6 @@ package client
 
 import (
 	// Stdlib
-	_ "encoding/hex"
 	"log"
 	"strconv"
 	"strings"
@@ -169,10 +168,25 @@ func (client *Client) DeleteComment(authorname, permlink string) (*OperResp, err
 	return &OperResp{NameOper: "Delete Comment/Post", Bresp: resp}, err
 }
 
-//Follows subscribe to the user
-func (client *Client) Follows(follower, following string) (*OperResp, error) {
-	jsonString := "[\"follow\",{\"follower\":\"" + follower + "\",\"following\":\"" + following + "\",\"what\":[\"blog\"]}]"
+//Follows subscribe(unsubscribe,ignore) to the user
+/*
+what:
+blog
+ignore
+empty value
+*/
+func (client *Client) Follows(follower, following, what string) (*OperResp, error) {
 	var trx []types.Operation
+	js := types.FollowOperation{
+		Follower:  follower,
+		Following: following,
+		What:      []string{what},
+	}
+
+	jsonString, errj := types.MarshalCustomJSON(js)
+	if errj != nil {
+		return nil, errj
+	}
 
 	tx := &types.CustomJSONOperation{
 		RequiredAuths:        []string{},
@@ -183,58 +197,16 @@ func (client *Client) Follows(follower, following string) (*OperResp, error) {
 
 	trx = append(trx, tx)
 	resp, err := client.SendTrx(follower, trx)
-	return &OperResp{NameOper: "Follows", Bresp: resp}, err
-}
-
-//Unfollow unsubscribe from user
-func (client *Client) Unfollow(follower, following string) (*OperResp, error) {
-	jsonString := "[\"follow\",{\"follower\":\"" + follower + "\",\"following\":\"" + following + "\",\"what\":[]}]"
-	var trx []types.Operation
-
-	tx := &types.CustomJSONOperation{
-		RequiredAuths:        []string{},
-		RequiredPostingAuths: []string{follower},
-		ID:                   "follow",
-		JSON:                 jsonString,
+	respOper := ""
+	switch what {
+	case "":
+		respOper = "Neutrality"
+	case "blog":
+		respOper = "Follows"
+	case "ignore":
+		respOper = "Ignore"
 	}
-
-	trx = append(trx, tx)
-	resp, err := client.SendTrx(follower, trx)
-	return &OperResp{NameOper: "Unfollow", Bresp: resp}, err
-}
-
-//Ignore user
-func (client *Client) Ignore(follower, following string) (*OperResp, error) {
-	jsonString := "[\"follow\",{\"follower\":\"" + follower + "\",\"following\":\"" + following + "\",\"what\":[\"ignore\"]}]"
-	var trx []types.Operation
-
-	tx := &types.CustomJSONOperation{
-		RequiredAuths:        []string{},
-		RequiredPostingAuths: []string{follower},
-		ID:                   "follow",
-		JSON:                 jsonString,
-	}
-
-	trx = append(trx, tx)
-	resp, err := client.SendTrx(follower, trx)
-	return &OperResp{NameOper: "Unfollow", Bresp: resp}, err
-}
-
-//Notice undo ignore the user
-func (client *Client) Notice(follower, following string) (*OperResp, error) {
-	jsonString := "[\"follow\",{\"follower\":\"" + follower + "\",\"following\":\"" + following + "\",\"what\":[]}]"
-	var trx []types.Operation
-
-	tx := &types.CustomJSONOperation{
-		RequiredAuths:        []string{},
-		RequiredPostingAuths: []string{follower},
-		ID:                   "follow",
-		JSON:                 jsonString,
-	}
-
-	trx = append(trx, tx)
-	resp, err := client.SendTrx(follower, trx)
-	return &OperResp{NameOper: "Notice", Bresp: resp}, err
+	return &OperResp{NameOper: respOper, Bresp: resp}, err
 }
 
 //Reblog repost records
@@ -242,7 +214,18 @@ func (client *Client) Reblog(username, authorname, permlink string) (*OperResp, 
 	if client.VerifyReblogs(authorname, permlink, username) {
 		return nil, errors.New("The user already did repost")
 	}
-	jsonString := "[\"reblog\",{\"account\":\"" + username + "\",\"author\":\"" + authorname + "\",\"permlink\":\"" + permlink + "\"}]"
+
+	js := types.ReblogOperation{
+		Account:  follower,
+		Author:   following,
+		Permlink: permlink,
+	}
+
+	jsonString, errj := types.MarshalCustomJSON(js)
+	if errj != nil {
+		return nil, errj
+	}
+
 	var trx []types.Operation
 
 	tx := &types.CustomJSONOperation{

@@ -1,7 +1,6 @@
 package client
 
 import (
-	"encoding/json"
 	"errors"
 	"strings"
 	"time"
@@ -178,7 +177,7 @@ func GetCommentOptionsOperation(username, permlink string, options PCOptions) *t
 
 func MarshalJSONMetadata(v interface{}) (string, error) {
 	if v != nil {
-		b, err := json.Marshal(v)
+		b, err := types.JSONMarshal(v)
 		if err != nil {
 			return "", err
 		}

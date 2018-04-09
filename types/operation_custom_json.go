@@ -15,14 +15,16 @@ import (
 	"github.com/asuleymanov/golos-go/encoding/transaction"
 )
 
-const (
-	TypeFollow = "follow"
-	TypeReblog = "reblog"
+var (
+	TypeFollow         = "follow"
+	TypeReblog         = "reblog"
+	TypePrivateMessage = "private_message"
 )
 
 var customJSONDataObjects = map[string]interface{}{
-	TypeFollow: &FollowOperation{},
-	TypeReblog: &ReblogOperation{},
+	TypeFollow:         &FollowOperation{},
+	TypeReblog:         &ReblogOperation{},
+	TypePrivateMessage: &PrivateMessageOperation{},
 }
 
 // FC_REFLECT( steemit::chain::custom_json_operation,

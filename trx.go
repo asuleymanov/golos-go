@@ -35,16 +35,16 @@ func (client *Client) SendTrx(username string, strx []types.Operation) (*BResp, 
 		return nil, err
 	}
 
-	// Подписываем транзакцию
-	if err := tx.Sign(privKeys, client.Chain); err != nil {
-		return nil, err
-	}
-
-	expTime := time.Now().Add(time.Hour + time.Minute)
+	expTime := time.Now().Add(59 * time.Minute).UTC()
 	tm := types.Time{
 		Time: &expTime,
 	}
 	tx.Expiration = &tm
+
+	// Подписываем транзакцию
+	if err := tx.Sign(privKeys, client.Chain); err != nil {
+		return nil, err
+	}
 
 	// Отправка транзакции
 	resp, err := client.NetworkBroadcast.BroadcastTransactionSynchronous(tx.Transaction)

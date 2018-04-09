@@ -8,6 +8,7 @@ import (
 	"github.com/asuleymanov/golos-go/apis/follow"
 	"github.com/asuleymanov/golos-go/apis/market_history"
 	"github.com/asuleymanov/golos-go/apis/network_broadcast"
+	"github.com/asuleymanov/golos-go/apis/private_message"
 	"github.com/asuleymanov/golos-go/apis/social_network"
 	"github.com/asuleymanov/golos-go/transactions"
 	"github.com/asuleymanov/golos-go/transports"
@@ -38,6 +39,9 @@ type Client struct {
 	// SocialNetwork represents social_network.
 	SocialNetwork *social_network.API
 
+	// PrivateMessage represents social_network.
+	PrivateMessage *private_message.API
+
 	//Chain Id
 	Chain *transactions.Chain
 
@@ -65,6 +69,8 @@ func NewClient(url []string, chain string) (*Client, error) {
 	client.AccountByKey = account_by_key.NewAPI(client.cc)
 
 	client.SocialNetwork = social_network.NewAPI(client.cc)
+
+	client.PrivateMessage = private_message.NewAPI(client.cc)
 
 	client.Chain, err = initChainID(chain)
 	if err != nil {

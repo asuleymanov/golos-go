@@ -2,6 +2,7 @@ package client
 
 import (
 	// Stdlib
+	_ "encoding/hex"
 	"log"
 	"strconv"
 	"strings"
@@ -80,7 +81,7 @@ func (client *Client) Comment(username, authorname, ppermlink, body string, o *P
 	permlink := "re-" + authorname + "-" + ppermlink + "-" + times
 	permlink = strings.Replace(permlink, ".", "-", -1)
 
-	jsonMeta := "{\"lib\":\"golos-go\"}"
+	jsonMeta, _ := MarshalJSONMetadata(nil)
 
 	tx := &types.CommentOperation{
 		ParentAuthor:   authorname,
@@ -599,7 +600,7 @@ func (client *Client) AccountCreate(creator, newAccountName, password, fee strin
 		KeyAuths:        map[string]int64{listKeys["posting"].Public: 1},
 	}
 
-	jsonMeta := "{\"lib\":\"golos-go\"}"
+	jsonMeta, _ := MarshalJSONMetadata(nil)
 
 	tx := &types.AccountCreateOperation{
 		Fee:            fee,
@@ -616,3 +617,28 @@ func (client *Client) AccountCreate(creator, newAccountName, password, fee strin
 	resp, err := client.SendTrx(creator, trx)
 	return &OperResp{NameOper: "AccountCreate", Bresp: resp}, err
 }
+
+/*func (client *Client) SendPrivateMessage(from string) (*OperResp, error) {
+	jsonString := "[\"private_message\"," +
+		"{\"from\":\"" + from +
+		"\",\"to\":\"gbot\"" +
+		",\"from_memo_key\":\"GLS5kc9FKrjBsPchpTeX84KdDVHa9pJ21PgLZCux8uDfFyqWBGZWx\"" +
+		",\"to_memo_key\":\"GLS5SVBL6qTTiaD1qbxNFqksfxzdenAok2ToNc4uCTXKXLVrNQRnx\"" +
+		",\"sent_time\":0" +
+		",\"checksum\":0" +
+		",\"encrypted_message\":\"" + hex.EncodeToString([]byte("test")) + "\"}]"
+
+	var trx []types.Operation
+
+	tx := &types.CustomJSONOperation{
+		RequiredAuths:        []string{},
+		RequiredPostingAuths: []string{from},
+		ID:                   "private_message",
+		JSON:                 jsonString,
+	}
+
+	trx = append(trx, tx)
+	resp, err := client.SendTrx(from, trx)
+	return &OperResp{NameOper: "SendPrivateMessage", Bresp: resp}, err
+
+}*/

@@ -1,7 +1,9 @@
 package client
 
 import (
+	"encoding/json"
 	"errors"
+	"strings"
 	"time"
 
 	"github.com/asuleymanov/golos-go/types"
@@ -171,5 +173,21 @@ func GetCommentOptionsOperation(username, permlink string, options PCOptions) *t
 		AllowVotes:           AV,
 		AllowCurationRewards: ACR,
 		Extensions:           Extens,
+	}
+}
+
+func MarshalJSONMetadata(v interface{}) (string, error) {
+	if v != nil {
+		b, err := json.Marshal(v)
+		if err != nil {
+			return "", err
+		}
+		str := string(b)
+		st := strings.Split(str, "")
+		str = strings.Join(st[0:len(st)-1], "")
+		str = strings.Replace(str, "\"", "\\\"", -1) + ",\"lib\":\"golos-go\"}"
+		return str, nil
+	} else {
+		return "{\"lib\":\"golos-go\"}", nil
 	}
 }

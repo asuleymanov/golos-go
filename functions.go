@@ -607,13 +607,13 @@ func (client *Client) AccountCreate(creator, newAccountName, password, fee strin
 func (client *Client) SendPrivateMessage(from, to, message string) (*OperResp, error) {
 	var trx []types.Operation
 
-	resp, _ := client.Database.GetAccounts([]string{from, to})
+	req, _ := client.Database.GetAccounts([]string{from, to})
 
 	js := types.PrivateMessageOperation{
 		From:             from,
 		To:               to,
-		FromMemoKey:      resp[0].MemoKey,
-		ToMemoKey:        resp[1].MemoKey,
+		FromMemoKey:      req[0].MemoKey,
+		ToMemoKey:        req[1].MemoKey,
 		SentTime:         0,
 		Checksum:         0,
 		EncryptedMessage: hex.EncodeToString([]byte(message)),

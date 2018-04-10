@@ -116,20 +116,7 @@ func (client *Client) Post(authorname, title, body, permlink, ptag, postImage st
 		ptag = translit.EncodeTag(ptag)
 	}
 
-	jsonMeta := &types.ContentMetadata{Tags: tag, Lib: "golos-go"}
-
-	/*jsonMeta := "{\"tags\":["
-	for k, v := range tag {
-		if k != len(tags)-1 {
-			jsonMeta = jsonMeta + "\"" + v + "\","
-		} else {
-			jsonMeta = jsonMeta + "\"" + v + "\"]"
-		}
-	}
-	if postImage != "" {
-		jsonMeta = jsonMeta + ",\"image\":[\"" + postImage + "\"]"
-	}
-	jsonMeta = jsonMeta + ",\"lib\":\"golos-go\"}"*/
+	jsonMeta := &types.ContentMetadata{Tags: tag, Image: []string{postImage}, Lib: "golos-go"}
 
 	var trx []types.Operation
 	txp := &types.CommentOperation{

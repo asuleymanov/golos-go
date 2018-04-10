@@ -91,7 +91,6 @@ func (encoder *Encoder) Encode(v interface{}) error {
 		return encoder.EncodeNumber(v)
 
 	case string:
-
 		return encoder.EncodeString(v)
 	default:
 		return errors.Errorf("encoder: unsupported type encountered")

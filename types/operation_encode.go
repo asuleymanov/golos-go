@@ -151,7 +151,7 @@ func (op *AccountCreateOperation) MarshalTransaction(encoder *transaction.Encode
 	enc.Encode(op.Active)
 	enc.Encode(op.Posting)
 	enc.EncodePubKey(op.MemoKey)
-	enc.EncodeString(op.JSONMetadata)
+	enc.Encode(op.JSONMetadata)
 	return enc.Err()
 }
 
@@ -170,7 +170,7 @@ func (op *AccountUpdateOperation) MarshalTransaction(encoder *transaction.Encode
 		enc.Encode(op.Posting)
 	}
 	enc.EncodePubKey(op.MemoKey)
-	enc.EncodeString(op.JSONMetadata)
+	enc.Encode(op.JSONMetadata)
 	return enc.Err()
 }
 

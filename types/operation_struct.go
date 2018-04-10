@@ -62,13 +62,13 @@ func (op *VoteOperation) Data() interface{} {
 
 // struct CommentOperation{}
 type CommentOperation struct {
-	ParentAuthor   string `json:"parent_author"`
-	ParentPermlink string `json:"parent_permlink"`
-	Author         string `json:"author"`
-	Permlink       string `json:"permlink"`
-	Title          string `json:"title"`
-	Body           string `json:"body"`
-	JSONMetadata   string `json:"json_metadata"`
+	ParentAuthor   string           `json:"parent_author"`
+	ParentPermlink string           `json:"parent_permlink"`
+	Author         string           `json:"author"`
+	Permlink       string           `json:"permlink"`
+	Title          string           `json:"title"`
+	Body           string           `json:"body"`
+	JSONMetadata   *ContentMetadata `json:"json_metadata"`
 }
 
 func (op *CommentOperation) Type() OpType {
@@ -191,14 +191,14 @@ func (op *ConvertOperation) Data() interface{} {
 
 // struct AccountCreateOperation{}
 type AccountCreateOperation struct {
-	Fee            string     `json:"fee"`
-	Creator        string     `json:"creator"`
-	NewAccountName string     `json:"new_account_name"`
-	Owner          *Authority `json:"owner"`
-	Active         *Authority `json:"active"`
-	Posting        *Authority `json:"posting"`
-	MemoKey        string     `json:"memo_key"`
-	JSONMetadata   string     `json:"json_metadata"`
+	Fee            string           `json:"fee"`
+	Creator        string           `json:"creator"`
+	NewAccountName string           `json:"new_account_name"`
+	Owner          *Authority       `json:"owner"`
+	Active         *Authority       `json:"active"`
+	Posting        *Authority       `json:"posting"`
+	MemoKey        string           `json:"memo_key"`
+	JSONMetadata   *AccountMetadata `json:"json_metadata"`
 }
 
 func (op *AccountCreateOperation) Type() OpType {
@@ -211,12 +211,12 @@ func (op *AccountCreateOperation) Data() interface{} {
 
 // struct AccountUpdateOperation{}
 type AccountUpdateOperation struct {
-	Account      string     `json:"account"`
-	Owner        *Authority `json:"owner"`
-	Active       *Authority `json:"active"`
-	Posting      *Authority `json:"posting"`
-	MemoKey      string     `json:"memo_key"`
-	JSONMetadata string     `json:"json_metadata"`
+	Account      string           `json:"account"`
+	Owner        *Authority       `json:"owner"`
+	Active       *Authority       `json:"active"`
+	Posting      *Authority       `json:"posting"`
+	MemoKey      string           `json:"memo_key"`
+	JSONMetadata *AccountMetadata `json:"json_metadata"`
 }
 
 func (op *AccountUpdateOperation) Type() OpType {
@@ -695,16 +695,16 @@ func (op *DelegateVestingSharesOperation) Data() interface{} {
 
 // struct AccountCreateWithDelegationOperation{}
 type AccountCreateWithDelegationOperation struct {
-	Fee            string        `json:"fee"`
-	Delegation     string        `json:"delegation"`
-	Creator        string        `json:"creator"`
-	NewAccountName string        `json:"new_account_name"`
-	Owner          string        `json:"owner"`
-	Active         string        `json:"active"`
-	Posting        string        `json:"posting"`
-	MemoKey        string        `json:"memo_key"`
-	JSONMetadata   string        `json:"json_metadata"`
-	Extensions     []interface{} `json:"extensions"`
+	Fee            string           `json:"fee"`
+	Delegation     string           `json:"delegation"`
+	Creator        string           `json:"creator"`
+	NewAccountName string           `json:"new_account_name"`
+	Owner          string           `json:"owner"`
+	Active         string           `json:"active"`
+	Posting        string           `json:"posting"`
+	MemoKey        string           `json:"memo_key"`
+	JSONMetadata   *AccountMetadata `json:"json_metadata"`
+	Extensions     []interface{}    `json:"extensions"`
 }
 
 func (op *AccountCreateWithDelegationOperation) Type() OpType {

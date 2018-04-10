@@ -81,7 +81,7 @@ func (client *Client) Comment(username, authorname, ppermlink, body string, o *P
 	permlink := "re-" + authorname + "-" + ppermlink + "-" + times
 	permlink = strings.Replace(permlink, ".", "-", -1)
 
-	jsonMeta, _ := MarshalJSONMetadata(nil)
+	jsonMeta := &types.ContentMetadata{Lib: "golos-go"}
 
 	tx := &types.CommentOperation{
 		ParentAuthor:   authorname,
@@ -116,7 +116,9 @@ func (client *Client) Post(authorname, title, body, permlink, ptag, postImage st
 		ptag = translit.EncodeTag(ptag)
 	}
 
-	jsonMeta := "{\"tags\":["
+	jsonMeta := &types.ContentMetadata{Tags: tag, Lib: "golos-go"}
+
+	/*jsonMeta := "{\"tags\":["
 	for k, v := range tag {
 		if k != len(tags)-1 {
 			jsonMeta = jsonMeta + "\"" + v + "\","
@@ -127,7 +129,7 @@ func (client *Client) Post(authorname, title, body, permlink, ptag, postImage st
 	if postImage != "" {
 		jsonMeta = jsonMeta + ",\"image\":[\"" + postImage + "\"]"
 	}
-	jsonMeta = jsonMeta + ",\"lib\":\"golos-go\"}"
+	jsonMeta = jsonMeta + ",\"lib\":\"golos-go\"}"*/
 
 	var trx []types.Operation
 	txp := &types.CommentOperation{
@@ -584,7 +586,7 @@ func (client *Client) AccountCreate(creator, newAccountName, password, fee strin
 		KeyAuths:        map[string]int64{listKeys["posting"].Public: 1},
 	}
 
-	jsonMeta, _ := MarshalJSONMetadata(nil)
+	jsonMeta := &types.AccountMetadata{}
 
 	tx := &types.AccountCreateOperation{
 		Fee:            fee,

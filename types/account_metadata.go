@@ -29,6 +29,9 @@ func (op *AccountMetadata) UnmarshalJSON(p []byte) error {
 	var raw rawAccountMetadata
 
 	str, _ := strconv.Unquote(string(p))
+	if str == "" {
+		return nil
+	}
 
 	if err := json.Unmarshal([]byte(str), &raw); err != nil {
 		return err

@@ -13,6 +13,10 @@ func (op *ContentMetadata) UnmarshalJSON(p []byte) error {
 	var raw map[string]interface{}
 
 	str, _ := strconv.Unquote(string(p))
+	if str == "" {
+		return nil
+	}
+
 	if err := json.Unmarshal([]byte(str), &raw); err != nil {
 		return err
 	}

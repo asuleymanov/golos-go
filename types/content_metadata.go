@@ -12,7 +12,7 @@ type ContentMetadata map[string]interface{}
 func (op *ContentMetadata) UnmarshalJSON(p []byte) error {
 	str, _ := strconv.Unquote(string(p))
 
-	if err := json.Unmarshal([]byte(str), op); err != nil {
+	if err := json.Unmarshal([]byte(str), *op); err != nil {
 		return err
 	}
 
@@ -20,7 +20,7 @@ func (op *ContentMetadata) UnmarshalJSON(p []byte) error {
 }
 
 func (op *ContentMetadata) MarshalJSON() ([]byte, error) {
-	ans, err := json.Marshal(op)
+	ans, err := json.Marshal(*op)
 	if err != nil {
 		return []byte{}, err
 	}
@@ -28,7 +28,7 @@ func (op *ContentMetadata) MarshalJSON() ([]byte, error) {
 }
 
 func (op *ContentMetadata) MarshalTransaction(encoder *transaction.Encoder) error {
-	ans, err := json.Marshal(op)
+	ans, err := json.Marshal(*op)
 	if err != nil {
 		return err
 	}

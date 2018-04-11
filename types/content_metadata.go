@@ -33,12 +33,7 @@ func (op *ContentMetadata) MarshalTransaction(encoder *transaction.Encoder) erro
 		return err
 	}
 
-	str, err := strconv.Unquote(string(ans))
-	if err != nil {
-		return err
-	}
-
 	enc := transaction.NewRollingEncoder(encoder)
-	enc.EncodeString(str)
+	enc.EncodeString(string(ans))
 	return enc.Err()
 }

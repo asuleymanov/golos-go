@@ -81,7 +81,7 @@ func (client *Client) Comment(username, authorname, ppermlink, body string, o *P
 	permlink := "re-" + authorname + "-" + ppermlink + "-" + times
 	permlink = strings.Replace(permlink, ".", "-", -1)
 
-	jsonMeta := &types.ContentMetadata{"lib": "golos-go"}
+	jsonMeta := &types.ContentMetadata{Lib: "golos-go"}
 
 	tx := &types.CommentOperation{
 		ParentAuthor:   authorname,
@@ -117,9 +117,9 @@ func (client *Client) Post(authorname, title, body, permlink, ptag, postImage st
 	}
 
 	jsonMeta := &types.ContentMetadata{
-		"tags": tag,
-		"image": []string{postImage},
-		"lib": "golos-go",
+		Tags:  tag,
+		Image: []string{postImage},
+		Lib:   "golos-go",
 	}
 
 	var trx []types.Operation

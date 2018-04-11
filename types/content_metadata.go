@@ -11,6 +11,9 @@ type ContentMetadata map[string]interface{}
 
 func (op *ContentMetadata) UnmarshalJSON(p []byte) error {
 	str, _ := strconv.Unquote(string(p))
+	if str == "" {
+		return nil
+	}
 
 	if err := json.Unmarshal([]byte(str), *op); err != nil {
 		return err

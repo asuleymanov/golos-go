@@ -9,7 +9,7 @@ import (
 
 const apiID = "market_history"
 
-var emptyParams = []string{}
+var emptyParams = struct{}{}
 
 type API struct {
 	caller transports.Caller

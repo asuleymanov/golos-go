@@ -18,7 +18,7 @@ func NewAPI(caller transports.Caller) *API {
 	return &API{caller}
 }
 
-var emptyParams = struct{}{}
+var emptyParams = []string{}
 
 func (api *API) raw(method string, params interface{}) (*json.RawMessage, error) {
 	var resp json.RawMessage

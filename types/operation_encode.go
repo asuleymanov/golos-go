@@ -27,14 +27,14 @@ func (auth *Authority) MarshalTransaction(encoder *transaction.Encoder) error {
 
 func (exch *ExchRate) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
-	enc.EncodeMoney(exch.Base)
-	enc.EncodeMoney(exch.Quote)
+	enc.Encode(exch.Base)
+	enc.Encode(exch.Quote)
 	return enc.Err()
 }
 
 func (cp *ChainProperties) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
-	enc.EncodeMoney(cp.AccountCreationFee)
+	enc.Encode(cp.AccountCreationFee)
 	enc.Encode(cp.MaximumBlockSize)
 	enc.Encode(cp.SBDInterestRate)
 	return enc.Err()
@@ -75,7 +75,7 @@ func (op *TransferOperation) MarshalTransaction(encoder *transaction.Encoder) er
 	enc.EncodeUVarint(uint64(TypeTransfer.Code()))
 	enc.Encode(op.From)
 	enc.Encode(op.To)
-	enc.EncodeMoney(op.Amount)
+	enc.Encode(op.Amount)
 	enc.Encode(op.Memo)
 	return enc.Err()
 }
@@ -86,7 +86,7 @@ func (op *TransferToVestingOperation) MarshalTransaction(encoder *transaction.En
 	enc.EncodeUVarint(uint64(TypeTransferToVesting.Code()))
 	enc.Encode(op.From)
 	enc.Encode(op.To)
-	enc.EncodeMoney(op.Amount)
+	enc.Encode(op.Amount)
 	return enc.Err()
 }
 
@@ -95,7 +95,7 @@ func (op *WithdrawVestingOperation) MarshalTransaction(encoder *transaction.Enco
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeWithdrawVesting.Code()))
 	enc.Encode(op.Account)
-	enc.EncodeMoney(op.VestingShares)
+	enc.Encode(op.VestingShares)
 	return enc.Err()
 }
 
@@ -105,8 +105,8 @@ func (op *LimitOrderCreateOperation) MarshalTransaction(encoder *transaction.Enc
 	enc.EncodeUVarint(uint64(TypeLimitOrderCreate.Code()))
 	enc.Encode(op.Owner)
 	enc.Encode(op.OrderID)
-	enc.EncodeMoney(op.AmountToSell)
-	enc.EncodeMoney(op.MinToReceive)
+	enc.Encode(op.AmountToSell)
+	enc.Encode(op.MinToReceive)
 	enc.EncodeBool(op.FillOrKill)
 	enc.Encode(op.Expiration)
 	return enc.Err()
@@ -136,7 +136,7 @@ func (op *ConvertOperation) MarshalTransaction(encoder *transaction.Encoder) err
 	enc.EncodeUVarint(uint64(TypeConvert.Code()))
 	enc.Encode(op.Owner)
 	enc.Encode(op.RequestID)
-	enc.EncodeMoney(op.Amount)
+	enc.Encode(op.Amount)
 	return enc.Err()
 }
 
@@ -144,7 +144,7 @@ func (op *ConvertOperation) MarshalTransaction(encoder *transaction.Encoder) err
 func (op *AccountCreateOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeAccountCreate.Code()))
-	enc.EncodeMoney(op.Fee)
+	enc.Encode(op.Fee)
 	enc.EncodeString(op.Creator)
 	enc.EncodeString(op.NewAccountName)
 	enc.Encode(op.Owner)
@@ -182,7 +182,7 @@ func (op *WitnessUpdateOperation) MarshalTransaction(encoder *transaction.Encode
 	enc.Encode(op.URL)
 	enc.EncodePubKey(op.BlockSigningKey)
 	enc.Encode(op.Props)
-	enc.EncodeMoney(op.Fee)
+	enc.Encode(op.Fee)
 	return enc.Err()
 }
 
@@ -224,7 +224,7 @@ func (op *CommentOptionsOperation) MarshalTransaction(encoder *transaction.Encod
 	enc.EncodeUVarint(uint64(TypeCommentOptions.Code()))
 	enc.Encode(op.Author)
 	enc.Encode(op.Permlink)
-	enc.EncodeMoney(op.MaxAcceptedPayout)
+	enc.Encode(op.MaxAcceptedPayout)
 	enc.Encode(op.PercentSteemDollars)
 	enc.EncodeBool(op.AllowVotes)
 	enc.EncodeBool(op.AllowCurationRewards)
@@ -287,7 +287,7 @@ func (op *TransferToSavingsOperation) MarshalTransaction(encoder *transaction.En
 	enc.EncodeUVarint(uint64(TypeTransferToSavings.Code()))
 	enc.Encode(op.From)
 	enc.Encode(op.To)
-	enc.EncodeMoney(op.Amount)
+	enc.Encode(op.Amount)
 	enc.Encode(op.Memo)
 	return enc.Err()
 }
@@ -299,7 +299,7 @@ func (op *TransferFromSavingsOperation) MarshalTransaction(encoder *transaction.
 	enc.Encode(op.From)
 	enc.Encode(op.RequestID)
 	enc.Encode(op.To)
-	enc.EncodeMoney(op.Amount)
+	enc.Encode(op.Amount)
 	enc.Encode(op.Memo)
 	return enc.Err()
 }

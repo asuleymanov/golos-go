@@ -7,6 +7,16 @@ import (
 	"github.com/asuleymanov/golos-go/types"
 )
 
+//SetKeys you can specify keys for signing transactions.
+func (client *Client) SetKeys(keys *Keys) {
+	client.CurrentKeys = keys
+}
+
+//SetAsset returns data of type Asset
+func SetAsset(amount float64, symbol string) *types.Asset {
+	return &types.Asset{Amount: amount, Symbol: symbol}
+}
+
 //FollowersList returns the subscriber's list of subscribers
 func (client *Client) FollowersList(username string) ([]string, error) {
 	var followers []string
@@ -126,13 +136,14 @@ func (client *Client) GetAuthorReward(username, permlink string, full bool) (*ty
 func GetCommentOptionsOperation(username, permlink string, options PCOptions) *types.CommentOptionsOperation {
 	var ext []interface{}
 	var AV, ACR bool
+	var MAP *types.Asset
 	symbol := "GBG"
-	MAP := "1000000.000 " + symbol
+	MAP = SetAsset(1000000.000, symbol)
 	PSD := options.Percent
 	Extens := []interface{}{}
 
 	if options.Percent == 0 {
-		MAP = "0.000 " + symbol
+		MAP = SetAsset(0.000, symbol)
 		PSD = 10000
 	} else if options.Percent == 50 {
 		PSD = 10000

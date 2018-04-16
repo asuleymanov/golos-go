@@ -41,25 +41,25 @@ type Content struct {
 	MaxCashoutTime          *types.Time            `json:"max_cashout_time"`
 	TotalVoteWeight         *types.Int             `json:"total_vote_weight"`
 	RewardWeight            *types.Int             `json:"reward_weight"`
-	TotalPayoutValue        string                 `json:"total_payout_value"`
-	CuratorPayoutValue      string                 `json:"curator_payout_value"`
+	TotalPayoutValue        *types.Asset           `json:"total_payout_value"`
+	CuratorPayoutValue      *types.Asset           `json:"curator_payout_value"`
 	AuthorRewards           *types.Int             `json:"author_rewards"`
 	NetVotes                *types.Int             `json:"net_votes"`
 	RootComment             *types.Int             `json:"root_comment"`
 	Mode                    string                 `json:"mode"`
-	MaxAcceptedPayout       string                 `json:"max_accepted_payout"`
+	MaxAcceptedPayout       *types.Asset           `json:"max_accepted_payout"`
 	PercentSteemDollars     *types.Int             `json:"percent_steem_dollars"`
 	AllowReplies            bool                   `json:"allow_replies"`
 	AllowVotes              bool                   `json:"allow_votes"`
 	AllowCurationRewards    bool                   `json:"allow_curation_rewards"`
 	URL                     string                 `json:"url"`
 	RootTitle               string                 `json:"root_title"`
-	PendingPayoutValue      string                 `json:"pending_payout_value"`
-	TotalPendingPayoutValue string                 `json:"total_pending_payout_value"`
+	PendingPayoutValue      *types.Asset           `json:"pending_payout_value"`
+	TotalPendingPayoutValue *types.Asset           `json:"total_pending_payout_value"`
 	ActiveVotes             []*VoteState           `json:"active_votes"`
 	Replies                 []*Content             `json:"replies"`
 	AuthorReputation        *types.Int             `json:"author_reputation"`
-	Promoted                string                 `json:"promoted"`
+	Promoted                *types.Asset           `json:"promoted"`
 	BodyLength              *types.Int             `json:"body_length"`
 	RebloggedBy             []interface{}          `json:"reblogged_by"`
 }
@@ -70,22 +70,22 @@ func (content *Content) IsStory() bool {
 
 //TrendingTags
 type TrendingTags struct {
-	Name                  string     `json:"name"`
-	TotalChildrenRshares2 string     `json:"total_children_rshares2"`
-	TotalPayouts          string     `json:"total_payouts"`
-	NetVotes              *types.Int `json:"net_votes"`
-	TopPosts              *types.Int `json:"top_posts"`
-	Comments              *types.Int `json:"comments"`
+	Name                  string       `json:"name"`
+	TotalChildrenRshares2 string       `json:"total_children_rshares2"`
+	TotalPayouts          *types.Asset `json:"total_payouts"`
+	NetVotes              *types.Int   `json:"net_votes"`
+	TopPosts              *types.Int   `json:"top_posts"`
+	Comments              *types.Int   `json:"comments"`
 }
 
 //Categories
 type Categories struct {
-	ID           *types.Int `json:"id"`
-	Name         string     `json:"name"`
-	AbsRshares   string     `json:"abs_rshares"`
-	TotalPayouts string     `json:"total_payouts"`
-	Discussions  *types.Int `json:"discussions"`
-	LastUpdate   string     `json:"last_update"`
+	ID           *types.Int   `json:"id"`
+	Name         string       `json:"name"`
+	AbsRshares   string       `json:"abs_rshares"`
+	TotalPayouts *types.Asset `json:"total_payouts"`
+	Discussions  *types.Int   `json:"discussions"`
+	LastUpdate   string       `json:"last_update"`
 }
 
 //VoteState

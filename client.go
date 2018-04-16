@@ -86,11 +86,6 @@ func (client *Client) Close() error {
 	return client.cc.Close()
 }
 
-//SetKeys you can specify keys for signing transactions.
-func (client *Client) SetKeys(keys *Keys) {
-	client.CurrentKeys = keys
-}
-
 func initclient(url []string) (*websocket.Transport, error) {
 	// Инициализация Websocket
 	t, err := websocket.NewTransport(url)

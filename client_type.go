@@ -48,7 +48,7 @@ type PCOptions struct {
 type ArrTransfer struct {
 	To      string
 	Memo    string
-	Ammount string
+	Ammount types.Asset
 }
 
 //ArrVote for MultiVote function

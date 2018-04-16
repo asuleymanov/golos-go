@@ -6,8 +6,8 @@ import (
 
 // Add-on struct
 type ExchRate struct {
-	Base  string `json:"base"`
-	Quote string `json:"quote"`
+	Base  *Asset `json:"base"`
+	Quote *Asset `json:"quote"`
 }
 
 type POW struct {
@@ -18,7 +18,7 @@ type POW struct {
 }
 
 type ChainProperties struct {
-	AccountCreationFee string `json:"account_creation_fee"`
+	AccountCreationFee *Asset `json:"account_creation_fee"`
 	MaximumBlockSize   uint32 `json:"maximum_block_size"`
 	SBDInterestRate    uint16 `json:"sbd_interest_rate"`
 }
@@ -87,7 +87,7 @@ func (op *CommentOperation) IsStoryOperation() bool {
 type TransferOperation struct {
 	From   string `json:"from"`
 	To     string `json:"to"`
-	Amount string `json:"amount"`
+	Amount *Asset `json:"amount"`
 	Memo   string `json:"memo"`
 }
 
@@ -103,7 +103,7 @@ func (op *TransferOperation) Data() interface{} {
 type TransferToVestingOperation struct {
 	From   string `json:"from"`
 	To     string `json:"to"`
-	Amount string `json:"amount"`
+	Amount *Asset `json:"amount"`
 }
 
 func (op *TransferToVestingOperation) Type() OpType {
@@ -117,7 +117,7 @@ func (op *TransferToVestingOperation) Data() interface{} {
 // struct WithdrawVestingOperation{}
 type WithdrawVestingOperation struct {
 	Account       string `json:"account"`
-	VestingShares string `json:"vesting_shares"`
+	VestingShares *Asset `json:"vesting_shares"`
 }
 
 func (op *WithdrawVestingOperation) Type() OpType {
@@ -132,8 +132,8 @@ func (op *WithdrawVestingOperation) Data() interface{} {
 type LimitOrderCreateOperation struct {
 	Owner        string `json:"owner"`
 	OrderID      uint32 `json:"orderid"`
-	AmountToSell string `json:"amount_to_sell"`
-	MinToReceive string `json:"min_to_receive"`
+	AmountToSell *Asset `json:"amount_to_sell"`
+	MinToReceive *Asset `json:"min_to_receive"`
 	FillOrKill   bool   `json:"fill_or_kill"`
 	Expiration   *Time  `json:"expiration"`
 }
@@ -178,7 +178,7 @@ func (op *FeedPublishOperation) Data() interface{} {
 type ConvertOperation struct {
 	Owner     string `json:"owner"`
 	RequestID uint32 `json:"requestid"`
-	Amount    string `json:"amount"`
+	Amount    *Asset `json:"amount"`
 }
 
 func (op *ConvertOperation) Type() OpType {
@@ -191,7 +191,7 @@ func (op *ConvertOperation) Data() interface{} {
 
 // struct AccountCreateOperation{}
 type AccountCreateOperation struct {
-	Fee            string           `json:"fee"`
+	Fee            *Asset           `json:"fee"`
 	Creator        string           `json:"creator"`
 	NewAccountName string           `json:"new_account_name"`
 	Owner          *Authority       `json:"owner"`
@@ -233,7 +233,7 @@ type WitnessUpdateOperation struct {
 	URL             string           `json:"url"`
 	BlockSigningKey string           `json:"block_signing_key"`
 	Props           *ChainProperties `json:"props"`
-	Fee             string           `json:"fee"`
+	Fee             *Asset           `json:"fee"`
 }
 
 func (op *WitnessUpdateOperation) Type() OpType {
@@ -337,7 +337,7 @@ func (op *DeleteCommentOperation) Data() interface{} {
 type CommentOptionsOperation struct {
 	Author               string        `json:"author"`
 	Permlink             string        `json:"permlink"`
-	MaxAcceptedPayout    string        `json:"max_accepted_payout"`
+	MaxAcceptedPayout    *Asset        `json:"max_accepted_payout"`
 	PercentSteemDollars  uint16        `json:"percent_steem_dollars"`
 	AllowVotes           bool          `json:"allow_votes"`
 	AllowCurationRewards bool          `json:"allow_curation_rewards"`
@@ -557,7 +557,7 @@ func (op *EscrowApproveOperation) Data() interface{} {
 type TransferToSavingsOperation struct {
 	From   string `json:"from"`
 	To     string `json:"to"`
-	Amount string `json:"amount"`
+	Amount *Asset `json:"amount"`
 	Memo   string `json:"memo"`
 }
 
@@ -574,7 +574,7 @@ type TransferFromSavingsOperation struct {
 	From      string `json:"from"`
 	RequestID uint32 `json:"request_id"`
 	To        string `json:"to"`
-	Amount    string `json:"amount"`
+	Amount    *Asset `json:"amount"`
 	Memo      string `json:"memo"`
 }
 

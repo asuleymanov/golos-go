@@ -5,23 +5,23 @@ import (
 )
 
 type Ticker struct {
-	Latest        string `json:"latest"`
-	LowestAsk     string `json:"lowest_ask"`
-	HighestBid    string `json:"highest_bid"`
-	PercentChange string `json:"percent_change"`
-	SteemVolume   string `json:"steem_volume"`
-	SbdVolume     string `json:"sbd_volume"`
+	Latest        string       `json:"latest"`
+	LowestAsk     string       `json:"lowest_ask"`
+	HighestBid    string       `json:"highest_bid"`
+	PercentChange string       `json:"percent_change"`
+	SteemVolume   *types.Asset `json:"steem_volume"`
+	SbdVolume     *types.Asset `json:"sbd_volume"`
 }
 
 type Volume struct {
-	SteemVolume string `json:"steem_volume"`
-	SbdVolume   string `json:"sbd_volume"`
+	SteemVolume *types.Asset `json:"steem_volume"`
+	SbdVolume   *types.Asset `json:"sbd_volume"`
 }
 
 type Trades struct {
-	Date        *types.Time `json:"date"`
-	CurrentPays string      `json:"current_pays"`
-	OpenPays    string      `json:"open_pays"`
+	Date        *types.Time  `json:"date"`
+	CurrentPays *types.Asset `json:"current_pays"`
+	OpenPays    *types.Asset `json:"open_pays"`
 }
 
 type OrderBook struct {
@@ -38,8 +38,8 @@ type OrderBookAB struct {
 }
 
 type OrderPrice struct {
-	Base  string `json:"base"`
-	Quote string `json:"quote"`
+	Base  *types.Asset `json:"base"`
+	Quote *types.Asset `json:"quote"`
 }
 
 type MarketHistory struct {

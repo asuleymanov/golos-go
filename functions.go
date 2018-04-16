@@ -264,13 +264,13 @@ func (client *Client) AccountWitnessProxy(username, proxy string) (*OperResp, er
 }
 
 //Transfer of funds to any user.
-func (client *Client) Transfer(fromName, toName, memo, ammount string) (*OperResp, error) {
+func (client *Client) Transfer(fromName, toName, memo string, ammount types.Asset) (*OperResp, error) {
 	var trx []types.Operation
 
 	tx := &types.TransferOperation{
 		From:   fromName,
 		To:     toName,
-		Amount: ammount,
+		Amount: &ammount,
 		Memo:   memo,
 	}
 
@@ -287,7 +287,7 @@ func (client *Client) MultiTransfer(username string, arrtrans []ArrTransfer) (*O
 		txt := &types.TransferOperation{
 			From:   username,
 			To:     val.To,
-			Amount: val.Ammount,
+			Amount: &val.Ammount,
 			Memo:   val.Memo,
 		}
 		trx = append(trx, txt)
@@ -361,7 +361,7 @@ func (client *Client) LimitOrderCancel(owner string, orderid uint32) (*OperResp,
 }
 
 //LimitOrderCreate Creating a limit order
-func (client *Client) LimitOrderCreate(owner, sell, buy string, orderid uint32) (*OperResp, error) {
+func (client *Client) LimitOrderCreate(owner string, sell, buy types.Asset, orderid uint32) (*OperResp, error) {
 	var trx []types.Operation
 
 	expiration := time.Now().Add(3600000 * time.Second).UTC()
@@ -370,8 +370,8 @@ func (client *Client) LimitOrderCreate(owner, sell, buy string, orderid uint32) 
 	tx := &types.LimitOrderCreateOperation{
 		Owner:        owner,
 		OrderID:      orderid,
-		AmountToSell: sell,
-		MinToReceive: buy,
+		AmountToSell: &sell,
+		MinToReceive: &buy,
 		FillOrKill:   fok,
 		Expiration:   &types.Time{&expiration},
 	}
@@ -382,13 +382,13 @@ func (client *Client) LimitOrderCreate(owner, sell, buy string, orderid uint32) 
 }
 
 //Convert conversion
-func (client *Client) Convert(owner, amount string, requestid uint32) (*OperResp, error) {
+func (client *Client) Convert(owner string, amount types.Asset, requestid uint32) (*OperResp, error) {
 	var trx []types.Operation
 
 	tx := &types.ConvertOperation{
 		Owner:     owner,
 		RequestID: requestid,
-		Amount:    amount,
+		Amount:    &amount,
 	}
 
 	trx = append(trx, tx)
@@ -397,13 +397,13 @@ func (client *Client) Convert(owner, amount string, requestid uint32) (*OperResp
 }
 
 //TransferToVesting transfer to POWER
-func (client *Client) TransferToVesting(from, to, amount string) (*OperResp, error) {
+func (client *Client) TransferToVesting(from, to string, amount types.Asset) (*OperResp, error) {
 	var trx []types.Operation
 
 	tx := &types.TransferToVestingOperation{
 		From:   from,
 		To:     to,
-		Amount: amount,
+		Amount: &amount,
 	}
 
 	trx = append(trx, tx)
@@ -412,12 +412,12 @@ func (client *Client) TransferToVesting(from, to, amount string) (*OperResp, err
 }
 
 //WithdrawVesting down POWER
-func (client *Client) WithdrawVesting(account, vshares string) (*OperResp, error) {
+func (client *Client) WithdrawVesting(account string, vshares types.Asset) (*OperResp, error) {
 	var trx []types.Operation
 
 	tx := &types.WithdrawVestingOperation{
 		Account:       account,
-		VestingShares: vshares,
+		VestingShares: &vshares,
 	}
 
 	trx = append(trx, tx)
@@ -441,13 +441,13 @@ func (client *Client) ChangeRecoveryAccount(accounttorecover, newrecoveryaccount
 }
 
 //TransferToSavings transfer to safe
-func (client *Client) TransferToSavings(from, to, amount, memo string) (*OperResp, error) {
+func (client *Client) TransferToSavings(from, to, memo string, amount types.Asset) (*OperResp, error) {
 	var trx []types.Operation
 
 	tx := &types.TransferToSavingsOperation{
 		From:   from,
 		To:     to,
-		Amount: amount,
+		Amount: &amount,
 		Memo:   memo,
 	}
 
@@ -457,14 +457,14 @@ func (client *Client) TransferToSavings(from, to, amount, memo string) (*OperRes
 }
 
 //TransferFromSavings transfer from safe
-func (client *Client) TransferFromSavings(from, to, amount, memo string, requestid uint32) (*OperResp, error) {
+func (client *Client) TransferFromSavings(from, to, memo string, amount types.Asset, requestid uint32) (*OperResp, error) {
 	var trx []types.Operation
 
 	tx := &types.TransferFromSavingsOperation{
 		From:      from,
 		RequestID: requestid,
 		To:        to,
-		Amount:    amount,
+		Amount:    &amount,
 		Memo:      memo,
 	}
 
@@ -503,14 +503,14 @@ func (client *Client) DeclineVotingRights(account string, decline bool) (*OperRe
 }
 
 //FeedPublish update course data
-func (client *Client) FeedPublish(publisher, base, quote string) (*OperResp, error) {
+func (client *Client) FeedPublish(publisher string, base, quote types.Asset) (*OperResp, error) {
 	var trx []types.Operation
 
 	tx := &types.FeedPublishOperation{
 		Publisher: publisher,
 		ExchangeRate: &types.ExchRate{
-			Base:  base,
-			Quote: quote,
+			Base:  &base,
+			Quote: &quote,
 		},
 	}
 
@@ -520,7 +520,7 @@ func (client *Client) FeedPublish(publisher, base, quote string) (*OperResp, err
 }
 
 //WitnessUpdate updating delegate data
-func (client *Client) WitnessUpdate(owner, url, blocksigningkey, accountcreationfee string, maxblocksize uint32, sbdinterestrate uint16) (*OperResp, error) {
+func (client *Client) WitnessUpdate(owner, url, blocksigningkey string, accountcreationfee types.Asset, maxblocksize uint32, sbdinterestrate uint16) (*OperResp, error) {
 	var trx []types.Operation
 
 	tx := &types.WitnessUpdateOperation{
@@ -528,11 +528,11 @@ func (client *Client) WitnessUpdate(owner, url, blocksigningkey, accountcreation
 		URL:             url,
 		BlockSigningKey: blocksigningkey,
 		Props: &types.ChainProperties{
-			AccountCreationFee: accountcreationfee,
+			AccountCreationFee: &accountcreationfee,
 			MaximumBlockSize:   maxblocksize,
 			SBDInterestRate:    sbdinterestrate,
 		},
-		Fee: "0.000 GOLOS",
+		Fee: SetAsset(0.000, "GOLOS"),
 	}
 
 	trx = append(trx, tx)
@@ -541,7 +541,7 @@ func (client *Client) WitnessUpdate(owner, url, blocksigningkey, accountcreation
 }
 
 //AccountCreate creating a user in systems
-func (client *Client) AccountCreate(creator, newAccountName, password, fee string) (*OperResp, error) {
+func (client *Client) AccountCreate(creator, newAccountName, password string, fee types.Asset) (*OperResp, error) {
 	type Keys struct {
 		Private string
 		Public  string
@@ -580,7 +580,7 @@ func (client *Client) AccountCreate(creator, newAccountName, password, fee strin
 	jsonMeta := &types.AccountMetadata{}
 
 	tx := &types.AccountCreateOperation{
-		Fee:            fee,
+		Fee:            &fee,
 		Creator:        creator,
 		NewAccountName: newAccountName,
 		Owner:          &owner,

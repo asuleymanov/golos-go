@@ -48,7 +48,7 @@ const (
 	TypeDeclineVotingRights         OpType = "decline_voting_rights"
 	TypeResetAccount                OpType = "reset_account"
 	TypeSetResetAccount             OpType = "set_reset_account"
-	TypeClaimRewardBalance          OpType = "claim_reward_balance"
+	TypeClaimRewardBalance          OpType = "claim_reward_balance" //Virtual Operation
 	TypeDelegateVestingShares       OpType = "delegate_vesting_shares"
 	TypeAccountCreateWithDelegation OpType = "account_create_with_delegation"
 	TypeFillConvertRequest          OpType = "fill_convert_request"

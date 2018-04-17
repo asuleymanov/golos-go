@@ -372,10 +372,10 @@ func (op *SetWithdrawVestingRouteOperation) Data() interface{} {
 type LimitOrderCreate2Operation struct {
 	Owner        string    `json:"owner"`
 	Orderid      uint32    `json:"orderid"`
-	AmountToSell string    `json:"amount_to_sell"`
+	AmountToSell *Asset    `json:"amount_to_sell"`
 	ExchangeRate *ExchRate `json:"exchange_rate"`
 	FillOrKill   bool      `json:"fill_or_kill"`
-	Expiration   Time      `json:"expiration"`
+	Expiration   *Time     `json:"expiration"`
 }
 
 func (op *LimitOrderCreate2Operation) Type() OpType {
@@ -466,14 +466,14 @@ func (op *ChangeRecoveryAccountOperation) Data() interface{} {
 type EscrowTransferOperation struct {
 	From                 string `json:"from"`
 	To                   string `json:"to"`
-	SbdAmount            string `json:"sbd_amount"`
-	SteemAmount          string `json:"steem_amount"`
+	SbdAmount            *Asset `json:"sbd_amount"`
+	SteemAmount          *Asset `json:"steem_amount"`
 	EscrowID             uint32 `json:"escrow_id"`
 	Agent                string `json:"agent"`
-	Fee                  string `json:"fee"`
+	Fee                  *Asset `json:"fee"`
 	JSONMeta             string `json:"json_meta"`
-	RatificationDeadline Time   `json:"ratification_deadline"`
-	EscrowExpiration     Time   `json:"escrow_expiration"`
+	RatificationDeadline *Time  `json:"ratification_deadline"`
+	EscrowExpiration     *Time  `json:"escrow_expiration"`
 }
 
 func (op *EscrowTransferOperation) Type() OpType {
@@ -509,8 +509,8 @@ type EscrowReleaseOperation struct {
 	Who         string `json:"who"`
 	Receiver    string `json:"receiver"`
 	EscrowID    uint32 `json:"escrow_id"`
-	SbdAmount   string `json:"sbd_amount"`
-	SteemAmount string `json:"steem_amount"`
+	SbdAmount   *Asset `json:"sbd_amount"`
+	SteemAmount *Asset `json:"steem_amount"`
 }
 
 func (op *EscrowReleaseOperation) Type() OpType {
@@ -662,12 +662,13 @@ func (op *SetResetAccountOperation) Data() interface{} {
 	return op
 }
 
+//Virtual Operation
 // struct ClaimRewardBalanceOperation{}
 type ClaimRewardBalanceOperation struct {
 	Account     string `json:"account"`
-	RewardSteem string `json:"reward_steem"`
-	RewardSbd   string `json:"reward_sbd"`
-	RewardVests string `json:"reward_vests"`
+	RewardSteem *Asset `json:"reward_steem"`
+	RewardSbd   *Asset `json:"reward_sbd"`
+	RewardVests *Asset `json:"reward_vests"`
 }
 
 func (op *ClaimRewardBalanceOperation) Type() OpType {
@@ -682,7 +683,7 @@ func (op *ClaimRewardBalanceOperation) Data() interface{} {
 type DelegateVestingSharesOperation struct {
 	Delegator     string `json:"delegator"`
 	Delegatee     string `json:"delegatee"`
-	VestingShares string `json:"vesting_shares"`
+	VestingShares *Asset `json:"vesting_shares"`
 }
 
 func (op *DelegateVestingSharesOperation) Type() OpType {
@@ -699,9 +700,9 @@ type AccountCreateWithDelegationOperation struct {
 	Delegation     string           `json:"delegation"`
 	Creator        string           `json:"creator"`
 	NewAccountName string           `json:"new_account_name"`
-	Owner          string           `json:"owner"`
-	Active         string           `json:"active"`
-	Posting        string           `json:"posting"`
+	Owner          *Authority       `json:"owner"`
+	Active         *Authority       `json:"active"`
+	Posting        *Authority       `json:"posting"`
 	MemoKey        string           `json:"memo_key"`
 	JSONMetadata   *AccountMetadata `json:"json_metadata"`
 	Extensions     []interface{}    `json:"extensions"`
@@ -719,8 +720,8 @@ func (op *AccountCreateWithDelegationOperation) Data() interface{} {
 type FillConvertRequestOperation struct {
 	Owner     string `json:"owner"`
 	Requestid uint32 `json:"requestid"`
-	AmountIn  string `json:"amount_in"`
-	AmountOut string `json:"amount_out"`
+	AmountIn  *Asset `json:"amount_in"`
+	AmountOut *Asset `json:"amount_out"`
 }
 
 func (op *FillConvertRequestOperation) Type() OpType {
@@ -735,9 +736,9 @@ func (op *FillConvertRequestOperation) Data() interface{} {
 type AuthorRewardOperation struct {
 	Author        string `json:"author"`
 	Permlink      string `json:"permlink"`
-	SbdPayout     string `json:"sbd_payout"`
-	SteemPayout   string `json:"steem_payout"`
-	VestingPayout string `json:"vesting_payout"`
+	SbdPayout     *Asset `json:"sbd_payout"`
+	SteemPayout   *Asset `json:"steem_payout"`
+	VestingPayout *Asset `json:"vesting_payout"`
 }
 
 func (op *AuthorRewardOperation) Type() OpType {
@@ -751,7 +752,7 @@ func (op *AuthorRewardOperation) Data() interface{} {
 // struct CurationRewardOperation{}
 type CurationRewardOperation struct {
 	Curator         string `json:"curator"`
-	Reward          string `json:"reward"`
+	Reward          *Asset `json:"reward"`
 	CommentAuthor   string `json:"comment_author"`
 	CommentPermlink string `json:"comment_permlink"`
 }
@@ -768,7 +769,7 @@ func (op *CurationRewardOperation) Data() interface{} {
 type CommentRewardOperation struct {
 	Author   string `json:"author"`
 	Permlink string `json:"permlink"`
-	Payout   string `json:"payout"`
+	Payout   *Asset `json:"payout"`
 }
 
 func (op *CommentRewardOperation) Type() OpType {
@@ -782,7 +783,7 @@ func (op *CommentRewardOperation) Data() interface{} {
 // struct LiquidityRewardOperation{}
 type LiquidityRewardOperation struct {
 	Owner  string `json:"owner"`
-	Payout string `json:"payout"`
+	Payout *Asset `json:"payout"`
 }
 
 func (op *LiquidityRewardOperation) Type() OpType {
@@ -796,7 +797,7 @@ func (op *LiquidityRewardOperation) Data() interface{} {
 // struct InterestOperation{}
 type InterestOperation struct {
 	Owner    string `json:"owner"`
-	Interest string `json:"interest"`
+	Interest *Asset `json:"interest"`
 }
 
 func (op *InterestOperation) Type() OpType {
@@ -811,8 +812,8 @@ func (op *InterestOperation) Data() interface{} {
 type FillVestingWithdrawOperation struct {
 	FromAccount string `json:"from_account"`
 	ToAccount   string `json:"to_account"`
-	Withdrawn   string `json:"withdrawn"`
-	Deposited   string `json:"deposited"`
+	Withdrawn   *Asset `json:"withdrawn"`
+	Deposited   *Asset `json:"deposited"`
 }
 
 func (op *FillVestingWithdrawOperation) Type() OpType {
@@ -827,10 +828,10 @@ func (op *FillVestingWithdrawOperation) Data() interface{} {
 type FillOrderOperation struct {
 	CurrentOwner   string `json:"current_owner"`
 	CurrentOrderid uint32 `json:"current_orderid"`
-	CurrentPays    string `json:"current_pays"`
+	CurrentPays    *Asset `json:"current_pays"`
 	OpenOwner      string `json:"open_owner"`
 	OpenOrderid    uint32 `json:"open_orderid"`
-	OpenPays       string `json:"open_pays"`
+	OpenPays       *Asset `json:"open_pays"`
 }
 
 func (op *FillOrderOperation) Type() OpType {
@@ -858,7 +859,7 @@ func (op *ShutdownWitnessOperation) Data() interface{} {
 type FillTransferFromSavingsOperation struct {
 	From      string `json:"from"`
 	To        string `json:"to"`
-	Amount    string `json:"amount"`
+	Amount    *Asset `json:"amount"`
 	RequestID uint32 `json:"request_id"`
 	Memo      string `json:"memo"`
 }
@@ -901,7 +902,7 @@ func (op *CommentPayoutUpdateOperation) Data() interface{} {
 // struct ReturnVestingDelegationOperation{}
 type ReturnVestingDelegationOperation struct {
 	Account       string `json:"account"`
-	VestingShares string `json:"vesting_shares"`
+	VestingShares *Asset `json:"vesting_shares"`
 }
 
 func (op *ReturnVestingDelegationOperation) Type() OpType {
@@ -917,7 +918,7 @@ type CommentBenefactorRewardOperation struct {
 	Benefactor string `json:"benefactor"`
 	Author     string `json:"author"`
 	Permlink   string `json:"permlink"`
-	Reward     string `json:"reward"`
+	Reward     *Asset `json:"reward"`
 }
 
 func (op *CommentBenefactorRewardOperation) Type() OpType {

@@ -262,10 +262,61 @@ func (op *SetWithdrawVestingRouteOperation) MarshalTransaction(encoder *transact
 }
 
 // encode LimitOrderCreate2Operation{}
+func (op *LimitOrderCreate2Operation) MarshalTransaction(encoder *transaction.Encoder) error {
+	enc := transaction.NewRollingEncoder(encoder)
+	enc.EncodeUVarint(uint64(TypeLimitOrderCreate2.Code()))
+	enc.Encode(op.Owner)
+	enc.Encode(op.Orderid)
+	enc.Encode(op.AmountToSell)
+	enc.Encode(op.ExchangeRate)
+	enc.EncodeBool(op.FillOrKill)
+	enc.Encode(op.Expiration)
+	return enc.Err()
+}
+
 // encode ChallengeAuthorityOperation{}
+func (op *ChallengeAuthorityOperation) MarshalTransaction(encoder *transaction.Encoder) error {
+	enc := transaction.NewRollingEncoder(encoder)
+	enc.EncodeUVarint(uint64(TypeChallengeAuthority.Code()))
+	enc.Encode(op.Challenger)
+	enc.Encode(op.Challenged)
+	enc.EncodeBool(op.RequireOwner)
+	return enc.Err()
+}
+
 // encode ProveAuthorityOperation{}
+func (op *ProveAuthorityOperation) MarshalTransaction(encoder *transaction.Encoder) error {
+	enc := transaction.NewRollingEncoder(encoder)
+	enc.EncodeUVarint(uint64(TypeProveAuthority.Code()))
+	enc.Encode(op.Challenged)
+	enc.EncodeBool(op.RequireOwner)
+	return enc.Err()
+}
+
 // encode RequestAccountRecoveryOperation{}
+func (op *RequestAccountRecoveryOperation) MarshalTransaction(encoder *transaction.Encoder) error {
+	enc := transaction.NewRollingEncoder(encoder)
+	enc.EncodeUVarint(uint64(TypeRequestAccountRecovery.Code()))
+	enc.Encode(op.RecoveryAccount)
+	enc.Encode(op.AccountToRecover)
+	enc.Encode(op.NewOwnerAuthority)
+	//enc.Encode(op.Extensions)
+	enc.Encode(byte(0))
+	return enc.Err()
+}
+
 // encode RecoverAccountOperation{}
+func (op *RecoverAccountOperation) MarshalTransaction(encoder *transaction.Encoder) error {
+	enc := transaction.NewRollingEncoder(encoder)
+	enc.EncodeUVarint(uint64(TypeRecoverAccount.Code()))
+	enc.Encode(op.AccountToRecover)
+	enc.Encode(op.NewOwnerAuthority)
+	enc.Encode(op.RecentOwnerAuthority)
+	//enc.Encode(op.Extensions)
+	enc.Encode(byte(0))
+	return enc.Err()
+}
+
 // encode ChangeRecoveryAccountOperation{}
 func (op *ChangeRecoveryAccountOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
@@ -277,10 +328,63 @@ func (op *ChangeRecoveryAccountOperation) MarshalTransaction(encoder *transactio
 }
 
 // encode EscrowTransferOperation{}
+func (op *EscrowTransferOperation) MarshalTransaction(encoder *transaction.Encoder) error {
+	enc := transaction.NewRollingEncoder(encoder)
+	enc.EncodeUVarint(uint64(TypeEscrowTransfer.Code()))
+	enc.Encode(op.From)
+	enc.Encode(op.To)
+	enc.Encode(op.SbdAmount)
+	enc.Encode(op.SteemAmount)
+	enc.Encode(op.EscrowID)
+	enc.Encode(op.Agent)
+	enc.Encode(op.Fee)
+	enc.Encode(op.JSONMeta)
+	enc.Encode(op.RatificationDeadline)
+	enc.Encode(op.EscrowExpiration)
+	return enc.Err()
+}
+
 // encode EscrowDisputeOperation{}
+func (op *EscrowDisputeOperation) MarshalTransaction(encoder *transaction.Encoder) error {
+	enc := transaction.NewRollingEncoder(encoder)
+	enc.EncodeUVarint(uint64(TypeEscrowDispute.Code()))
+	enc.Encode(op.From)
+	enc.Encode(op.To)
+	enc.Encode(op.Agent)
+	enc.Encode(op.Who)
+	enc.Encode(op.EscrowID)
+	return enc.Err()
+}
+
 // encode EscrowReleaseOperation{}
+func (op *EscrowReleaseOperation) MarshalTransaction(encoder *transaction.Encoder) error {
+	enc := transaction.NewRollingEncoder(encoder)
+	enc.EncodeUVarint(uint64(TypeEscrowRelease.Code()))
+	enc.Encode(op.From)
+	enc.Encode(op.To)
+	enc.Encode(op.Agent)
+	enc.Encode(op.Who)
+	enc.Encode(op.Receiver)
+	enc.Encode(op.EscrowID)
+	enc.Encode(op.SbdAmount)
+	enc.Encode(op.SteemAmount)
+	return enc.Err()
+}
+
 // encode POW2Operation{}
 // encode EscrowApproveOperation{}
+func (op *EscrowApproveOperation) MarshalTransaction(encoder *transaction.Encoder) error {
+	enc := transaction.NewRollingEncoder(encoder)
+	enc.EncodeUVarint(uint64(TypeEscrowApprove.Code()))
+	enc.Encode(op.From)
+	enc.Encode(op.To)
+	enc.Encode(op.Agent)
+	enc.Encode(op.Who)
+	enc.Encode(op.EscrowID)
+	enc.EncodeBool(op.Approve)
+	return enc.Err()
+}
+
 // encode TransferToSavingsOperation{}
 func (op *TransferToSavingsOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
@@ -324,7 +428,26 @@ func (op *DeclineVotingRightsOperation) MarshalTransaction(encoder *transaction.
 }
 
 // encode ResetAccountOperation{}
+func (op *ResetAccountOperation) MarshalTransaction(encoder *transaction.Encoder) error {
+	enc := transaction.NewRollingEncoder(encoder)
+	enc.EncodeUVarint(uint64(TypeResetAccount.Code()))
+	enc.Encode(op.ResetAccount)
+	enc.Encode(op.AccountToReset)
+	enc.Encode(op.NewOwnerAuthority)
+	return enc.Err()
+}
+
 // encode SetResetAccountOperation{}
+func (op *SetResetAccountOperation) MarshalTransaction(encoder *transaction.Encoder) error {
+	enc := transaction.NewRollingEncoder(encoder)
+	enc.EncodeUVarint(uint64(TypeSetResetAccount.Code()))
+	enc.Encode(op.Account)
+	enc.Encode(op.CurrentResetAccount)
+	enc.Encode(op.ResetAccount)
+	return enc.Err()
+}
+
+//Virtual Operation
 // encode ClaimRewardBalanceOperation{}
 // encode DelegateVestingSharesOperation{}
 // encode AccountCreateWithDelegationOperation{}

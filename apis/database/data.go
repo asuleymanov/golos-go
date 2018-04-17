@@ -263,7 +263,7 @@ type Account struct {
 	LastMarketBandwidthUpdate     *types.Time            `json:"last_market_bandwidth_update"`
 	LastPost                      *types.Time            `json:"last_post"`
 	LastRootPost                  *types.Time            `json:"last_root_post"`
-	PostBandwidth                 *types.Int             `json:"post_bandwidth"`
+	PostBandwidth                 int64                  `json:"post_bandwidth"`
 	NewAverageBandwidth           *types.Int64           `json:"new_average_bandwidth"`
 	NewAverageMarketBandwidth     *types.Int64           `json:"new_average_market_bandwidth"`
 	VestingBalance                *types.Asset           `json:"vesting_balance"`

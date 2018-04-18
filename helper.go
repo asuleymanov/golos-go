@@ -184,3 +184,20 @@ func GetCommentOptionsOperation(username, permlink string, options PCOptions) *t
 		Extensions:           Extens,
 	}
 }
+
+//GetPostBandwidth returns the real (calculated) value of the post_bandwidth parameter.
+func (client *Client) GetPostBandwidth(username string) (int64, error) {
+	MinutesPerDay := float64(1440)
+
+	resp, err := client.Database.GetAccounts([]string{username})
+	if err != nil {
+		return 0, err
+	}
+
+	OldPostBandwidth := float64(resp[0].PostBandwidth)
+	DeltaTimeMinutes := float64(time.Now().Sub(*resp[0].LastRootPost.Time).Minutes())
+
+	NewPostBandwidth := ((MinutesPerDay - DeltaTimeMinutes) / MinutesPerDay) * OldPostBandwidth
+
+	return int64(NewPostBandwidth), nil
+}

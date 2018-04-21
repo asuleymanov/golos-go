@@ -35,7 +35,7 @@ func (op *AccountMetadata) UnmarshalJSON(p []byte) error {
 	}
 
 	if err := json.Unmarshal([]byte(str), &raw); err != nil {
-		fmt.Printf("ERROR: AccountMedata unmarshal error: %s", err)
+		fmt.Printf("ERROR: AccountMedata unmarshal error: %s\n", err)
 		return nil
 	}
 

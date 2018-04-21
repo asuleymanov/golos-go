@@ -19,7 +19,7 @@ func (op *ContentMetadata) UnmarshalJSON(p []byte) error {
 	}
 
 	if err := json.Unmarshal([]byte(str), &raw); err != nil {
-		fmt.Printf("ERROR: ContentMedata unmarshal error: %s", err)
+		fmt.Printf("ERROR: ContentMedata unmarshal error: %s\n", err)
 		return nil
 	}
 

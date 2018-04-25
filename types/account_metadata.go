@@ -2,6 +2,7 @@ package types
 
 import (
 	"encoding/json"
+	"fmt"
 	"strconv"
 
 	"github.com/asuleymanov/golos-go/encoding/transaction"
@@ -81,4 +82,8 @@ func (op *AccountMetadata) MarshalTransaction(encoder *transaction.Encoder) erro
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeString(str)
 	return enc.Err()
+}
+
+func (op *AccountMetadata) String() string {
+	return fmt.Sprintf("%#v", op)
 }

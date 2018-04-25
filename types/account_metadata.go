@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/asuleymanov/golos-go/encoding/transaction"
+	"fmt"
 )
 
 type AccountMetadata struct {
@@ -35,7 +36,8 @@ func (op *AccountMetadata) UnmarshalJSON(p []byte) error {
 	}
 
 	if err := json.Unmarshal([]byte(str), &raw); err != nil {
-		return err
+		fmt.Printf("ERROR: AccountMedata unmarshal error: %s\n", err)
+		return nil
 	}
 
 	op.Profile = ProfileJSON{

@@ -14,7 +14,7 @@ func (client *Client) SetKeys(keys *Keys) {
 
 //SetAsset returns data of type Asset
 func SetAsset(amount float64, symbol string) *types.Asset {
-	return &types.Asset{Amount: amount, Symbol: symbol}
+	return &types.Asset{Ammount: amount, Symbol: symbol}
 }
 
 //FollowersList returns the subscriber's list of subscribers

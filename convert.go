@@ -11,8 +11,8 @@ func (client *Client) SbdMedianPrice() (float64, error) {
 		return 0, errsmp
 	}
 
-	base := smpreq.CurrentMedianHistory.Base.Amount
-	quote := smpreq.CurrentMedianHistory.Quote.Amount
+	base := smpreq.CurrentMedianHistory.Base.Ammount
+	quote := smpreq.CurrentMedianHistory.Quote.Ammount
 	smptmp := base / quote
 
 	str := strconv.FormatFloat(smptmp, 'f', 3, 64)
@@ -31,8 +31,8 @@ func (client *Client) SteemPerMvest() (float64, error) {
 		return 0, errdgp
 	}
 
-	tvfs := dgp.TotalVersingFundSteem.Amount
-	tvs := dgp.TotalVestingShares.Amount
+	tvfs := dgp.TotalVersingFundSteem.Ammount
+	tvs := dgp.TotalVestingShares.Ammount
 
 	spmtmp := (tvfs / tvs) * 1000000
 

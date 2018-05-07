@@ -20,6 +20,15 @@ func EncodeTags(tag []string) []string {
 	return arrEncTag
 }
 
+func DecodeTags(tags []string) []string {
+	arrDecTag := make([]string, 0)
+	for _, tag := range tags {
+		dec := DecodeTag(tag)
+		arrDecTag = append(arrDecTag, dec)
+	}
+	return arrDecTag
+}
+
 //EncodeTag transliteration of a tag
 func EncodeTag(tag string) string {
 	str, count := encode(tag)
@@ -27,6 +36,14 @@ func EncodeTag(tag string) string {
 		str = "ru--" + str
 	}
 	return str
+}
+
+func DecodeTag(tag string) string {
+	if tag[0:4] == "ru--" {
+		str, _ := decode(tag[4:])
+		return str
+	}
+	return tag
 }
 
 //EncodeTitle transliteration of the title
@@ -45,6 +62,11 @@ func EncodeTitle(title string) string {
 	} else {
 		str = strings.Join(s3, "")
 	}
+	return str
+}
+
+func DecodeTitle(title string) string {
+	str, _ := decode(title)
 	return str
 }
 
@@ -88,4 +110,18 @@ func encode(text string) (string, int) {
 	}
 
 	return output.String(), i
+}
+
+func decode(text string) (string, int) {
+	if text == "" {
+		return "", 0
+	}
+
+	output := text
+
+	for _, trans := range decOrder {
+		output = strings.Replace(output, trans, decMap[trans], -1)
+	}
+
+	return output, len(output)
 }

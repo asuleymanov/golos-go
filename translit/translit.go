@@ -39,6 +39,9 @@ func EncodeTag(tag string) string {
 }
 
 func DecodeTag(tag string) string {
+	if len(tag) < 5 {
+		return tag
+	}
 	if tag[0:4] == "ru--" {
 		str, _ := decode(tag[4:])
 		return str

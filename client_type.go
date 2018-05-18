@@ -46,9 +46,9 @@ type PCOptions struct {
 
 //ArrTransfer for MultiTransfer function
 type ArrTransfer struct {
-	To      string
-	Memo    string
-	Ammount types.Asset
+	To     string
+	Memo   string
+	Amount types.Asset
 }
 
 //ArrVote for MultiVote function

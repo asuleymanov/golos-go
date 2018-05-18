@@ -264,13 +264,13 @@ func (client *Client) AccountWitnessProxy(username, proxy string) (*OperResp, er
 }
 
 //Transfer of funds to any user.
-func (client *Client) Transfer(fromName, toName, memo string, ammount types.Asset) (*OperResp, error) {
+func (client *Client) Transfer(fromName, toName, memo string, amount types.Asset) (*OperResp, error) {
 	var trx []types.Operation
 
 	tx := &types.TransferOperation{
 		From:   fromName,
 		To:     toName,
-		Amount: &ammount,
+		Amount: &amount,
 		Memo:   memo,
 	}
 
@@ -287,7 +287,7 @@ func (client *Client) MultiTransfer(username string, arrtrans []ArrTransfer) (*O
 		txt := &types.TransferOperation{
 			From:   username,
 			To:     val.To,
-			Amount: &val.Ammount,
+			Amount: &val.Amount,
 			Memo:   val.Memo,
 		}
 		trx = append(trx, txt)

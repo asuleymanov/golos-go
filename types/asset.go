@@ -9,8 +9,8 @@ import (
 )
 
 type Asset struct {
-	Ammount float64
-	Symbol  string
+	Amount float64
+	Symbol string
 }
 
 func (op *Asset) UnmarshalJSON(data []byte) error {
@@ -22,7 +22,7 @@ func (op *Asset) UnmarshalJSON(data []byte) error {
 	if s, errpf := strconv.ParseFloat(param[0], 64); errpf != nil {
 		return errpf
 	} else {
-		op.Ammount = s
+		op.Amount = s
 	}
 	op.Symbol = param[1]
 	return nil
@@ -46,10 +46,10 @@ func (op *Asset) MarshalTransaction(encoder *transaction.Encoder) error {
 }
 
 func (op *Asset) String() string {
-	ammf := strconv.FormatFloat(op.Ammount, 'f', 3, 64)
+	ammf := strconv.FormatFloat(op.Amount, 'f', 3, 64)
 	return ammf + " " + op.Symbol
 }
 
 func (op *Asset) StringAmount() string {
-	return strconv.FormatFloat(op.Ammount, 'f', 3, 64)
+	return strconv.FormatFloat(op.Amount, 'f', 3, 64)
 }

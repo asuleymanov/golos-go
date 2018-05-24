@@ -4,7 +4,7 @@ import (
 	"time"
 
 	jsonrpc2websocket "github.com/asuleymanov/jsonrpc2/websocket"
-	"github.com/gorilla/websocket"
+	"github.com/asuleymanov/websocket"
 )
 
 // ObjectStream implements jsonrpc2.ObjectStream that uses a WebSocket.

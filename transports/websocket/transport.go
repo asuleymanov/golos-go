@@ -10,7 +10,7 @@ import (
 	// Vendor
 	"github.com/asuleymanov/golos-go/tomb"
 	"github.com/asuleymanov/jsonrpc2"
-	"github.com/gorilla/websocket"
+	"github.com/asuleymanov/websocket"
 	"github.com/pkg/errors"
 )
 

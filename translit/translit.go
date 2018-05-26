@@ -78,6 +78,8 @@ func encode(text string) (string, int) {
 		return "", 0
 	}
 	text = strings.ToLower(text)
+	text = strings.Replace(text, "ые", "yie", -1)
+
 	var input = bytes.NewBufferString(text)
 	var output = bytes.NewBuffer(nil)
 
@@ -115,16 +117,16 @@ func encode(text string) (string, int) {
 	return output.String(), i
 }
 
-func decode(text string) (string, int) {
-	if text == "" {
+func decode(str string) (string, int) {
+	if str == "" {
 		return "", 0
 	}
 
-	output := text
+	str = strings.Replace(str, "yie", "ые", -1)
 
 	for _, trans := range decOrder {
-		output = strings.Replace(output, trans, decMap[trans], -1)
+		str = strings.Replace(str, trans, decMap[trans], -1)
 	}
 
-	return output, len(output)
+	return str, len(str)
 }

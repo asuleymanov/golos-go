@@ -49,12 +49,14 @@ func TestEncodeDecodeTags(t *testing.T) {
 		"simple-tag1",
 		"Русский тэг1",
 		"РУССКИЙ ТЭГ 2",
+		"твердые формы",
 		"simple-tag-3",
 	}
 	results := []string{
 		"simple-tag1",
 		"русский тэг1",
 		"русский тэг 2",
+		"твердые формы",
 		"simple-tag-3",
 	}
 

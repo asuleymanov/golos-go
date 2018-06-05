@@ -51,6 +51,10 @@ func DecodeTag(tag string) string {
 
 //EncodeTitle transliteration of the title
 func EncodeTitle(title string) string {
+	if title == "" {
+		return title
+	}
+
 	var str string
 	reg, err := regexp.Compile("[^a-zA-Z0-9а-яА-Я.,]+")
 	if err != nil {

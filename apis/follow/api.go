@@ -129,15 +129,12 @@ func (api *API) GetBlog(accountName string, entryID uint32, limit uint16) ([]*Bl
 }
 
 //GetAccountReputations api request get_account_reputations
-func (api *API) GetAccountReputations(lowerBoundName string, limit uint32) ([]*AccountReputation, error) {
-	if limit > 1000 {
-		return nil, errors.New("golos: follow_api: get_account_reputations -> limit must not exceed 1000")
-	}
-	raw, err := api.raw("get_account_reputations", []interface{}{lowerBoundName, limit})
+func (api *API) GetAccountReputations(accounts []string) ([]uint32, error) {
+	raw, err := api.raw("get_account_reputations", []interface{}{accounts})
 	if err != nil {
 		return nil, err
 	}
-	var resp []*AccountReputation
+	var resp []uint32
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
 		return nil, errors.Wrap(err, "golos: follow_api: failed to unmarshal get_account_reputations response")
 	}

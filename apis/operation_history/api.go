@@ -8,7 +8,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-const apiID = "operation_history_api"
+const apiID = "operation_history"
 
 type API struct {
 	caller transports.Caller

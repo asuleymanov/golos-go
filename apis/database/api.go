@@ -321,28 +321,3 @@ func (api *API) GetVerifyAuthority(trx *types.Transaction) (bool, error) {
 }
 
 //verify_account_authority
-
-//GetAccountHistory api request get_account_history
-func (api *API) GetAccountHistory(account string, from int64, limit uint32) ([]*types.OperationObject, error) {
-	raw, err := api.raw("get_account_history", []interface{}{account, from, limit})
-	if err != nil {
-		return nil, err
-	}
-	var tmp1 [][]interface{}
-	if err := json.Unmarshal([]byte(*raw), &tmp1); err != nil {
-		return nil, err
-	}
-	var resp []*types.OperationObject
-	for _, v := range tmp1 {
-		byteData, errm := json.Marshal(&v[1])
-		if errm != nil {
-			return nil, errm
-		}
-		var tmp *types.OperationObject
-		if err := json.Unmarshal(byteData, &tmp); err != nil {
-			return nil, err
-		}
-		resp = append(resp, tmp)
-	}
-	return resp, nil
-}

@@ -11,6 +11,8 @@ import (
 	"github.com/asuleymanov/golos-go/apis/private_message"
 	"github.com/asuleymanov/golos-go/apis/social_network"
 	"github.com/asuleymanov/golos-go/apis/witness"
+	"github.com/asuleymanov/golos-go/apis/account_history"
+	"github.com/asuleymanov/golos-go/apis/operation_history"
 	"github.com/asuleymanov/golos-go/transactions"
 	"github.com/asuleymanov/golos-go/transports"
 	"github.com/asuleymanov/golos-go/transports/websocket"
@@ -46,6 +48,12 @@ type Client struct {
 	// Witness represents witness.
 	Witness *witness.API
 
+	// AccountHistory represents witness.
+	AccountHistory *account_history.API
+
+	// OperationHistory represents witness.
+	OperationHistory *operation_history.API
+
 	//Chain Id
 	Chain *transactions.Chain
 
@@ -77,6 +85,10 @@ func NewClient(url []string, chain string) (*Client, error) {
 	client.PrivateMessage = private_message.NewAPI(client.cc)
 
 	client.Witness = witness.NewAPI(client.cc)
+
+	client.AccountHistory = account_history.NewAPI(client.cc)
+
+	client.OperationHistory = operation_history.NewAPI(client.cc)
 
 	client.Chain, err = initChainID(chain)
 	if err != nil {

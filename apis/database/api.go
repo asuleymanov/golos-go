@@ -320,4 +320,68 @@ func (api *API) GetVerifyAuthority(trx *types.Transaction) (bool, error) {
 	return resp, nil
 }
 
+func (api *API) GetProposedTransaction(account string) (*ProposalObject, error) {
+	raw, err := api.raw("get_proposed_transaction", []interface{}{account})
+	if err != nil {
+		return nil, err
+	}
+	resp := ProposalObject{}
+	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
+		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal verify_authority response", apiID)
+	}
+	return &resp, nil
+}
+
+func (api *API) GetDatabaseInfo() (*DatabaseInfo, error) {
+	raw, err := api.raw("get_database_info", []interface{}{})
+	if err != nil {
+		return nil, err
+	}
+	resp := DatabaseInfo{}
+	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
+		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal verify_authority response", apiID)
+	}
+	return &resp, nil
+}
+
+func (api *API) GetVestingDelegations(account, from string, opts ...interface{}) ([]VestingDelegation, error) {
+	params := []interface{}{account, from}
+	switch len(opts) {
+	case 0:
+		params = append(params, 100, "delegated")
+	case 1:
+		params = append(params, opts[0], "delegated")
+	default:
+		params = append(params, opts...)
+	}
+	raw, err := api.raw("get_vesting_delegations", params)
+	if err != nil {
+		return nil, err
+	}
+	resp := make([]VestingDelegation, 0)
+	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
+		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal verify_authority response", apiID)
+	}
+	return resp, nil
+}
+
+func (api *API) GetExpiringVestingDelegations(account string, from types.Time, opts ...interface{}) ([]VestingDelegationExpiration, error) {
+	params := []interface{}{account, from}
+	switch len(opts) {
+	case 0:
+		params = append(params, 100)
+	default:
+		params = append(params, opts...)
+	}
+	raw, err := api.raw("get_expiring_vesting_delegations", params)
+	if err != nil {
+		return nil, err
+	}
+	resp := make([]VestingDelegationExpiration, 0)
+	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
+		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal verify_authority response", apiID)
+	}
+	return resp, nil
+}
+
 //verify_account_authority

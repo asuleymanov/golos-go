@@ -86,7 +86,7 @@ func (client *Client) GetVotingPower(username string) (int, error) {
 //GetAuthorReward returns information about the reward received for publication.
 func (client *Client) GetAuthorReward(username, permlink string, full bool) (*types.AuthorRewardOperation, error) {
 	if !full {
-		resp, err := client.Database.GetAccountHistory(username, -1, 1000)
+		resp, err := client.AccountHistory.GetAccountHistory(username, -1, 1000)
 		if err != nil {
 			return nil, err
 		}
@@ -104,7 +104,7 @@ func (client *Client) GetAuthorReward(username, permlink string, full bool) (*ty
 	limit := 1000
 	var lastBlock uint32
 	for {
-		ans, err := client.Database.GetAccountHistory(username, int64(from), uint32(limit))
+		ans, err := client.AccountHistory.GetAccountHistory(username, int64(from), uint32(limit))
 		if err != nil {
 			return nil, err
 		}

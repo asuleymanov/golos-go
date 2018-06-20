@@ -141,7 +141,7 @@ func (client *Client) VerifyDelegatePostingKeySign(fromUser, toUser string) bool
 //VerifyFirstPost сheck whether the post of the user is his first post in GOLOS
 func (client *Client) VerifyFirstPost(username string) bool {
 	d := time.Now()
-	cont, err := client.SocialNetwork.GetDiscussionsByAuthorBeforeDate(username, "", d.Format("2006-01-02T00:00:00"), 100)
+	cont, err := client.Tags.GetDiscussionsByAuthorBeforeDate(username, "", d.Format("2006-01-02T00:00:00"), 100)
 	if err != nil {
 		log.Println(errors.Wrapf(err, "Error Verify First Post: "))
 		return false

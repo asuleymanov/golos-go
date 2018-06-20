@@ -6,7 +6,7 @@ import (
 
 //SbdMedianPrice returns the average cost of GBG when converting GOLOS.
 func (client *Client) SbdMedianPrice() (float64, error) {
-	smpreq, errsmp := client.Database.GetFeedHistory()
+	smpreq, errsmp := client.Witness.GetFeedHistory()
 	if errsmp != nil {
 		return 0, errsmp
 	}

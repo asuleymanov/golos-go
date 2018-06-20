@@ -69,16 +69,6 @@ func (content *Content) IsStory() bool {
 	return content.ParentAuthor == ""
 }
 
-//TrendingTags
-type TrendingTags struct {
-	Name                  string       `json:"name"`
-	TotalChildrenRshares2 string       `json:"total_children_rshares2"`
-	TotalPayouts          *types.Asset `json:"total_payouts"`
-	NetVotes              *types.Int   `json:"net_votes"`
-	TopPosts              *types.Int   `json:"top_posts"`
-	Comments              *types.Int   `json:"comments"`
-}
-
 //Categories
 type Categories struct {
 	ID           *types.Int   `json:"id"`

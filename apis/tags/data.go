@@ -69,3 +69,13 @@ type VoteState struct {
 	Percent int         `json:"percent"`
 	Time    *types.Time `json:"time"`
 }
+
+//TrendingTags
+type TrendingTags struct {
+	Name                  string       `json:"name"`
+	TotalChildrenRshares2 string       `json:"total_children_rshares2"`
+	TotalPayouts          *types.Asset `json:"total_payouts"`
+	NetVotes              *types.Int   `json:"net_votes"`
+	TopPosts              *types.Int   `json:"top_posts"`
+	Comments              *types.Int   `json:"comments"`
+}

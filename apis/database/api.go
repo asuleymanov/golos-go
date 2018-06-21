@@ -56,19 +56,6 @@ func (api *API) GetBlock(blockNum uint32) (*Block, error) {
 	return &resp, nil
 }
 
-//GetOpsInBlock api request get_ops_in_block
-func (api *API) GetOpsInBlock(blockNum uint32, onlyVirtual bool) ([]*types.OperationObject, error) {
-	raw, err := api.raw("get_ops_in_block", []interface{}{blockNum, onlyVirtual})
-	if err != nil {
-		return nil, err
-	}
-	var resp []*types.OperationObject
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_ops_in_block response", apiID)
-	}
-	return resp, nil
-}
-
 //GetConfig api request get_config
 func (api *API) GetConfig() (*Config, error) {
 	raw, err := api.raw("get_config", emptyParams)
@@ -277,19 +264,6 @@ func (api *API) GetConversionRequests(accountName string) ([]*ConversionRequests
 //GetTransactionHex api request get_transaction_hex
 func (api *API) GetTransactionHex(trx *types.Transaction) (*json.RawMessage, error) {
 	return api.raw("get_transaction_hex", []interface{}{&trx})
-}
-
-//GetTransaction api request get_transaction
-func (api *API) GetTransaction(id string) (*types.Transaction, error) {
-	raw, err := api.raw("get_transaction", []string{id})
-	if err != nil {
-		return nil, err
-	}
-	var resp types.Transaction
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_transaction response", apiID)
-	}
-	return &resp, nil
 }
 
 //get_required_signatures

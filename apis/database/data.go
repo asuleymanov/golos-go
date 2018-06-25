@@ -174,34 +174,6 @@ type ChainProperties struct {
 	SbdInterestRate    *types.Int   `json:"sbd_interest_rate"`
 }
 
-//CurrentMedianHistoryPrice
-type CurrentMedianHistoryPrice struct {
-	Base  *types.Asset `json:"base"`
-	Quote *types.Asset `json:"quote"`
-}
-
-//FeedHistory
-type FeedHistory struct {
-	ID                   *types.Int                   `json:"id"`
-	CurrentMedianHistory *CurrentMedianHistoryPrice   `json:"current_median_history"`
-	PriceHistory         []*CurrentMedianHistoryPrice `json:"price_history"`
-}
-
-//WitnessSchedule
-type WitnessSchedule struct {
-	ID                            *types.Int       `json:"id"`
-	CurrentVirtualTime            string           `json:"current_virtual_time"`
-	NextShuffleBlockNum           *types.Int       `json:"next_shuffle_block_num"`
-	CurrentShuffledWitnesses      string           `json:"current_shuffled_witnesses"`
-	NumScheduledWitnesses         *types.Int       `json:"num_scheduled_witnesses"`
-	Top19Weight                   *types.Int       `json:"top19_weight"`
-	TimeshareWeight               *types.Int       `json:"timeshare_weight"`
-	MinerWeight                   *types.Int       `json:"miner_weight"`
-	WitnessPayNormalizationFactor *types.Int       `json:"witness_pay_normalization_factor"`
-	MedianProps                   *ChainProperties `json:"median_props"`
-	MajorityVersion               string           `json:"majority_version"`
-}
-
 //NextScheduledHardfork
 type NextScheduledHardfork struct {
 	HfVersion string      `json:"hf_version"`
@@ -268,15 +240,7 @@ type Account struct {
 	NewAverageMarketBandwidth     *types.Int64           `json:"new_average_market_bandwidth"`
 	VestingBalance                *types.Asset           `json:"vesting_balance"`
 	Reputation                    *types.Int64           `json:"reputation"`
-	TransferHistory               []interface{}          `json:"transfer_history"`
-	MarketHistory                 []interface{}          `json:"market_history"`
-	PostHistory                   []interface{}          `json:"post_history"`
-	VoteHistory                   []interface{}          `json:"vote_history"`
-	OtherHistory                  []interface{}          `json:"other_history"`
 	WitnessVotes                  []string               `json:"witness_votes"`
-	TagsUsage                     []interface{}          `json:"tags_usage"`
-	GuestBloggers                 []interface{}          `json:"guest_bloggers"`
-	BlogCategory                  interface{}            `json:"blog_category"`
 }
 
 //SavingsWithdraw
@@ -288,30 +252,6 @@ type SavingsWithdraw struct {
 	RequestID *types.Int   `json:"request_id"`
 	Amount    *types.Asset `json:"amount"`
 	Complete  *types.Time  `json:"complete"`
-}
-
-//Witness
-type Witness struct {
-	ID                    *types.Int                 `json:"id"`
-	Owner                 string                     `json:"owner"`
-	Created               *types.Time                `json:"created"`
-	URL                   string                     `json:"url"`
-	Votes                 string                     `json:"votes"`
-	VirtualLastUpdate     string                     `json:"virtual_last_update"`
-	VirtualPosition       string                     `json:"virtual_position"`
-	VirtualScheduledTime  string                     `json:"virtual_scheduled_time"`
-	TotalMissed           *types.Int                 `json:"total_missed"`
-	LastAslot             *types.Int                 `json:"last_aslot"`
-	LastConfirmedBlockNum *types.Int                 `json:"last_confirmed_block_num"`
-	PowWorker             *types.Int                 `json:"pow_worker"`
-	SigningKey            string                     `json:"signing_key"`
-	Props                 *ChainProperties           `json:"props"`
-	SbdExchangeRate       *CurrentMedianHistoryPrice `json:"sbd_exchange_rate"`
-	LastSbdExchangeUpdate *types.Time                `json:"last_sbd_exchange_update"`
-	LastWork              string                     `json:"last_work"`
-	RunningVersion        string                     `json:"running_version"`
-	HardforkVersionVote   string                     `json:"hardfork_version_vote"`
-	HardforkTimeVote      *types.Time                `json:"hardfork_time_vote"`
 }
 
 //ConversionRequests
@@ -396,4 +336,48 @@ type OwnerHistory struct {
 	Account                string           `json:"account"`
 	PreviousOwnerAuthority *types.Authority `json:"previous_owner_authority"`
 	LastValidTime          string           `json:"last_valid_time"`
+}
+
+type ProposalObject struct {
+	Author 						string				`json:"author"`
+	Title						string				`json:"title"`
+	Memo						string				`json:"memo"`
+	ExpirationTime				*types.Time			`json:"expiration_time"`
+	ReviewPeriodTime			*types.Time			`json:"review_period_time"`
+	ProposedOperations			types.Operations	`json:"proposed_operations"`
+	RequiredActiveApprovals		[]string			`json:"required_active_approvals"`
+	AvailableActiveApprovals	[]string			`json:"available_active_approvals"`
+	RequiredOwnerApprovals		[]string			`json:"required_owner_approvals"`
+	AvailableOwnerApprovals		[]string			`json:"available_owner_approvals"`
+	RequiredPostingApprovals	[]string			`json:"required_posting_approvals"`
+	AvailablePostingApprovals	[]string			`json:"available_posting_approvals"`
+	AvailableKeyApprovals		[]string			`json:"available_key_approvals"`
+}
+
+type DatabaseInfoIndex struct {
+	Name						string				`json:"name"`
+	RecordCount					uint32				`json:"record_count"`
+}
+
+type DatabaseInfo struct {
+	TotalSize					uint64				`json:"total_size"`
+	FreeSize					uint64				`json:"free_size"`
+	ReservedSize				uint64				`json:"reserved_size"`
+	UsedSize					uint64				`json:"used_size"`
+	IndexList					[]DatabaseInfoIndex	`json:"index_list"`
+}
+
+type VestingDelegation struct {
+	Id							uint64				`json:"id"`
+	Delegator					string				`json:"delegator"`
+	Delegatee					string				`json:"delegatee"`
+	VestingShares				*types.Asset		`json:"vesting_shares"`
+	MinDelegationTime			*types.Time			`json:"min_delegation_time"`
+}
+
+type VestingDelegationExpiration struct {
+	Id							uint64				`json:"id"`
+	Delegator					string				`json:"delegator"`
+	VestingShares				*types.Asset		`json:"vesting_shares"`
+	Expiration					*types.Time			`json:"expiration"`
 }

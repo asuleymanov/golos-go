@@ -339,45 +339,45 @@ type OwnerHistory struct {
 }
 
 type ProposalObject struct {
-	Author 						string				`json:"author"`
-	Title						string				`json:"title"`
-	Memo						string				`json:"memo"`
-	ExpirationTime				*types.Time			`json:"expiration_time"`
-	ReviewPeriodTime			*types.Time			`json:"review_period_time"`
-	ProposedOperations			types.Operations	`json:"proposed_operations"`
-	RequiredActiveApprovals		[]string			`json:"required_active_approvals"`
-	AvailableActiveApprovals	[]string			`json:"available_active_approvals"`
-	RequiredOwnerApprovals		[]string			`json:"required_owner_approvals"`
-	AvailableOwnerApprovals		[]string			`json:"available_owner_approvals"`
-	RequiredPostingApprovals	[]string			`json:"required_posting_approvals"`
-	AvailablePostingApprovals	[]string			`json:"available_posting_approvals"`
-	AvailableKeyApprovals		[]string			`json:"available_key_approvals"`
+	Author                    string           `json:"author"`
+	Title                     string           `json:"title"`
+	Memo                      string           `json:"memo"`
+	ExpirationTime            *types.Time      `json:"expiration_time"`
+	ReviewPeriodTime          *types.Time      `json:"review_period_time"`
+	ProposedOperations        types.Operations `json:"proposed_operations"`
+	RequiredActiveApprovals   []string         `json:"required_active_approvals"`
+	AvailableActiveApprovals  []string         `json:"available_active_approvals"`
+	RequiredOwnerApprovals    []string         `json:"required_owner_approvals"`
+	AvailableOwnerApprovals   []string         `json:"available_owner_approvals"`
+	RequiredPostingApprovals  []string         `json:"required_posting_approvals"`
+	AvailablePostingApprovals []string         `json:"available_posting_approvals"`
+	AvailableKeyApprovals     []string         `json:"available_key_approvals"`
 }
 
 type DatabaseInfoIndex struct {
-	Name						string				`json:"name"`
-	RecordCount					uint32				`json:"record_count"`
+	Name        string `json:"name"`
+	RecordCount uint32 `json:"record_count"`
 }
 
 type DatabaseInfo struct {
-	TotalSize					uint64				`json:"total_size"`
-	FreeSize					uint64				`json:"free_size"`
-	ReservedSize				uint64				`json:"reserved_size"`
-	UsedSize					uint64				`json:"used_size"`
-	IndexList					[]DatabaseInfoIndex	`json:"index_list"`
+	TotalSize    uint64              `json:"total_size"`
+	FreeSize     uint64              `json:"free_size"`
+	ReservedSize uint64              `json:"reserved_size"`
+	UsedSize     uint64              `json:"used_size"`
+	IndexList    []DatabaseInfoIndex `json:"index_list"`
 }
 
 type VestingDelegation struct {
-	Id							uint64				`json:"id"`
-	Delegator					string				`json:"delegator"`
-	Delegatee					string				`json:"delegatee"`
-	VestingShares				*types.Asset		`json:"vesting_shares"`
-	MinDelegationTime			*types.Time			`json:"min_delegation_time"`
+	Id                uint64       `json:"id"`
+	Delegator         string       `json:"delegator"`
+	Delegatee         string       `json:"delegatee"`
+	VestingShares     *types.Asset `json:"vesting_shares"`
+	MinDelegationTime *types.Time  `json:"min_delegation_time"`
 }
 
 type VestingDelegationExpiration struct {
-	Id							uint64				`json:"id"`
-	Delegator					string				`json:"delegator"`
-	VestingShares				*types.Asset		`json:"vesting_shares"`
-	Expiration					*types.Time			`json:"expiration"`
+	Id            uint64       `json:"id"`
+	Delegator     string       `json:"delegator"`
+	VestingShares *types.Asset `json:"vesting_shares"`
+	Expiration    *types.Time  `json:"expiration"`
 }

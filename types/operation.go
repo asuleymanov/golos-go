@@ -52,9 +52,13 @@ var dataObjects = map[OpType]Operation{
 	TypeDeclineVotingRights:         &DeclineVotingRightsOperation{},
 	TypeResetAccount:                &ResetAccountOperation{},
 	TypeSetResetAccount:             &SetResetAccountOperation{},
-	TypeClaimRewardBalance:          &ClaimRewardBalanceOperation{},
 	TypeDelegateVestingShares:       &DelegateVestingSharesOperation{},
 	TypeAccountCreateWithDelegation: &AccountCreateWithDelegationOperation{},
+	TypeAccountMetadata:             &AccountMetadataOperation{},
+	TypeProposalCreate:              &ProposalCreateOperation{},
+	TypeProposalUpdate:              &ProposalUpdateOperation{},
+	TypeProposalDelete:              &ProposalDeleteOperation{},
+	TypeChainPropertiesUpdate:       &ChainPropertiesUpdateOperation{},
 	TypeFillConvertRequest:          &FillConvertRequestOperation{},
 	TypeAuthorReward:                &AuthorRewardOperation{},
 	TypeCurationReward:              &CurationRewardOperation{},
@@ -67,8 +71,8 @@ var dataObjects = map[OpType]Operation{
 	TypeFillTransferFromSavings:     &FillTransferFromSavingsOperation{},
 	TypeHardfork:                    &HardforkOperation{},
 	TypeCommentPayoutUpdate:         &CommentPayoutUpdateOperation{},
-	TypeReturnVestingDelegation:     &ReturnVestingDelegationOperation{},
 	TypeCommentBenefactorReward:     &CommentBenefactorRewardOperation{},
+	TypeReturnVestingDelegation:     &ReturnVestingDelegationOperation{},
 }
 
 // Operation represents an operation stored in a transaction.

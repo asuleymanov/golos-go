@@ -40,6 +40,18 @@ func (cp *ChainProperties) MarshalTransaction(encoder *transaction.Encoder) erro
 	return enc.Err()
 }
 
+func (cp *ChainPropsUpdate) MarshalTransaction(encoder *transaction.Encoder) error {
+	enc := transaction.NewRollingEncoder(encoder)
+	enc.Encode(cp.AccountCreationFee)
+	enc.Encode(cp.MaximumBlockSize)
+	enc.Encode(cp.SBDInterestRate)
+	enc.Encode(cp.CreateAccountWithGolosModifier)
+	enc.Encode(cp.CreateAccountDelegationRation)
+	enc.Encode(cp.CreateAccountDelegationTime)
+	enc.Encode(cp.MinDelegationMultiplier)
+	return enc.Err()
+}
+
 // encode VoteOperation{}
 func (op *VoteOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
@@ -447,10 +459,99 @@ func (op *SetResetAccountOperation) MarshalTransaction(encoder *transaction.Enco
 	return enc.Err()
 }
 
-//Virtual Operation
-// encode ClaimRewardBalanceOperation{}
 // encode DelegateVestingSharesOperation{}
+func (op *DelegateVestingSharesOperation) MarshalTransaction(encoder *transaction.Encoder) error {
+	enc := transaction.NewRollingEncoder(encoder)
+	enc.EncodeUVarint(uint64(TypeDelegateVestingShares.Code()))
+	enc.Encode(op.Delegator)
+	enc.Encode(op.Delegatee)
+	enc.Encode(op.VestingShares)
+	return enc.Err()
+}
+
 // encode AccountCreateWithDelegationOperation{}
+func (op *AccountCreateWithDelegationOperation) MarshalTransaction(encoder *transaction.Encoder) error {
+	enc := transaction.NewRollingEncoder(encoder)
+	enc.EncodeUVarint(uint64(TypeAccountCreateWithDelegation.Code()))
+	enc.Encode(op.Fee)
+	enc.Encode(op.Delegation)
+	enc.Encode(op.Creator)
+	enc.Encode(op.NewAccountName)
+	enc.Encode(op.Owner)
+	enc.Encode(op.Active)
+	enc.Encode(op.Posting)
+	enc.EncodePubKey(op.MemoKey)
+	enc.Encode(op.JSONMetadata)
+	//enc.Encode(op.Extensions)
+	enc.Encode(byte(0))
+	return enc.Err()
+}
+
+// encode AccountMetadataOperation{}
+func (op *AccountMetadataOperation) MarshalTransaction(encoder *transaction.Encoder) error {
+	enc := transaction.NewRollingEncoder(encoder)
+	enc.EncodeUVarint(uint64(TypeAccountMetadata.Code()))
+	enc.Encode(op.Account)
+	enc.Encode(op.JSONMetadata)
+	return enc.Err()
+}
+
+// encode ProposalCreateOperation{}
+func (op *ProposalCreateOperation) MarshalTransaction(encoder *transaction.Encoder) error {
+	enc := transaction.NewRollingEncoder(encoder)
+	enc.EncodeUVarint(uint64(TypeProposalCreate.Code()))
+	enc.Encode(op.Author)
+	enc.Encode(op.Title)
+	enc.Encode(op.Memo)
+	enc.EncodeArrString(op.ProposedOperations)
+	enc.Encode(op.ExpirationTime)
+	enc.Encode(op.ReviewPeriodTime)
+	//enc.Encode(op.Extensions)
+	enc.Encode(byte(0))
+	return enc.Err()
+}
+
+// encode ProposalUpdateOperation{}
+func (op *ProposalUpdateOperation) MarshalTransaction(encoder *transaction.Encoder) error {
+	enc := transaction.NewRollingEncoder(encoder)
+	enc.EncodeUVarint(uint64(TypeProposalUpdate.Code()))
+	enc.Encode(op.Author)
+	enc.Encode(op.Title)
+	enc.EncodeArrString(op.ActiveApprovalsToAdd)
+	enc.EncodeArrString(op.ActiveApprovalsToRemove)
+	enc.EncodeArrString(op.OwnerApprovalsToAdd)
+	enc.EncodeArrString(op.OwnerApprovalsToRemove)
+	enc.EncodeArrString(op.PostingApprovalsToAdd)
+	enc.EncodeArrString(op.PostingApprovalsToRemove)
+	enc.EncodeArrString(op.KeyApprovalsToAdd)
+	enc.EncodeArrString(op.KeyApprovalsToRemove)
+	//enc.Encode(op.Extensions)
+	enc.Encode(byte(0))
+	return enc.Err()
+}
+
+// encode ProposalDeleteOperation{}
+func (op *ProposalDeleteOperation) MarshalTransaction(encoder *transaction.Encoder) error {
+	enc := transaction.NewRollingEncoder(encoder)
+	enc.EncodeUVarint(uint64(TypeProposalDelete.Code()))
+	enc.Encode(op.Author)
+	enc.Encode(op.Title)
+	enc.Encode(op.Requester)
+	//enc.Encode(op.Extensions)
+	enc.Encode(byte(0))
+	return enc.Err()
+}
+
+// encode ChainPropertiesUpdateOperation{}
+func (op *ChainPropertiesUpdateOperation) MarshalTransaction(encoder *transaction.Encoder) error {
+	enc := transaction.NewRollingEncoder(encoder)
+	enc.EncodeUVarint(uint64(TypeChainPropertiesUpdate.Code()))
+	enc.Encode(op.Owner)
+	enc.Encode(op.Props)
+	return enc.Err()
+}
+
+//Virtual Operation
 // encode FillConvertRequestOperation{}
 // encode AuthorRewardOperation{}
 // encode CurationRewardOperation{}

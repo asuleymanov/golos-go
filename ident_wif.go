@@ -52,24 +52,13 @@ func init() {
 	OpTypeKey["decline_voting_rights"] = []string{"owner"}
 	OpTypeKey["reset_account"] = []string{"active"}
 	OpTypeKey["set_reset_account"] = []string{"posting"}
-	OpTypeKey["claim_reward_balance"] = []string{"posting"}
 	OpTypeKey["delegate_vesting_shares"] = []string{"active"}
 	OpTypeKey["account_create_with_delegation"] = []string{"active"}
-	OpTypeKey["fill_convert_request"] = []string{"active"}
-	OpTypeKey["author_reward"] = []string{"posting"}
-	OpTypeKey["curation_reward"] = []string{"posting"}
-	OpTypeKey["comment_reward"] = []string{"posting"}
-	OpTypeKey["liquidity_reward"] = []string{"active"}
-	OpTypeKey["interest"] = []string{"active"}
-	OpTypeKey["fill_vesting_withdraw"] = []string{"active"}
-	OpTypeKey["fill_order"] = []string{"posting"}
-	OpTypeKey["shutdown_witness"] = []string{"posting"}
-	OpTypeKey["fill_transfer_from_savings"] = []string{"posting"}
-	OpTypeKey["hardfork"] = []string{"posting"}
-	OpTypeKey["comment_payout_update"] = []string{"posting"}
-	OpTypeKey["return_vesting_delegation"] = []string{"posting"}
-	OpTypeKey["comment_benefactor_reward"] = []string{"posting"}
-
+	OpTypeKey["account_metadata"] = []string{"posting"}
+	OpTypeKey["proposal_create"] = []string{"active"}
+	OpTypeKey["proposal_update"] = []string{"active"}
+	OpTypeKey["proposal_delete"] = []string{"active"}
+	OpTypeKey["chain_properties_update"] = []string{"active"}
 }
 
 //SigningKeys returns the key from the CurrentKeys

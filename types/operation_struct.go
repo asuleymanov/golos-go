@@ -23,6 +23,16 @@ type ChainProperties struct {
 	SBDInterestRate    uint16 `json:"sbd_interest_rate"`
 }
 
+type ChainPropsUpdate struct {
+	AccountCreationFee             *Asset `json:"account_creation_fee"`
+	MaximumBlockSize               uint32 `json:"maximum_block_size"`
+	SBDInterestRate                uint16 `json:"sbd_interest_rate"`
+	CreateAccountWithGolosModifier uint16 `json:"create_account_with_golos_modifier"`
+	CreateAccountDelegationRation  uint16 `json:"create_account_delegation_ration"`
+	CreateAccountDelegationTime    uint16 `json:"create_account_delegation_time"`
+	MinDelegationMultiplier        uint16 `json:"min_delegation_multiplier"`
+}
+
 type Authority struct {
 	AccountAuths    StringInt64Map `json:"account_auths"`
 	KeyAuths        StringInt64Map `json:"key_auths"`
@@ -662,23 +672,6 @@ func (op *SetResetAccountOperation) Data() interface{} {
 	return op
 }
 
-//Virtual Operation
-// struct ClaimRewardBalanceOperation{}
-type ClaimRewardBalanceOperation struct {
-	Account     string `json:"account"`
-	RewardSteem *Asset `json:"reward_steem"`
-	RewardSbd   *Asset `json:"reward_sbd"`
-	RewardVests *Asset `json:"reward_vests"`
-}
-
-func (op *ClaimRewardBalanceOperation) Type() OpType {
-	return TypeClaimRewardBalance
-}
-
-func (op *ClaimRewardBalanceOperation) Data() interface{} {
-	return op
-}
-
 // struct DelegateVestingSharesOperation{}
 type DelegateVestingSharesOperation struct {
 	Delegator     string `json:"delegator"`
@@ -696,8 +689,8 @@ func (op *DelegateVestingSharesOperation) Data() interface{} {
 
 // struct AccountCreateWithDelegationOperation{}
 type AccountCreateWithDelegationOperation struct {
-	Fee            string           `json:"fee"`
-	Delegation     string           `json:"delegation"`
+	Fee            *Asset           `json:"fee"`
+	Delegation     *Asset           `json:"delegation"`
 	Creator        string           `json:"creator"`
 	NewAccountName string           `json:"new_account_name"`
 	Owner          *Authority       `json:"owner"`
@@ -716,6 +709,93 @@ func (op *AccountCreateWithDelegationOperation) Data() interface{} {
 	return op
 }
 
+// struct AccountMetadataOperation{}
+type AccountMetadataOperation struct {
+	Account      string           `json:"account"`
+	JSONMetadata *AccountMetadata `json:"json_metadata"`
+}
+
+func (op *AccountMetadataOperation) Type() OpType {
+	return TypeAccountMetadata
+}
+
+func (op *AccountMetadataOperation) Data() interface{} {
+	return op
+}
+
+// struct ProposalCreateOperation{}
+type ProposalCreateOperation struct {
+	Author             string        `json:"author"`
+	Title              string        `json:"title"`
+	Memo               string        `json:"memo"`
+	ProposedOperations []string      `json:"proposed_operations"` //Подумать про реализацию
+	ExpirationTime     *Time         `json:"expiration_time"`
+	ReviewPeriodTime   *Time         `json:"review_period_time"`
+	Extensions         []interface{} `json:"extensions"`
+}
+
+func (op *ProposalCreateOperation) Type() OpType {
+	return TypeProposalCreate
+}
+
+func (op *ProposalCreateOperation) Data() interface{} {
+	return op
+}
+
+// struct ProposalUpdateOperation{}
+type ProposalUpdateOperation struct {
+	Author                   string        `json:"author"`
+	Title                    string        `json:"title"`
+	ActiveApprovalsToAdd     []string      `json:"active_approvals_to_add"`
+	ActiveApprovalsToRemove  []string      `json:"active_approvals_to_remove"`
+	OwnerApprovalsToAdd      []string      `json:"owner_approvals_to_add"`
+	OwnerApprovalsToRemove   []string      `json:"owner_approvals_to_remove"`
+	PostingApprovalsToAdd    []string      `json:"posting_approvals_to_add"`
+	PostingApprovalsToRemove []string      `json:"posting_approvals_to_remove"`
+	KeyApprovalsToAdd        []string      `json:"key_approvals_to_add"`
+	KeyApprovalsToRemove     []string      `json:"key_approvals_to_remove"`
+	Extensions               []interface{} `json:"extensions"`
+}
+
+func (op *ProposalUpdateOperation) Type() OpType {
+	return TypeProposalUpdate
+}
+
+func (op *ProposalUpdateOperation) Data() interface{} {
+	return op
+}
+
+// struct ProposalDeleteOperation{}
+type ProposalDeleteOperation struct {
+	Author     string        `json:"author"`
+	Title      string        `json:"title"`
+	Requester  string        `json:"requester"`
+	Extensions []interface{} `json:"extensions"`
+}
+
+func (op *ProposalDeleteOperation) Type() OpType {
+	return TypeProposalDelete
+}
+
+func (op *ProposalDeleteOperation) Data() interface{} {
+	return op
+}
+
+// struct ChainPropertiesUpdateOperation{}
+type ChainPropertiesUpdateOperation struct {
+	Owner string            `json:"owner"`
+	Props *ChainPropsUpdate `json:"props"`
+}
+
+func (op *ChainPropertiesUpdateOperation) Type() OpType {
+	return TypeChainPropertiesUpdate
+}
+
+func (op *ChainPropertiesUpdateOperation) Data() interface{} {
+	return op
+}
+
+//Virtual Operation
 // struct FillConvertRequestOperation{}
 type FillConvertRequestOperation struct {
 	Owner     string `json:"owner"`
@@ -899,20 +979,6 @@ func (op *CommentPayoutUpdateOperation) Data() interface{} {
 	return op
 }
 
-// struct ReturnVestingDelegationOperation{}
-type ReturnVestingDelegationOperation struct {
-	Account       string `json:"account"`
-	VestingShares *Asset `json:"vesting_shares"`
-}
-
-func (op *ReturnVestingDelegationOperation) Type() OpType {
-	return TypeReturnVestingDelegation
-}
-
-func (op *ReturnVestingDelegationOperation) Data() interface{} {
-	return op
-}
-
 // struct CommentBenefactorRewardOperation{}
 type CommentBenefactorRewardOperation struct {
 	Benefactor string `json:"benefactor"`
@@ -926,6 +992,20 @@ func (op *CommentBenefactorRewardOperation) Type() OpType {
 }
 
 func (op *CommentBenefactorRewardOperation) Data() interface{} {
+	return op
+}
+
+// struct ReturnVestingDelegationOperation{}
+type ReturnVestingDelegationOperation struct {
+	Account       string `json:"account"`
+	VestingShares *Asset `json:"vesting_shares"`
+}
+
+func (op *ReturnVestingDelegationOperation) Type() OpType {
+	return TypeReturnVestingDelegation
+}
+
+func (op *ReturnVestingDelegationOperation) Data() interface{} {
 	return op
 }
 

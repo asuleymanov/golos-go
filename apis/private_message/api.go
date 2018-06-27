@@ -27,10 +27,10 @@ func (api *API) raw(method string, params interface{}) (*json.RawMessage, error)
 }
 
 //GetInbox api request get_inbox
-func (api *API) GetInbox(to string, limit uint16) (*[]Message, error) {
+func (api *API) GetInbox(to string, limit, offset uint16) (*[]Message, error) {
 	t := time.Now()
 
-	raw, err := api.raw("get_inbox", []interface{}{to, t, limit})
+	raw, err := api.raw("get_inbox", []interface{}{to, t, limit, offset})
 
 	if err != nil {
 		return nil, err
@@ -43,10 +43,10 @@ func (api *API) GetInbox(to string, limit uint16) (*[]Message, error) {
 }
 
 //GetOutbox api request get_outbox
-func (api *API) GetOutbox(from string, limit uint16) (*[]Message, error) {
+func (api *API) GetOutbox(from string, limit, offset uint16) (*[]Message, error) {
 	t := time.Now()
 
-	raw, err := api.raw("get_outbox", []interface{}{from, t, limit})
+	raw, err := api.raw("get_outbox", []interface{}{from, t, limit, offset})
 
 	if err != nil {
 		return nil, err

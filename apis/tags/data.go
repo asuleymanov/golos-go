@@ -5,7 +5,7 @@ import "github.com/asuleymanov/golos-go/types"
 type DiscussionQuery struct {
 	Tag            string   `json:"tag"`
 	Limit          uint32   `json:"limit"`
-	VoteLimit	   uint32	`json:"vote_limit"`
+	VoteLimit      uint32   `json:"vote_limit"`
 	FilterTags     []string `json:"filter_tags"`
 	StartAuthor    string   `json:"start_author,omitempty"`
 	StartPermlink  string   `json:"start_permlink,omitempty"`
@@ -54,7 +54,7 @@ type Content struct {
 	PendingPayoutValue      *types.Asset           `json:"pending_payout_value"`
 	TotalPendingPayoutValue *types.Asset           `json:"total_pending_payout_value"`
 	ActiveVotes             []*VoteState           `json:"active_votes"`
-	ActiveVotesCount		uint32				   `json:"active_votes_count"`
+	ActiveVotesCount        uint32                 `json:"active_votes_count"`
 	Replies                 []*Content             `json:"replies"`
 	AuthorReputation        *types.Int             `json:"author_reputation"`
 	Promoted                *types.Asset           `json:"promoted"`

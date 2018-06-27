@@ -48,10 +48,14 @@ const (
 	TypeDeclineVotingRights         OpType = "decline_voting_rights"
 	TypeResetAccount                OpType = "reset_account"
 	TypeSetResetAccount             OpType = "set_reset_account"
-	TypeClaimRewardBalance          OpType = "claim_reward_balance" //Virtual Operation
 	TypeDelegateVestingShares       OpType = "delegate_vesting_shares"
 	TypeAccountCreateWithDelegation OpType = "account_create_with_delegation"
-	TypeFillConvertRequest          OpType = "fill_convert_request"
+	TypeAccountMetadata             OpType = "account_metadata"
+	TypeProposalCreate              OpType = "proposal_create"
+	TypeProposalUpdate              OpType = "proposal_update"
+	TypeProposalDelete              OpType = "proposal_delete"
+	TypeChainPropertiesUpdate       OpType = "chain_properties_update"
+	TypeFillConvertRequest          OpType = "fill_convert_request" //Virtual Operation
 	TypeAuthorReward                OpType = "author_reward"
 	TypeCurationReward              OpType = "curation_reward"
 	TypeCommentReward               OpType = "comment_reward"
@@ -63,8 +67,8 @@ const (
 	TypeFillTransferFromSavings     OpType = "fill_transfer_from_savings"
 	TypeHardfork                    OpType = "hardfork"
 	TypeCommentPayoutUpdate         OpType = "comment_payout_update"
-	TypeReturnVestingDelegation     OpType = "return_vesting_delegation"
 	TypeCommentBenefactorReward     OpType = "comment_benefactor_reward"
+	TypeReturnVestingDelegation     OpType = "return_vesting_delegation"
 )
 
 var opTypes = [...]OpType{
@@ -107,9 +111,13 @@ var opTypes = [...]OpType{
 	TypeDeclineVotingRights,
 	TypeResetAccount,
 	TypeSetResetAccount,
-	TypeClaimRewardBalance,
 	TypeDelegateVestingShares,
 	TypeAccountCreateWithDelegation,
+	TypeAccountMetadata,
+	TypeProposalCreate,
+	TypeProposalUpdate,
+	TypeProposalDelete,
+	TypeChainPropertiesUpdate,
 	TypeFillConvertRequest,
 	TypeAuthorReward,
 	TypeCurationReward,
@@ -122,8 +130,8 @@ var opTypes = [...]OpType{
 	TypeFillTransferFromSavings,
 	TypeHardfork,
 	TypeCommentPayoutUpdate,
-	TypeReturnVestingDelegation,
 	TypeCommentBenefactorReward,
+	TypeReturnVestingDelegation,
 }
 
 // opCodes keeps mapping operation type -> operation code.

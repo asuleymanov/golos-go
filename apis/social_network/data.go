@@ -57,7 +57,7 @@ type Content struct {
 	PendingPayoutValue      *types.Asset           `json:"pending_payout_value"`
 	TotalPendingPayoutValue *types.Asset           `json:"total_pending_payout_value"`
 	ActiveVotes             []*VoteState           `json:"active_votes"`
-	ActiveVotesCount		uint32				   `json:"active_votes_count"`
+	ActiveVotesCount        uint32                 `json:"active_votes_count"`
 	Replies                 []*Content             `json:"replies"`
 	AuthorReputation        *types.Int             `json:"author_reputation"`
 	Promoted                *types.Asset           `json:"promoted"`

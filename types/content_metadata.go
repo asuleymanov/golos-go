@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"strconv"
 
-	"github.com/asuleymanov/golos-go/encoding/transaction"
 	"fmt"
+	"github.com/asuleymanov/golos-go/encoding/transaction"
 )
 
 type ContentMetadata map[string]interface{}

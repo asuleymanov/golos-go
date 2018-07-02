@@ -45,10 +45,10 @@ func (cp *ChainPropsUpdate) MarshalTransaction(encoder *transaction.Encoder) err
 	enc.Encode(cp.AccountCreationFee)
 	enc.Encode(cp.MaximumBlockSize)
 	enc.Encode(cp.SBDInterestRate)
-	enc.Encode(cp.CreateAccountWithGolosModifier)
-	enc.Encode(cp.CreateAccountDelegationRation)
+	enc.Encode(cp.CreateAccountMinGolosFee)
+	enc.Encode(cp.CreateAccountMinDelegation)
 	enc.Encode(cp.CreateAccountDelegationTime)
-	enc.Encode(cp.MinDelegationMultiplier)
+	enc.Encode(cp.MinDelegation)
 	return enc.Err()
 }
 
@@ -503,8 +503,8 @@ func (op *ProposalCreateOperation) MarshalTransaction(encoder *transaction.Encod
 	enc.Encode(op.Author)
 	enc.Encode(op.Title)
 	enc.Encode(op.Memo)
-	enc.EncodeArrString(op.ProposedOperations)
 	enc.Encode(op.ExpirationTime)
+	enc.Encode(op.ProposedOperations)
 	enc.Encode(op.ReviewPeriodTime)
 	//enc.Encode(op.Extensions)
 	enc.Encode(byte(0))
@@ -547,6 +547,7 @@ func (op *ChainPropertiesUpdateOperation) MarshalTransaction(encoder *transactio
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeChainPropertiesUpdate.Code()))
 	enc.Encode(op.Owner)
+	enc.Encode(byte(1))
 	enc.Encode(op.Props)
 	return enc.Err()
 }

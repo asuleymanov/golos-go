@@ -24,13 +24,13 @@ type ChainProperties struct {
 }
 
 type ChainPropsUpdate struct {
-	AccountCreationFee             *Asset `json:"account_creation_fee"`
-	MaximumBlockSize               uint32 `json:"maximum_block_size"`
-	SBDInterestRate                uint16 `json:"sbd_interest_rate"`
-	CreateAccountWithGolosModifier uint16 `json:"create_account_with_golos_modifier"`
-	CreateAccountDelegationRation  uint16 `json:"create_account_delegation_ration"`
-	CreateAccountDelegationTime    uint16 `json:"create_account_delegation_time"`
-	MinDelegationMultiplier        uint16 `json:"min_delegation_multiplier"`
+	AccountCreationFee          *Asset `json:"account_creation_fee"`
+	MaximumBlockSize            uint32 `json:"maximum_block_size"`
+	SBDInterestRate             uint16 `json:"sbd_interest_rate"`
+	CreateAccountMinGolosFee    *Asset `json:"create_account_min_golos_fee"`
+	CreateAccountMinDelegation  *Asset `json:"create_account_min_delegation"`
+	CreateAccountDelegationTime uint32 `json:"create_account_delegation_time"`
+	MinDelegation               *Asset `json:"min_delegation"`
 }
 
 type Authority struct {
@@ -728,7 +728,7 @@ type ProposalCreateOperation struct {
 	Author             string        `json:"author"`
 	Title              string        `json:"title"`
 	Memo               string        `json:"memo"`
-	ProposedOperations []string      `json:"proposed_operations"` //Подумать про реализацию
+	ProposedOperations []*Operation  `json:"proposed_operations"`
 	ExpirationTime     *Time         `json:"expiration_time"`
 	ReviewPeriodTime   *Time         `json:"review_period_time"`
 	Extensions         []interface{} `json:"extensions"`

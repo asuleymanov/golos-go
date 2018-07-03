@@ -17,13 +17,13 @@ type POW struct {
 	Work      string `json:"work"`
 }
 
-type ChainProperties struct {
+type ChainPropertiesOLD struct {
 	AccountCreationFee *Asset `json:"account_creation_fee"`
 	MaximumBlockSize   uint32 `json:"maximum_block_size"`
 	SBDInterestRate    uint16 `json:"sbd_interest_rate"`
 }
 
-type ChainPropsUpdate struct {
+type ChainProperties struct {
 	AccountCreationFee          *Asset `json:"account_creation_fee"`
 	MaximumBlockSize            uint32 `json:"maximum_block_size"`
 	SBDInterestRate             uint16 `json:"sbd_interest_rate"`
@@ -239,11 +239,11 @@ func (op *AccountUpdateOperation) Data() interface{} {
 
 // struct WitnessUpdateOperation{}
 type WitnessUpdateOperation struct {
-	Owner           string           `json:"owner"`
-	URL             string           `json:"url"`
-	BlockSigningKey string           `json:"block_signing_key"`
-	Props           *ChainProperties `json:"props"`
-	Fee             *Asset           `json:"fee"`
+	Owner           string              `json:"owner"`
+	URL             string              `json:"url"`
+	BlockSigningKey string              `json:"block_signing_key"`
+	Props           *ChainPropertiesOLD `json:"props"`
+	Fee             *Asset              `json:"fee"`
 }
 
 func (op *WitnessUpdateOperation) Type() OpType {
@@ -381,7 +381,7 @@ func (op *SetWithdrawVestingRouteOperation) Data() interface{} {
 // struct LimitOrderCreate2Operation{}
 type LimitOrderCreate2Operation struct {
 	Owner        string    `json:"owner"`
-	Orderid      uint32    `json:"orderid"`
+	OrderID      uint32    `json:"orderid"`
 	AmountToSell *Asset    `json:"amount_to_sell"`
 	ExchangeRate *ExchRate `json:"exchange_rate"`
 	FillOrKill   bool      `json:"fill_or_kill"`
@@ -783,8 +783,8 @@ func (op *ProposalDeleteOperation) Data() interface{} {
 
 // struct ChainPropertiesUpdateOperation{}
 type ChainPropertiesUpdateOperation struct {
-	Owner string            `json:"owner"`
-	Props *ChainPropsUpdate `json:"props"`
+	Owner string           `json:"owner"`
+	Props *ChainProperties `json:"props"`
 }
 
 func (op *ChainPropertiesUpdateOperation) Type() OpType {

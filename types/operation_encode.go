@@ -32,7 +32,7 @@ func (exch *ExchRate) MarshalTransaction(encoder *transaction.Encoder) error {
 	return enc.Err()
 }
 
-func (cp *ChainProperties) MarshalTransaction(encoder *transaction.Encoder) error {
+func (cp *ChainPropertiesOLD) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.Encode(cp.AccountCreationFee)
 	enc.Encode(cp.MaximumBlockSize)
@@ -40,7 +40,7 @@ func (cp *ChainProperties) MarshalTransaction(encoder *transaction.Encoder) erro
 	return enc.Err()
 }
 
-func (cp *ChainPropsUpdate) MarshalTransaction(encoder *transaction.Encoder) error {
+func (cp *ChainProperties) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.Encode(cp.AccountCreationFee)
 	enc.Encode(cp.MaximumBlockSize)
@@ -278,7 +278,7 @@ func (op *LimitOrderCreate2Operation) MarshalTransaction(encoder *transaction.En
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeLimitOrderCreate2.Code()))
 	enc.Encode(op.Owner)
-	enc.Encode(op.Orderid)
+	enc.Encode(op.OrderID)
 	enc.Encode(op.AmountToSell)
 	enc.Encode(op.ExchangeRate)
 	enc.EncodeBool(op.FillOrKill)

@@ -80,8 +80,8 @@ func (client *Client) PostNew(authorname, title, body string, opt *PCOptionsNew)
 		tag = translit.EncodeTags(opt.Tags)
 	}
 
-	if opt != nil && ptag != "" {
-		ptag = translit.EncodeTag(ptag)
+	if opt != nil && opt.Ptag != "" {
+		ptag = translit.EncodeTag(opt.Ptag)
 	} else {
 		ptag = translit.EncodeTag(opt.Tags[0])
 	}

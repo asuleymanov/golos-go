@@ -294,8 +294,8 @@ func (api *API) GetVerifyAuthority(trx *types.Transaction) (bool, error) {
 	return resp, nil
 }
 
-func (api *API) GetProposedTransaction(account string) (*ProposalObject, error) {
-	raw, err := api.raw("get_proposed_transaction", []interface{}{account})
+func (api *API) GetProposedTransaction(account string, from, limit uint32) (*ProposalObject, error) {
+	raw, err := api.raw("get_proposed_transactions", []interface{}{account, from, limit})
 	if err != nil {
 		return nil, err
 	}

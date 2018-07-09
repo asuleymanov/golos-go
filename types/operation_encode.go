@@ -192,12 +192,7 @@ func (op *WitnessUpdateOperation) MarshalTransaction(encoder *transaction.Encode
 	enc.EncodeUVarint(uint64(TypeWitnessUpdate.Code()))
 	enc.Encode(op.Owner)
 	enc.Encode(op.URL)
-	if op.BlockSigningKey == "GLS1111111111111111111111111111111114T1Anm" {
-		dst :=make([]byte,33)
-		enc.Encode(dst)
-	} else {
-		enc.EncodePubKey(op.BlockSigningKey)
-	}
+	enc.EncodePubKey(op.BlockSigningKey)
 	enc.Encode(op.Props)
 	enc.Encode(op.Fee)
 	return enc.Err()

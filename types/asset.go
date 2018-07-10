@@ -46,9 +46,15 @@ func (op *Asset) MarshalTransaction(encoder *transaction.Encoder) error {
 }
 
 func (op *Asset) String() string {
-	ammf := strconv.FormatFloat(op.Amount, 'f', 3, 64)
-	return ammf + " " + op.Symbol
+                var ammf string
+                if op.Symbol != "GESTS" {
+                               ammf = strconv.FormatFloat(op.Amount, 'f', 3, 64)
+                } else {
+                               ammf = strconv.FormatFloat(op.Amount, 'f', 6, 64)
+                }
+                return ammf + " " + op.Symbol
 }
+
 
 func (op *Asset) StringAmount() string {
 	return strconv.FormatFloat(op.Amount, 'f', 3, 64)

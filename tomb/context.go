@@ -55,7 +55,7 @@ func (t *Tomb) Context(parent context.Context) context.Context {
 	return child
 }
 
-func (t *Tomb) addChild(parent context.Context, child context.Context, cancel func()) {
+func (t *Tomb) addChild(parent, child context.Context, cancel func()) {
 	if t.reason != ErrStillAlive {
 		cancel()
 		return

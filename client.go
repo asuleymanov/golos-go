@@ -121,17 +121,17 @@ func initClient(url []string) (*websocket.Transport, error) {
 }
 
 func initChainID(str string) (*transactions.Chain, error) {
-	var ChainID transactions.Chain
+	var chainID transactions.Chain
 	// Определяем ChainId
 	switch str {
 	case "golos":
-		ChainID = *transactions.GolosChain
+		chainID = *transactions.GolosChain
 	case "test":
-		ChainID = *transactions.TestChain
+		chainID = *transactions.TestChain
 	default:
 		return nil, errors.New("Chain not found")
 	}
-	return &ChainID, nil
+	return &chainID, nil
 }
 
 func (client *Client) SetAsync(async bool) {

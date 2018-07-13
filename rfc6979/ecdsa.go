@@ -18,7 +18,7 @@ import (
 // truncation itself.
 func SignECDSA(priv *ecdsa.PrivateKey, hash []byte, alg func() hash.Hash, nonce int) (r, s *big.Int, err error) {
 	c := priv.PublicKey.Curve
-	N := c.Params().N
+	n := c.Params().N
 
 	//log.Println("e=", hex.EncodeToString(hash)) 		 // OK
 	//log.Println("N=", hex.EncodeToString(N.Bytes()))	 // OK
@@ -28,9 +28,9 @@ func SignECDSA(priv *ecdsa.PrivateKey, hash []byte, alg func() hash.Hash, nonce 
 
 	//log.Println("generateSecret- nonce=", nonce)
 	generateSecret(priv /* N, priv.D, */, alg, hashClone, func(k *big.Int) bool {
-		inv := new(big.Int).ModInverse(k, N)
+		inv := new(big.Int).ModInverse(k, n)
 		r, _ = priv.Curve.ScalarBaseMult(k.Bytes())
-		r.Mod(r, N)
+		r.Mod(r, n)
 
 		if r.Sign() == 0 {
 			//log.Println("r.Sign() == 0")
@@ -41,7 +41,7 @@ func SignECDSA(priv *ecdsa.PrivateKey, hash []byte, alg func() hash.Hash, nonce 
 		s = new(big.Int).Mul(priv.D, r)
 		s.Add(s, e)
 		s.Mul(s, inv)
-		s.Mod(s, N)
+		s.Mod(s, n)
 
 		if s.Sign() == 0 {
 			//log.Println("s.Sign() == 0")
@@ -53,9 +53,9 @@ func SignECDSA(priv *ecdsa.PrivateKey, hash []byte, alg func() hash.Hash, nonce 
 
 	//log.Println("enforce low S values, see bip62: 'low s values in signatures'");
 	// enforce low S values, see bip62: 'low s values in signatures'
-	NOverTwo := new(big.Int).Div(N, big.NewInt(2))
-	if s.Cmp(NOverTwo) > 0 {
-		s = new(big.Int).Sub(N, s)
+	nOverTwo := new(big.Int).Div(n, big.NewInt(2))
+	if s.Cmp(nOverTwo) > 0 {
+		s = new(big.Int).Sub(n, s)
 	}
 
 	return

@@ -123,7 +123,9 @@ func (client *Client) VerifyDelegatePostingKeySign(fromUser, toUser string) bool
 	if err != nil {
 		log.Println(errors.Wrapf(err, "Error Verify Delegate Vote Sign: "))
 		return false
-	} else if len(acc) == 1 {
+	}
+
+	if len(acc) == 1 {
 		for _, v := range acc[0].Posting.AccountAuths {
 			tu := strings.Split(strings.Replace(strings.Replace(fmt.Sprintf("%v", v), "[", "", -1), "]", "", -1), " ")
 			if tu[0] == toUser {
@@ -132,10 +134,8 @@ func (client *Client) VerifyDelegatePostingKeySign(fromUser, toUser string) bool
 				}
 			}
 		}
-		return false
-	} else {
-		return false
 	}
+	return false
 }
 
 //VerifyFirstPost сheck whether the post of the user is his first post in GOLOS
@@ -146,10 +146,8 @@ func (client *Client) VerifyFirstPost(username string) bool {
 		log.Println(errors.Wrapf(err, "Error Verify First Post: "))
 		return false
 	}
-	if len(cont) > 1 {
-		return false
-	}
-	return true
+
+	return len(cont) <= 1
 }
 
 //VerifyUser сheck if the user exists in GOLOS
@@ -158,11 +156,9 @@ func (client *Client) VerifyUser(username string) bool {
 	if err != nil {
 		log.Println(errors.Wrapf(err, "Error Verify User: "))
 		return false
-	} else if len(acc) == 1 {
-		return true
-	} else {
-		return false
 	}
+
+	return len(acc) == 1
 }
 
 //VerifyTrx check the possibility of execution of the signed transaction for its execution in GOLOS.

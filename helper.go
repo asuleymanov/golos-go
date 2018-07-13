@@ -135,28 +135,29 @@ func (client *Client) GetAuthorReward(username, permlink string, full bool) (*ty
 //GetCommentOptionsOperation generates CommentOptionsOperation depending on the incoming data
 func GetCommentOptionsOperation(username, permlink string, options PCOptions) *types.CommentOptionsOperation {
 	var ext []interface{}
-	var AV, ACR bool
-	var MAP *types.Asset
+	var av, acr bool
+	var vMap *types.Asset
 	symbol := "GBG"
-	MAP = SetAsset(1000000.000, symbol)
-	PSD := options.Percent
-	Extens := []interface{}{}
+	vMap = SetAsset(1000000.000, symbol)
+	psd := options.Percent
+	extens := []interface{}{}
 
-	if options.Percent == 0 {
-		MAP = SetAsset(0.000, symbol)
-		PSD = 10000
-	} else if options.Percent == 50 {
-		PSD = 10000
-	} else {
-		PSD = 0
+	switch options.Percent {
+	case 0:
+		vMap = SetAsset(0.000, symbol)
+		psd = 10000
+	case 50:
+		psd = 10000
+	default:
+		psd = 0
 	}
 
 	if options.AllowVotes == nil || *options.AllowVotes {
-		AV = OptionsTrue
+		av = OptionsTrue
 	}
 
 	if options.AllowCurationRewards == nil || *options.AllowCurationRewards {
-		ACR = OptionsTrue
+		acr = OptionsTrue
 	}
 
 	if options.BeneficiarieList != nil && len(*options.BeneficiarieList) > 0 {
@@ -166,38 +167,37 @@ func GetCommentOptionsOperation(username, permlink string, options PCOptions) *t
 			benList = append(benList, types.Beneficiarie{val.Account, val.Weight})
 		}
 		benef.Beneficiaries = benList
-		ext = append(ext, 0)
-		ext = append(ext, benef)
+		ext = append(ext, 0, benef)
 	}
 
 	if len(ext) > 0 {
-		Extens = []interface{}{ext}
+		extens = []interface{}{ext}
 	}
 
 	return &types.CommentOptionsOperation{
 		Author:               username,
 		Permlink:             permlink,
-		MaxAcceptedPayout:    MAP,
-		PercentSteemDollars:  PSD,
-		AllowVotes:           AV,
-		AllowCurationRewards: ACR,
-		Extensions:           Extens,
+		MaxAcceptedPayout:    vMap,
+		PercentSteemDollars:  psd,
+		AllowVotes:           av,
+		AllowCurationRewards: acr,
+		Extensions:           extens,
 	}
 }
 
 //GetPostBandwidth returns the real (calculated) value of the post_bandwidth parameter.
 func (client *Client) GetPostBandwidth(username string) (int64, error) {
-	MinutesPerDay := float64(1440)
+	minutesPerDay := float64(1440)
 
 	resp, err := client.Database.GetAccounts([]string{username})
 	if err != nil {
 		return 0, err
 	}
 
-	OldPostBandwidth := float64(resp[0].PostBandwidth)
-	DeltaTimeMinutes := float64(time.Now().Sub(*resp[0].LastRootPost.Time).Minutes())
+	oldPostBandwidth := float64(resp[0].PostBandwidth)
+	deltaTimeMinutes := float64(time.Now().Sub(*resp[0].LastRootPost.Time).Minutes())
 
-	NewPostBandwidth := ((MinutesPerDay - DeltaTimeMinutes) / MinutesPerDay) * OldPostBandwidth
+	newPostBandwidth := ((minutesPerDay - deltaTimeMinutes) / minutesPerDay) * oldPostBandwidth
 
-	return int64(NewPostBandwidth), nil
+	return int64(newPostBandwidth), nil
 }

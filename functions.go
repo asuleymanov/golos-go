@@ -283,12 +283,12 @@ func (client *Client) Transfer(fromName, toName, memo string, amount *types.Asse
 func (client *Client) MultiTransfer(username string, arrtrans []ArrTransfer) (*OperResp, error) {
 	var trx []types.Operation
 
-	for _, val := range arrtrans {
+	for i := range arrtrans {
 		txt := &types.TransferOperation{
 			From:   username,
-			To:     val.To,
-			Amount: &val.Amount,
-			Memo:   val.Memo,
+			To:     arrtrans[i].To,
+			Amount: &arrtrans[i].Amount,
+			Memo:   arrtrans[i].Memo,
 		}
 		trx = append(trx, txt)
 	}
@@ -692,12 +692,12 @@ func (client *Client) Delegation(from, to string, vestingshares *types.Asset) (*
 }
 
 //UpdateAccountMetadata allows you to change the user profile.
-func (client *Client) UpdateAccountMetadata(account string, JSONMetadata types.AccountMetadata) (*OperResp, error) {
+func (client *Client) UpdateAccountMetadata(account string, jsonMetadata types.AccountMetadata) (*OperResp, error) {
 	var trx []types.Operation
 
 	tx := &types.AccountMetadataOperation{
 		Account:      account,
-		JSONMetadata: &JSONMetadata,
+		JSONMetadata: &jsonMetadata,
 	}
 
 	trx = append(trx, tx)

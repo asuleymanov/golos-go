@@ -129,10 +129,10 @@ func generateSecret(priv *ecdsa.PrivateKey, alg func() hash.Hash, hash []byte, t
 	// Step H2b
 	v = HmacSHA256(v, k)
 
-	var T = hashToInt(v, c)
+	var t = hashToInt(v, c)
 
 	// Step H3, repeat until T is within the interval [1, n - 1]
-	for T.Sign() <= 0 || T.Cmp(q) >= 0 || !test(T) {
+	for t.Sign() <= 0 || t.Cmp(q) >= 0 || !test(t) {
 
 		k = HmacSHA256(append(v, 0x00), k)
 
@@ -142,11 +142,11 @@ func generateSecret(priv *ecdsa.PrivateKey, alg func() hash.Hash, hash []byte, t
 		// Step H2b again
 		v = HmacSHA256(v, k)
 
-		T = hashToInt(v, c)
+		t = hashToInt(v, c)
 	}
 }
 
-func HmacSHA256(m []byte, k []byte) []byte {
+func HmacSHA256(m, k []byte) []byte {
 	mac := hmac.New(sha256.New, k)
 	mac.Write(m)
 	expectedMAC := mac.Sum(nil)

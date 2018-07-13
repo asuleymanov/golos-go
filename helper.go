@@ -160,11 +160,11 @@ func GetCommentOptionsOperation(username, permlink string, options PCOptions) *t
 		acr = OptionsTrue
 	}
 
-	if options.BeneficiarieList != nil && len(*options.BeneficiarieList) > 0 {
-		var benList []types.Beneficiarie
+	if options.BeneficiaryList != nil && len(*options.BeneficiaryList) > 0 {
+		var benList []types.Beneficiary
 		var benef types.CommentPayoutBeneficiaries
-		for _, val := range *options.BeneficiarieList {
-			benList = append(benList, types.Beneficiarie{val.Account, val.Weight})
+		for _, val := range *options.BeneficiaryList {
+			benList = append(benList, types.Beneficiary{val.Account, val.Weight})
 		}
 		benef.Beneficiaries = benList
 		ext = append(ext, 0, benef)

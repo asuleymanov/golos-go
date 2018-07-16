@@ -49,7 +49,7 @@ func (client *Client) SendTrx(username string, strx []types.Operation) (*BResp, 
 
 	// Отправка транзакции
 	var resp *network_broadcast.BroadcastResponse
-	if client.asyncProtocol {
+	if client.AsyncProtocol {
 		err = client.NetworkBroadcast.BroadcastTransaction(tx.Transaction)
 	} else {
 		resp, err = client.NetworkBroadcast.BroadcastTransactionSynchronous(tx.Transaction)

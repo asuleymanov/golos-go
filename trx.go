@@ -9,6 +9,8 @@ import (
 
 //SendTrx generates and sends an array of transactions to GOLOS.
 func (client *Client) SendTrx(username string, strx []types.Operation) (*BResp, error) {
+	var bresp BResp
+
 	// Получение необходимых параметров
 	props, err := client.Database.GetDynamicGlobalProperties()
 	if err != nil {
@@ -30,17 +32,17 @@ func (client *Client) SendTrx(username string, strx []types.Operation) (*BResp, 
 		tx.PushOperation(val)
 	}
 
-	// Получаем необходимый для подписи ключ
-	privKeys, err := client.SigningKeys(strx[0])
-	if err != nil {
-		return nil, err
-	}
-
 	expTime := time.Now().Add(59 * time.Minute).UTC()
 	tm := types.Time{
 		Time: &expTime,
 	}
 	tx.Expiration = &tm
+
+	// Получаем необходимый для подписи ключ
+	privKeys, err := client.SigningKeys(strx[0])
+	if err != nil {
+		return nil, err
+	}
 
 	// Подписываем транзакцию
 	if err := tx.Sign(privKeys, client.Chain); err != nil {
@@ -55,12 +57,12 @@ func (client *Client) SendTrx(username string, strx []types.Operation) (*BResp, 
 		resp, err = client.NetworkBroadcast.BroadcastTransactionSynchronous(tx.Transaction)
 	}
 
+	bresp.JSONTrx = JSONTrx(tx)
+
 	if err != nil {
-		return nil, err
+		return &bresp, err
 	}
 	if resp != nil {
-		var bresp BResp
-
 		bresp.ID = resp.ID
 		bresp.BlockNum = resp.BlockNum
 		bresp.TrxNum = resp.TrxNum
@@ -69,5 +71,5 @@ func (client *Client) SendTrx(username string, strx []types.Operation) (*BResp, 
 		return &bresp, nil
 	}
 
-	return nil, nil
+	return &bresp, nil
 }

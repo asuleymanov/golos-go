@@ -626,7 +626,7 @@ func (client *Client) AccountCreateDelegation(creator, newAccountName, password 
 		Public  string
 	}
 
-	var trx []types.Operation
+	//var trx []types.Operation
 	var listKeys = make(map[string]Keys)
 
 	empty := map[string]int64{}
@@ -671,9 +671,12 @@ func (client *Client) AccountCreateDelegation(creator, newAccountName, password 
 		Extensions:     []interface{}{},
 	}
 
-	trx = append(trx, tx)
+	log.Println(tx)
+	return nil, nil
+
+	/*trx = append(trx, tx)
 	resp, err := client.SendTrx(creator, trx)
-	return &OperResp{NameOper: "AccountCreateDelegation", Bresp: resp}, err
+	return &OperResp{NameOper: "AccountCreateDelegation", Bresp: resp}, err*/
 }
 
 //Delegation allows you to delegate a number of GESTS to another user.
@@ -708,18 +711,24 @@ func (client *Client) UpdateAccountMetadata(account string, JSONMetadata types.A
 //ChainPropertiesUpdate allows you to set delegate parameters for the network.
 func (client *Client) ChainPropertiesUpdate(owner string, accountcreationfee *types.Asset, maxblocksize uint32, sbdinterestrate uint16, createaccountmingolosfee, createaccountmindelegation *types.Asset, createaccountdelegationtime uint32, mindelegation *types.Asset) (*OperResp, error) {
 	var trx []types.Operation
+var props []interface{}
+	
+	chp := types.ChainProperties{
+		AccountCreationFee:          accountcreationfee,
+		MaximumBlockSize:            maxblocksize,
+		SBDInterestRate:             sbdinterestrate,
+		CreateAccountMinGolosFee:    createaccountmingolosfee,
+		CreateAccountMinDelegation:  createaccountmindelegation,
+		CreateAccountDelegationTime: createaccountdelegationtime,
+		MinDelegation:               mindelegation,
+	}
+
+	props = append(props, 1)
+	props = append(props, chp)
 
 	tx := &types.ChainPropertiesUpdateOperation{
-		Owner: owner,
-		Props: &types.ChainProperties{
-			AccountCreationFee:          accountcreationfee,
-			MaximumBlockSize:            maxblocksize,
-			SBDInterestRate:             sbdinterestrate,
-			CreateAccountMinGolosFee:    createaccountmingolosfee,
-			CreateAccountMinDelegation:  createaccountmindelegation,
-			CreateAccountDelegationTime: createaccountdelegationtime,
-			MinDelegation:               mindelegation,
-		},
+		Owner: "asl1",
+		Props: props,
 	}
 
 	trx = append(trx, tx)
@@ -754,7 +763,7 @@ func (client *Client) ProposalCreate(author, title, memo string, listop []types.
 		Author:             author,
 		Title:              title,
 		Memo:               memo,
-		ProposedOperations: listop,
+		ProposedOperations: JSONOp(listop),
 		ExpirationTime:     &types.Time{&expiration},
 		ReviewPeriodTime:   &types.Time{&reviewperiodtime},
 		Extensions:         []interface{}{},

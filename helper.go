@@ -4,6 +4,7 @@ import (
 	"errors"
 	"time"
 
+	"github.com/asuleymanov/golos-go/transactions"
 	"github.com/asuleymanov/golos-go/types"
 )
 
@@ -200,4 +201,18 @@ func (client *Client) GetPostBandwidth(username string) (int64, error) {
 	NewPostBandwidth := ((MinutesPerDay - DeltaTimeMinutes) / MinutesPerDay) * OldPostBandwidth
 
 	return int64(NewPostBandwidth), nil
+}
+
+func JSONTrx(v *transactions.SignedTransaction) string {
+	ans, _ := types.JSONMarshal(v)
+	return string(ans)
+}
+
+func JSONOp(v []types.Operation) string {
+	var tx types.Operations
+
+	tx=append(tx,v...)
+
+	ans, _ := types.JSONMarshal(tx)
+	return string(ans)
 }

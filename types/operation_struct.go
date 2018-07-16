@@ -728,7 +728,7 @@ type ProposalCreateOperation struct {
 	Author             string        `json:"author"`
 	Title              string        `json:"title"`
 	Memo               string        `json:"memo"`
-	ProposedOperations []Operation   `json:"proposed_operations"`
+	ProposedOperations string   `json:"proposed_operations"`
 	ExpirationTime     *Time         `json:"expiration_time"`
 	ReviewPeriodTime   *Time         `json:"review_period_time"`
 	Extensions         []interface{} `json:"extensions"`
@@ -784,7 +784,7 @@ func (op *ProposalDeleteOperation) Data() interface{} {
 // struct ChainPropertiesUpdateOperation{}
 type ChainPropertiesUpdateOperation struct {
 	Owner string           `json:"owner"`
-	Props *ChainProperties `json:"props"`
+	Props []interface{} `json:"props"`
 }
 
 func (op *ChainPropertiesUpdateOperation) Type() OpType {

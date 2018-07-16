@@ -26,6 +26,7 @@ type BResp struct {
 	BlockNum uint32
 	TrxNum   uint32
 	Expired  bool
+	JSONTrx  string
 }
 
 //OperResp type is returned when the operation is performed.

@@ -547,7 +547,7 @@ func (op *ChainPropertiesUpdateOperation) MarshalTransaction(encoder *transactio
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeChainPropertiesUpdate.Code()))
 	enc.Encode(op.Owner)
-	enc.Encode(byte(1))
+	enc.EncodeUVarint(uint64(len(op.Props)))
 	enc.Encode(op.Props)
 	return enc.Err()
 }

@@ -170,7 +170,7 @@ func (encoder *Encoder) EncodePubKey(s string) error {
 	chHash.Write(pkn2)
 	nchs := chHash.Sum(nil)[:4]
 	if bytes.Equal(chs, nchs) {
-		if string(pkn2) == string(make([]byte, 33)) {
+	if string(pkn2) == string(make([]byte, 33)) {
 			return encoder.writeBytes(pkn2)
 		}
 		pkn3, _ := btcec.ParsePubKey(pkn2, btcec.S256())

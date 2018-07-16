@@ -25,7 +25,7 @@ import (
 type Client struct {
 	cc transports.CallCloser
 
-	asyncProtocol bool
+	AsyncProtocol bool
 
 	// Database represents database_api.
 	Database *database.API
@@ -132,8 +132,4 @@ func initChainID(str string) (*transactions.Chain, error) {
 		return nil, errors.New("Chain not found")
 	}
 	return &chainID, nil
-}
-
-func (client *Client) SetAsync(async bool) {
-	client.asyncProtocol = async
 }

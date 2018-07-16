@@ -72,7 +72,7 @@ func NewClient(url []string, chain string) (*Client, error) {
 	}
 	client := &Client{cc: call}
 
-	client.asyncProtocol = false
+	client.AsyncProtocol = false
 
 	client.Database = database.NewAPI(client.cc)
 

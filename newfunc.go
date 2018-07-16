@@ -27,7 +27,7 @@ type CommentOptions struct {
 	Percent              uint16
 	AllowVotes           *bool
 	AllowCurationRewards *bool
-	BeneficiarieList     []types.Beneficiarie
+	BeneficiaryList      []types.Beneficiary
 }
 
 //FUNCTION
@@ -117,52 +117,52 @@ func (client *Client) PostNew(authorname, title, body string, opt *PCOptionsNew)
 //GetCommentOptionsOperation generates CommentOptionsOperation depending on the incoming data
 func GetCommentOptionsOperationNew(username, permlink string, options CommentOptions) *types.CommentOptionsOperation {
 	var ext []interface{}
-	var AV, ACR bool
-	var MAP *types.Asset
+	var av, acr bool
+	var vMap *types.Asset
 	symbol := "GBG"
-	MAP = SetAsset(1000000.000, symbol)
-	PSD := options.Percent
-	Extens := []interface{}{}
+	vMap = SetAsset(1000000.000, symbol)
+	psd := options.Percent
+	extens := []interface{}{}
 
-	if options.Percent == 0 {
-		MAP = SetAsset(0.000, symbol)
-		PSD = 10000
-	} else if options.Percent == 50 {
-		PSD = 10000
-	} else {
-		PSD = 0
+	switch options.Percent {
+	case 0:
+		vMap = SetAsset(0.000, symbol)
+		psd = 10000
+	case 50:
+		psd = 10000
+	default:
+		psd = 0
 	}
 
 	if options.AllowVotes == nil || *options.AllowVotes {
-		AV = OptionsTrue
+		av = OptionsTrue
 	}
 
 	if options.AllowCurationRewards == nil || *options.AllowCurationRewards {
-		ACR = OptionsTrue
+		acr = OptionsTrue
 	}
 
-	if options.BeneficiarieList != nil && len(options.BeneficiarieList) > 0 {
-		var benList []types.Beneficiarie
+	if options.BeneficiaryList != nil && len(options.BeneficiaryList) > 0 {
+		var benList []types.Beneficiary
 		var benef types.CommentPayoutBeneficiaries
-		for _, val := range options.BeneficiarieList {
-			benList = append(benList, types.Beneficiarie{val.Account, val.Weight})
+		for _, val := range options.BeneficiaryList {
+			benList = append(benList, types.Beneficiary{val.Account, val.Weight})
 		}
 		benef.Beneficiaries = benList
-		ext = append(ext, 0)
-		ext = append(ext, benef)
+		ext = append(ext, 0, benef)
 	}
 
 	if len(ext) > 0 {
-		Extens = []interface{}{ext}
+		extens = []interface{}{ext}
 	}
 
 	return &types.CommentOptionsOperation{
 		Author:               username,
 		Permlink:             permlink,
-		MaxAcceptedPayout:    MAP,
-		PercentSteemDollars:  PSD,
-		AllowVotes:           AV,
-		AllowCurationRewards: ACR,
-		Extensions:           Extens,
+		MaxAcceptedPayout:    vMap,
+		PercentSteemDollars:  psd,
+		AllowVotes:           av,
+		AllowCurationRewards: acr,
+		Extensions:           extens,
 	}
 }

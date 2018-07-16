@@ -45,13 +45,13 @@ type POW2Input struct {
 	Nonce         uint64 `json:"nonce"`
 }
 
-type Beneficiarie struct {
+type Beneficiary struct {
 	Account string `json:"account"`
 	Weight  uint16 `json:"weight"`
 }
 
 type CommentPayoutBeneficiaries struct {
-	Beneficiaries []Beneficiarie `json:"beneficiaries"`
+	Beneficiaries []Beneficiary `json:"beneficiaries"`
 }
 
 // struct VoteOperation{}

@@ -42,7 +42,7 @@ type PCOptions struct {
 	Percent              uint16
 	AllowVotes           *bool
 	AllowCurationRewards *bool
-	BeneficiarieList     *[]types.Beneficiarie
+	BeneficiaryList      *[]types.Beneficiary
 }
 
 //ArrTransfer for MultiTransfer function

@@ -12,7 +12,7 @@ import (
 	"math/big"
 )
 
-func (tx *SignedTransaction) SignSingle(privB []byte, data []byte) []byte {
+func (tx *SignedTransaction) SignSingle(privB, data []byte) []byte {
 	privKeyBytes := [32]byte{}
 	copy(privKeyBytes[:], privB)
 
@@ -98,24 +98,24 @@ func signBufferSha256(bufSha256 []byte, privateKey *ecdsa.PrivateKey) []byte { /
 }
 
 func recoverKeyFromSignature(curve *secp256k1.KoblitzCurve, sig *secp256k1.Signature, msg []byte, iter int, doChecks bool) (*secp256k1.PublicKey, error) {
-	Rx := new(big.Int).Mul(curve.Params().N,
+	rx := new(big.Int).Mul(curve.Params().N,
 		new(big.Int).SetInt64(int64(iter/2)))
-	Rx.Add(Rx, sig.R)
-	if Rx.Cmp(curve.Params().P) != -1 {
+	rx.Add(rx, sig.R)
+	if rx.Cmp(curve.Params().P) != -1 {
 		return nil, errors.New("calculated Rx is larger than curve P")
 	}
 
 	// convert 02<Rx> to point R. (step 1.2 and 1.3). If we are on an odd
 	// iteration then 1.6 will be done with -R, so we calculate the other
 	// term when uncompressing the point.
-	Ry, err := decompressPoint(curve, Rx, iter%2 == 1)
+	ry, err := decompressPoint(curve, rx, iter%2 == 1)
 	if err != nil {
 		return nil, err
 	}
 
 	// 1.4 Check n*R is point at infinity
 	if doChecks {
-		nRx, nRy := curve.ScalarMult(Rx, Ry, curve.Params().N.Bytes())
+		nRx, nRy := curve.ScalarMult(rx, ry, curve.Params().N.Bytes())
 		if nRx.Sign() != 0 || nRy.Sign() != 0 {
 			return nil, errors.New("n*R does not equal the point at infinity")
 		}
@@ -134,7 +134,7 @@ func recoverKeyFromSignature(curve *secp256k1.KoblitzCurve, sig *secp256k1.Signa
 	// first term.
 	invrS := new(big.Int).Mul(invr, sig.S)
 	invrS.Mod(invrS, curve.Params().N)
-	sRx, sRy := curve.ScalarMult(Rx, Ry, invrS.Bytes())
+	sRx, sRy := curve.ScalarMult(rx, ry, invrS.Bytes())
 
 	// second term.
 	e.Neg(e)
@@ -145,12 +145,12 @@ func recoverKeyFromSignature(curve *secp256k1.KoblitzCurve, sig *secp256k1.Signa
 
 	// TODO: this would be faster if we did a mult and add in one
 	// step to prevent the jacobian conversion back and forth.
-	Qx, Qy := curve.Add(sRx, sRy, minuseGx, minuseGy)
+	qx, qy := curve.Add(sRx, sRy, minuseGx, minuseGy)
 
 	return &secp256k1.PublicKey{
 		Curve: curve,
-		X:     Qx,
-		Y:     Qy,
+		X:     qx,
+		Y:     qy,
 	}, nil
 }
 

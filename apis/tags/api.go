@@ -202,12 +202,12 @@ func (api *API) GetDiscussionsByPromoted(query *DiscussionQuery) ([]*Content, er
 }
 
 //GetDiscussionsByAuthorBeforeDate api request get_discussions_by_author_before_date
-func (api *API) GetDiscussionsByAuthorBeforeDate(Author, Permlink, Date string, limit uint32, opts ...interface{}) ([]*Content, error) {
+func (api *API) GetDiscussionsByAuthorBeforeDate(author, permlink, date string, limit uint32, opts ...interface{}) ([]*Content, error) {
 	var params []interface{}
 	if len(opts) > 0 {
-		params = []interface{}{Author, Permlink, Date, limit, opts[0]}
+		params = []interface{}{author, permlink, date, limit, opts[0]}
 	} else {
-		params = []interface{}{Author, Permlink, Date, limit}
+		params = []interface{}{author, permlink, date, limit}
 	}
 	raw, err := api.raw("get_discussions_by_author_before_date", params)
 	if err != nil {

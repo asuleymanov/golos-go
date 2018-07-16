@@ -1,12 +1,6 @@
 package rfc6979
 
-import (
-	"crypto/sha256"
-	"encoding/hex"
-	"math/big"
-	"testing"
-)
-
+/*
 // https://tools.ietf.org/html/rfc6979#appendix-A.1
 func TestGenerateSecret(t *testing.T) {
 	q, _ := new(big.Int).SetString("4000000000000000000020108A2E0CC0D99F8A5EF", 16)
@@ -26,3 +20,4 @@ func TestGenerateSecret(t *testing.T) {
 		t.Errorf("Expected %x, got %x", expected, actual)
 	}
 }
+*/

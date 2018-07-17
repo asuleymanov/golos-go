@@ -17,6 +17,7 @@ import (
 	"github.com/asuleymanov/golos-go/transactions"
 	"github.com/asuleymanov/golos-go/transports"
 	"github.com/asuleymanov/golos-go/transports/websocket"
+	"github.com/asuleymanov/golos-go/types"
 )
 
 // Client can be used to access Golos remote APIs.
@@ -26,6 +27,9 @@ type Client struct {
 	cc transports.CallCloser
 
 	AsyncProtocol bool
+
+	// Fixed JSONMetadata added to posting all comments
+	DefaultContentMetadata types.ContentMetadata
 
 	// Database represents database_api.
 	Database *database.API
@@ -132,4 +136,17 @@ func initChainID(str string) (*transactions.Chain, error) {
 		return nil, errors.New("Chain not found")
 	}
 	return &chainID, nil
+}
+
+func (client *Client) GenCommentMetadata(meta *types.ContentMetadata) (*types.ContentMetadata) {
+	if client.DefaultContentMetadata != nil {
+		for k := range client.DefaultContentMetadata {
+			_, ok := (*meta)[k]
+			if !ok {
+				// Set fixed value only if value not exists
+				(*meta)[k] = client.DefaultContentMetadata[k]
+			}
+		}
+	}
+	return meta
 }

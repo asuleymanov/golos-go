@@ -90,7 +90,7 @@ func (client *Client) Comment(username, authorname, ppermlink, body string, o *P
 		Permlink:       permlink,
 		Title:          "",
 		Body:           body,
-		JSONMetadata:   jsonMeta,
+		JSONMetadata:   client.GenCommentMetadata(jsonMeta),
 	}
 	trx = append(trx, tx)
 
@@ -130,7 +130,7 @@ func (client *Client) Post(authorname, title, body, permlink, ptag, postImage st
 		Permlink:       permlink,
 		Title:          title,
 		Body:           body,
-		JSONMetadata:   jsonMeta,
+		JSONMetadata:   client.GenCommentMetadata(jsonMeta),
 	}
 	trx = append(trx, txp)
 

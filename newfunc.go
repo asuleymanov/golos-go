@@ -135,11 +135,11 @@ func GetCommentOptionsOperationNew(username, permlink string, options CommentOpt
 	}
 
 	if options.AllowVotes == nil || *options.AllowVotes {
-		av = OptionsTrue
+		av = true
 	}
 
 	if options.AllowCurationRewards == nil || *options.AllowCurationRewards {
-		acr = OptionsTrue
+		acr = true
 	}
 
 	if options.BeneficiaryList != nil && len(options.BeneficiaryList) > 0 {

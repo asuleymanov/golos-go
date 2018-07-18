@@ -154,11 +154,11 @@ func GetCommentOptionsOperation(username, permlink string, options PCOptions) *t
 	}
 
 	if options.AllowVotes == nil || *options.AllowVotes {
-		av = OptionsTrue
+		av = true
 	}
 
 	if options.AllowCurationRewards == nil || *options.AllowCurationRewards {
-		acr = OptionsTrue
+		acr = true
 	}
 
 	if options.BeneficiaryList != nil && len(*options.BeneficiaryList) > 0 {
@@ -211,7 +211,7 @@ func JSONTrx(v *transactions.SignedTransaction) string {
 func JSONOp(v []types.Operation) string {
 	var tx types.Operations
 
-	tx=append(tx,v...)
+	tx = append(tx, v...)
 
 	ans, _ := types.JSONMarshal(tx)
 	return string(ans)

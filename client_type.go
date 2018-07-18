@@ -4,13 +4,6 @@ import (
 	"github.com/asuleymanov/golos-go/types"
 )
 
-var (
-	//OptionsTrue variable for type PCOptions
-	OptionsTrue bool = true
-	//OptionsFalse variable for type PCOptions
-	OptionsFalse bool = false
-)
-
 //Keys is used as a keystroke for a specific user.
 //Only a few keys can be set.
 type Keys struct {

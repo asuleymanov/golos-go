@@ -711,8 +711,8 @@ func (client *Client) UpdateAccountMetadata(account string, jsonMetadata types.A
 //ChainPropertiesUpdate allows you to set delegate parameters for the network.
 func (client *Client) ChainPropertiesUpdate(owner string, accountcreationfee *types.Asset, maxblocksize uint32, sbdinterestrate uint16, createaccountmingolosfee, createaccountmindelegation *types.Asset, createaccountdelegationtime uint32, mindelegation *types.Asset) (*OperResp, error) {
 	var trx []types.Operation
-var props []interface{}
-	
+	var props []interface{}
+
 	chp := types.ChainProperties{
 		AccountCreationFee:          accountcreationfee,
 		MaximumBlockSize:            maxblocksize,
@@ -727,7 +727,7 @@ var props []interface{}
 	props = append(props, chp)
 
 	tx := &types.ChainPropertiesUpdateOperation{
-		Owner: "asl1",
+		Owner: owner,
 		Props: props,
 	}
 

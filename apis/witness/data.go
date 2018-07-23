@@ -6,9 +6,13 @@ import (
 
 //ChainProperties
 type ChainProperties struct {
-	AccountCreationFee *types.Asset `json:"account_creation_fee"`
-	MaximumBlockSize   *types.Int   `json:"maximum_block_size"`
-	SbdInterestRate    *types.Int   `json:"sbd_interest_rate"`
+	AccountCreationFee          *types.Asset `json:"account_creation_fee"`
+	MaximumBlockSize            uint32       `json:"maximum_block_size"`
+	SBDInterestRate             uint16       `json:"sbd_interest_rate"`
+	CreateAccountMinGolosFee    *types.Asset `json:"create_account_min_golos_fee"`
+	CreateAccountMinDelegation  *types.Asset `json:"create_account_min_delegation"`
+	CreateAccountDelegationTime uint32       `json:"create_account_delegation_time"`
+	MinDelegation               *types.Asset `json:"min_delegation"`
 }
 
 //CurrentMedianHistoryPrice

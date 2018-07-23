@@ -203,12 +203,12 @@ func (client *Client) GetPostBandwidth(username string) (int64, error) {
 	return int64(newPostBandwidth), nil
 }
 
-func JSONTrx(v *transactions.SignedTransaction) string {
+func JSONTrxString(v *transactions.SignedTransaction) string {
 	ans, _ := types.JSONMarshal(v)
 	return string(ans)
 }
 
-func JSONOp(v []types.Operation) string {
+func JSONOpString(v []types.Operation) string {
 	var tx types.Operations
 
 	tx = append(tx, v...)

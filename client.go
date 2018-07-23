@@ -138,7 +138,7 @@ func initChainID(str string) (*transactions.Chain, error) {
 	return &chainID, nil
 }
 
-func (client *Client) GenCommentMetadata(meta *types.ContentMetadata) (*types.ContentMetadata) {
+func (client *Client) GenCommentMetadata(meta *types.ContentMetadata) *types.ContentMetadata {
 	if client.DefaultContentMetadata != nil {
 		for k := range client.DefaultContentMetadata {
 			_, ok := (*meta)[k]

@@ -57,7 +57,7 @@ func (client *Client) SendTrx(username string, strx []types.Operation) (*BResp, 
 		resp, err = client.NetworkBroadcast.BroadcastTransactionSynchronous(tx.Transaction)
 	}
 
-	bresp.JSONTrx = JSONTrx(tx)
+	bresp.JSONTrx = JSONTrxString(tx)
 
 	if err != nil {
 		return &bresp, err

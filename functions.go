@@ -547,6 +547,10 @@ func (client *Client) FeedPublish(publisher string, base, quote *types.Asset) (*
 func (client *Client) WitnessUpdate(owner, url, blocksigningkey string) (*OperResp, error) {
 	var trx []types.Operation
 
+	if url == "" {
+		url = "https://golos.io/"
+	}
+
 	tx := &types.WitnessUpdateOperation{
 		Owner:           owner,
 		URL:             url,

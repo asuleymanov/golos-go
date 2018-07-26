@@ -106,9 +106,8 @@ func (client *Client) Comment(username, authorname, ppermlink, body string, o *P
 func (client *Client) Post(authorname, title, body, permlink, ptag, postImage string, tags []string, o *PCOptions) (*OperResp, error) {
 	if permlink == "" {
 		permlink = translit.EncodeTitle(title)
-	} else {
-		permlink = translit.EncodeTitle(permlink)
-	}
+	} 
+	
 	tag := translit.EncodeTags(tags)
 	if ptag == "" {
 		ptag = translit.EncodeTag(tags[0])

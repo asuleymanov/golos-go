@@ -69,8 +69,8 @@ type Client struct {
 
 // NewClient creates a new RPC client that use the given CallCloser internally.
 // Initialize only server present API. Absent API initialized as nil value.
-func NewClient(url []string, chain string) (*Client, error) {
-	call, err := initClient(url)
+func NewClient(url []string, chain string, options ...websocket.Option) (*Client, error) {
+	call, err := initClient(url, options...)
 	if err != nil {
 		return nil, err
 	}
@@ -114,9 +114,9 @@ func (client *Client) Close() error {
 	return client.cc.Close()
 }
 
-func initClient(url []string) (*websocket.Transport, error) {
+func initClient(url []string, options ...websocket.Option) (*websocket.Transport, error) {
 	// Инициализация Websocket
-	t, err := websocket.NewTransport(url)
+	t, err := websocket.NewTransport(url, options...)
 	if err != nil {
 		return nil, err
 	}

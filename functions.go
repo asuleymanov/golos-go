@@ -756,7 +756,7 @@ func (client *Client) SetWithdrawVestingRoute(from, to string, percent uint16, a
 }
 
 //ProposalCreate allows you to create a list of operations and send it to the block of the sign for signing by those who are mentioned in the transactions.
-func (client *Client) ProposalCreate(author, title, memo string, listop []types.Operation, reviewperiod int64) (*OperResp, error) {
+/*func (client *Client) ProposalCreate(author, title, memo string, listop []types.Operation, reviewperiod int64) (*OperResp, error) {
 	var trx []types.Operation
 	var op types.Operations
 
@@ -778,7 +778,7 @@ func (client *Client) ProposalCreate(author, title, memo string, listop []types.
 	trx = append(trx, tx)
 	resp, err := client.SendTrx(author, trx)
 	return &OperResp{NameOper: "ProposalCreate", Bresp: resp}, err
-}
+}*/
 
 //ProposalDelete allows you to delete a previously created list of operations.
 func (client *Client) ProposalDelete(author, title, requester string) (*OperResp, error) {

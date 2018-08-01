@@ -54,6 +54,8 @@ type CommentPayoutBeneficiaries struct {
 	Beneficiaries []Beneficiary `json:"beneficiaries"`
 }
 
+type ProposalOperations []interface{}
+
 // struct VoteOperation{}
 type VoteOperation struct {
 	Voter    string `json:"voter"`
@@ -725,13 +727,13 @@ func (op *AccountMetadataOperation) Data() interface{} {
 
 // struct ProposalCreateOperation{}
 type ProposalCreateOperation struct {
-	Author             string        `json:"author"`
-	Title              string        `json:"title"`
-	Memo               string        `json:"memo"`
-	ProposedOperations []interface{} `json:"proposed_operations"`
-	ExpirationTime     *Time         `json:"expiration_time"`
-	ReviewPeriodTime   *Time         `json:"review_period_time"`
-	Extensions         []interface{} `json:"extensions"`
+	Author             string             `json:"author"`
+	Title              string             `json:"title"`
+	Memo               string             `json:"memo"`
+	ProposedOperations ProposalOperations `json:"proposed_operations"`
+	ExpirationTime     *Time              `json:"expiration_time"`
+	ReviewPeriodTime   *Time              `json:"review_period_time"`
+	Extensions         []interface{}      `json:"extensions"`
 }
 
 func (op *ProposalCreateOperation) Type() OpType {

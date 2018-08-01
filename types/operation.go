@@ -7,7 +7,6 @@ import (
 	"reflect"
 
 	// Vendor
-	"github.com/asuleymanov/golos-go/encoding/transaction"
 	"github.com/pkg/errors"
 )
 
@@ -173,14 +172,4 @@ func (op *operationTuple) UnmarshalJSON(data []byte) error {
 	op.Type = opType
 	op.Data = opData
 	return nil
-}
-
-func (ops Operations) MarshalTransaction(encoder *transaction.Encoder) error {
-	enc := transaction.NewRollingEncoder(encoder)
-
-	for _, val := range ops {
-		enc.Encode(val)
-	}
-
-	return enc.Err()
 }

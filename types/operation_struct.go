@@ -54,8 +54,6 @@ type CommentPayoutBeneficiaries struct {
 	Beneficiaries []Beneficiary `json:"beneficiaries"`
 }
 
-type ProposalOperations []interface{}
-
 // struct VoteOperation{}
 type VoteOperation struct {
 	Voter    string `json:"voter"`

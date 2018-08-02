@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 )
 
+type ProposalOperations []ProposalOperation
+
 type ProposalOperation struct {
     Operation Operation `json:"op"`
     OperationType          OpType    `json:"-"`

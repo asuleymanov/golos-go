@@ -674,12 +674,9 @@ func (client *Client) AccountCreateDelegation(creator, newAccountName, password 
 		Extensions:     []interface{}{},
 	}
 
-	log.Println(tx)
-	return nil, nil
-
-	/*trx = append(trx, tx)
+	trx = append(trx, tx)
 	resp, err := client.SendTrx(creator, trx)
-	return &OperResp{NameOper: "AccountCreateDelegation", Bresp: resp}, err*/
+	return &OperResp{NameOper: "AccountCreateDelegation", Bresp: resp}, err
 }
 
 //Delegation allows you to delegate a number of GESTS to another user.

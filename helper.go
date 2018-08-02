@@ -216,3 +216,13 @@ func JSONOpString(v []types.Operation) string {
 	ans, _ := types.JSONMarshal(tx)
 	return string(ans)
 }
+
+func GenerateProposalOperation(ops []types.Operation) types.ProposalOperations {
+	var ans types.ProposalOperations
+	
+	for _,val:=range ops {
+		ans=append(ans,types.ProposalOperation{Operation: val,OperationType: val.Type()})
+	}
+
+	return ans
+}

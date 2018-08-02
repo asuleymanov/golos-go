@@ -755,18 +755,17 @@ func (client *Client) SetWithdrawVestingRoute(from, to string, percent uint16, a
 //ProposalCreate allows you to create a list of operations and send it to the block of the sign for signing by those who are mentioned in the transactions.
 /*func (client *Client) ProposalCreate(author, title, memo string, listop []types.Operation, reviewperiod int64) (*OperResp, error) {
 	var trx []types.Operation
-	var op types.Operations
 
 	expiration := time.Now().Add(3600000 * time.Second).UTC()
 	reviewperiodtime := time.Now().Add(time.Duration(reviewperiod) * time.Minute).UTC()
 
-	op = append(op, listop...)
+	proposedOperations :=GenerateProposalOperation(listop)
 
 	tx := &types.ProposalCreateOperation{
 		Author:             author,
 		Title:              title,
 		Memo:               memo,
-		ProposedOperations: op,
+		ProposedOperations: proposedOperations,
 		ExpirationTime:     &types.Time{&expiration},
 		ReviewPeriodTime:   &types.Time{&reviewperiodtime},
 		Extensions:         []interface{}{},

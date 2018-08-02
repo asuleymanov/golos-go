@@ -629,7 +629,7 @@ func (client *Client) AccountCreateDelegation(creator, newAccountName, password 
 		Public  string
 	}
 
-	//var trx []types.Operation
+	var trx []types.Operation
 	var listKeys = make(map[string]Keys)
 
 	empty := map[string]int64{}

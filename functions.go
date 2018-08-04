@@ -18,7 +18,10 @@ import (
 	"github.com/asuleymanov/golos-go/types"
 )
 
-const fdt = `"20060102t150405"`
+const (
+	fdt = `"20060102t150405"`
+	permlinkRegenCounter = 3
+)
 
 //Vote for publication
 func (client *Client) Vote(username, authorname, permlink string, weight int) (*OperResp, error) {
@@ -121,23 +124,37 @@ func (client *Client) Post(authorname, title, body, permlink, ptag, postImage st
 		"lib":   "golos-go",
 	}
 
-	var trx []types.Operation
-	txp := &types.CommentOperation{
-		ParentAuthor:   "",
-		ParentPermlink: ptag,
-		Author:         authorname,
-		Permlink:       permlink,
-		Title:          title,
-		Body:           body,
-		JSONMetadata:   client.GenCommentMetadata(jsonMeta),
-	}
-	trx = append(trx, txp)
+	counter := permlinkRegenCounter
+	var resp *BResp
+	var err error
+	for {
+		var trx []types.Operation
+		txp := &types.CommentOperation{
+			ParentAuthor:   "",
+			ParentPermlink: ptag,
+			Author:         authorname,
+			Permlink:       permlink,
+			Title:          title,
+			Body:           body,
+			JSONMetadata:   client.GenCommentMetadata(jsonMeta),
+		}
+		trx = append(trx, txp)
 
-	if o != nil {
-		trx = append(trx, GetCommentOptionsOperation(authorname, permlink, *o))
+		if o != nil {
+			trx = append(trx, GetCommentOptionsOperation(authorname, permlink, *o))
+		}
+
+		resp, err = client.SendTrx(authorname, trx)
+		if counter <= 0 || err == nil || !strings.Contains(err.Error(), "The permlink of a comment cannot change") {
+			break
+		}
+
+		times, _ := strconv.Unquote(time.Now().Add(30 * time.Second).UTC().Format(fdt))
+		permlink = permlink + "-" + times
+
+		counter--
 	}
 
-	resp, err := client.SendTrx(authorname, trx)
 	return &OperResp{NameOper: "Post", PermLink: permlink, Bresp: resp}, err
 }
 

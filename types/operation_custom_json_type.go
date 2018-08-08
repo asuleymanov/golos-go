@@ -6,21 +6,26 @@ import (
 	"reflect"
 )
 
-// struct FollowOperation{}
+//FollowOperation the structure for the operation CustomJSONOperation.
 type FollowOperation struct {
 	Follower  string   `json:"follower"`
 	Following string   `json:"following"`
 	What      []string `json:"what"`
 }
 
-// struct ReblogOperation{}
+//ReblogOperation the structure for the operation CustomJSONOperation.
 type ReblogOperation struct {
 	Account  string `json:"account"`
 	Author   string `json:"author"`
 	Permlink string `json:"permlink"`
 }
 
-// struct PrivateMessageOperation{}
+//LoginOperation the structure for the operation CustomJSONOperation.
+type LoginOperation struct {
+	Account string `json:"account"`
+}
+
+//PrivateMessageOperation the structure for the operation CustomJSONOperation.
 type PrivateMessageOperation struct {
 	From             string `json:"from"`
 	To               string `json:"to"`
@@ -41,6 +46,8 @@ func MarshalCustomJSON(v interface{}) (string, error) {
 		tmp = append(tmp, TypeFollow)
 	case "ReblogOperation":
 		tmp = append(tmp, TypeReblog)
+	case "LoginOperation":
+		tmp = append(tmp, TypeLogin)
 	case "PrivateMessageOperation":
 		tmp = append(tmp, TypePrivateMessage)
 	default:

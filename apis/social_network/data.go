@@ -4,18 +4,25 @@ import (
 	"github.com/asuleymanov/golos-go/types"
 )
 
-//DiscussionQuery
-type DiscussionQuery struct {
-	Tag            string   `json:"tag"`
-	Limit          uint32   `json:"limit"`
-	FilterTags     []string `json:"filter_tags"`
-	StartAuthor    string   `json:"start_author,omitempty"`
-	StartPermlink  string   `json:"start_permlink,omitempty"`
-	ParentAuthor   string   `json:"parent_author,omitempty"`
-	ParentPermlink string   `json:"parent_permlink"`
+//Votes structure for the GetAccountVotes function.
+type Votes struct {
+	Authorperm string      `json:"authorperm"`
+	Weight     *types.Int  `json:"weight"`
+	Rshares    *types.Int  `json:"rshares"`
+	Percent    uint        `json:"percent"`
+	Time       *types.Time `json:"time"`
 }
 
-//Content
+//VoteState structure for the GetActiveVotes function.
+type VoteState struct {
+	Voter   string      `json:"voter"`
+	Weight  *types.Int  `json:"weight"`
+	Rshares *types.Int  `json:"rshares"`
+	Percent int         `json:"percent"`
+	Time    *types.Time `json:"time"`
+}
+
+//Content structure for the GetContent, GetContentReplies and GetRepliesByLastUpdate function.
 type Content struct {
 	ID                      *types.ID              `json:"id"`
 	Author                  string                 `json:"author"`
@@ -65,34 +72,7 @@ type Content struct {
 	RebloggedBy             []interface{}          `json:"reblogged_by"`
 }
 
+//IsStory operation that determines that Content is a publication.
 func (content *Content) IsStory() bool {
 	return content.ParentAuthor == ""
-}
-
-//Categories
-type Categories struct {
-	ID           *types.Int   `json:"id"`
-	Name         string       `json:"name"`
-	AbsRshares   string       `json:"abs_rshares"`
-	TotalPayouts *types.Asset `json:"total_payouts"`
-	Discussions  *types.Int   `json:"discussions"`
-	LastUpdate   string       `json:"last_update"`
-}
-
-//VoteState
-type VoteState struct {
-	Voter   string      `json:"voter"`
-	Weight  *types.Int  `json:"weight"`
-	Rshares *types.Int  `json:"rshares"`
-	Percent int         `json:"percent"`
-	Time    *types.Time `json:"time"`
-}
-
-//Votes
-type Votes struct {
-	Authorperm string      `json:"authorperm"`
-	Weight     *types.Int  `json:"weight"`
-	Rshares    *types.Int  `json:"rshares"`
-	Percent    uint        `json:"percent"`
-	Time       *types.Time `json:"time"`
 }

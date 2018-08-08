@@ -10,10 +10,12 @@ import (
 
 const apiID = "network_broadcast_api"
 
+//API plug-in structure
 type API struct {
 	caller transports.Caller
 }
 
+//NewAPI plug-in initialization
 func NewAPI(caller transports.Caller) *API {
 	return &API{caller}
 }
@@ -22,29 +24,13 @@ func (api *API) call(method string, params, resp interface{}) error {
 	return api.caller.Call("call", []interface{}{apiID, method, params}, resp)
 }
 
-/*
- * broadcast_transaction
- */
-
+//BroadcastTransaction api request broadcast_transaction
 func (api *API) BroadcastTransaction(tx *types.Transaction) error {
 	params := []interface{}{tx}
-	return api.call("broadcast_transaction", params, nil)
+	return errors.Wrapf(api.call("broadcast_transaction", params, nil), "")
 }
 
-/*
- * broadcast_transaction_synchronous
- */
-
-func (api *API) BroadcastTransactionSynchronousRaw(tx *types.Transaction) (*json.RawMessage, error) {
-	params := []interface{}{tx}
-
-	var resp json.RawMessage
-	if err := api.call("broadcast_transaction_synchronous", params, &resp); err != nil {
-		return nil, err
-	}
-	return &resp, nil
-}
-
+//BroadcastResponse structure for the BroadcastTransactionSynchronous function
 type BroadcastResponse struct {
 	ID       string `json:"id"`
 	BlockNum uint32 `json:"block_num"`
@@ -52,15 +38,18 @@ type BroadcastResponse struct {
 	Expired  bool   `json:"expired"`
 }
 
+//BroadcastTransactionSynchronous api request broadcast_transaction_synchronous
 func (api *API) BroadcastTransactionSynchronous(tx *types.Transaction) (*BroadcastResponse, error) {
-	raw, err := api.BroadcastTransactionSynchronousRaw(tx)
+	params := []interface{}{tx}
+	var raw json.RawMessage
+	err := api.call("broadcast_transaction_synchronous", params, &raw)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(err, "")
 	}
 
 	var resp BroadcastResponse
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "failed to unmarshal BroadcastResponse: %v", string(*raw))
+	if err := json.Unmarshal([]byte(raw), &resp); err != nil {
+		return nil, errors.Wrapf(err, "failed to unmarshal BroadcastResponse: %v", string(raw))
 	}
 	return &resp, nil
 }

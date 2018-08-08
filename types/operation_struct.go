@@ -5,11 +5,14 @@ import (
 )
 
 // Add-on struct
+
+//ExchRate is an additional structure used by other structures.
 type ExchRate struct {
 	Base  *Asset `json:"base"`
 	Quote *Asset `json:"quote"`
 }
 
+//POW is an additional structure used by other structures.
 type POW struct {
 	Worker    string `json:"worker"`
 	Input     string `json:"input"`
@@ -17,12 +20,14 @@ type POW struct {
 	Work      string `json:"work"`
 }
 
+//ChainPropertiesOLD is an additional structure used by other structures.
 type ChainPropertiesOLD struct {
 	AccountCreationFee *Asset `json:"account_creation_fee"`
 	MaximumBlockSize   uint32 `json:"maximum_block_size"`
 	SBDInterestRate    uint16 `json:"sbd_interest_rate"`
 }
 
+//ChainProperties is an additional structure used by other structures.
 type ChainProperties struct {
 	AccountCreationFee          *Asset `json:"account_creation_fee"`
 	MaximumBlockSize            uint32 `json:"maximum_block_size"`
@@ -33,28 +38,32 @@ type ChainProperties struct {
 	MinDelegation               *Asset `json:"min_delegation"`
 }
 
+//Authority is an additional structure used by other structures.
 type Authority struct {
 	AccountAuths    StringInt64Map `json:"account_auths"`
 	KeyAuths        StringInt64Map `json:"key_auths"`
 	WeightThreshold uint32         `json:"weight_threshold"`
 }
 
+//POW2Input is an additional structure used by other structures.
 type POW2Input struct {
 	WorkerAccount string `json:"worker_account"`
 	PrevBlock     []byte `json:"prev_block"`
 	Nonce         uint64 `json:"nonce"`
 }
 
+//Beneficiary is an additional structure used by other structures.
 type Beneficiary struct {
 	Account string `json:"account"`
 	Weight  uint16 `json:"weight"`
 }
 
+//CommentPayoutBeneficiaries is an additional structure used by other structures.
 type CommentPayoutBeneficiaries struct {
 	Beneficiaries []Beneficiary `json:"beneficiaries"`
 }
 
-// struct VoteOperation{}
+//VoteOperation represents vote operation data.
 type VoteOperation struct {
 	Voter    string `json:"voter"`
 	Author   string `json:"author"`
@@ -62,15 +71,17 @@ type VoteOperation struct {
 	Weight   Int16  `json:"weight"`
 }
 
+//Type function that defines the type of operation VoteOperation.
 func (op *VoteOperation) Type() OpType {
 	return TypeVote
 }
 
+//Data returns the operation data VoteOperation.
 func (op *VoteOperation) Data() interface{} {
 	return op
 }
 
-// struct CommentOperation{}
+//CommentOperation represents comment operation data.
 type CommentOperation struct {
 	ParentAuthor   string           `json:"parent_author"`
 	ParentPermlink string           `json:"parent_permlink"`
@@ -81,19 +92,22 @@ type CommentOperation struct {
 	JSONMetadata   *ContentMetadata `json:"json_metadata"`
 }
 
+//Type function that defines the type of operation CommentOperation.
 func (op *CommentOperation) Type() OpType {
 	return TypeComment
 }
 
+//Data returns the operation data CommentOperation.
 func (op *CommentOperation) Data() interface{} {
 	return op
 }
 
+//IsStoryOperation function specifies the type of publication.
 func (op *CommentOperation) IsStoryOperation() bool {
 	return op.ParentAuthor == ""
 }
 
-// struct TransferOperation{}
+//TransferOperation represents transfer operation data.
 type TransferOperation struct {
 	From   string `json:"from"`
 	To     string `json:"to"`
@@ -101,44 +115,50 @@ type TransferOperation struct {
 	Memo   string `json:"memo"`
 }
 
+//Type function that defines the type of operation TransferOperation.
 func (op *TransferOperation) Type() OpType {
 	return TypeTransfer
 }
 
+//Data returns the operation data TransferOperation.
 func (op *TransferOperation) Data() interface{} {
 	return op
 }
 
-// struct TransferToVestingOperation{}
+//TransferToVestingOperation represents transfer_to_vesting operation data.
 type TransferToVestingOperation struct {
 	From   string `json:"from"`
 	To     string `json:"to"`
 	Amount *Asset `json:"amount"`
 }
 
+//Type function that defines the type of operation TransferToVestingOperation.
 func (op *TransferToVestingOperation) Type() OpType {
 	return TypeTransferToVesting
 }
 
+//Data returns the operation data TransferToVestingOperation.
 func (op *TransferToVestingOperation) Data() interface{} {
 	return op
 }
 
-// struct WithdrawVestingOperation{}
+//WithdrawVestingOperation represents withdraw_vesting operation data.
 type WithdrawVestingOperation struct {
 	Account       string `json:"account"`
 	VestingShares *Asset `json:"vesting_shares"`
 }
 
+//Type function that defines the type of operation WithdrawVestingOperation.
 func (op *WithdrawVestingOperation) Type() OpType {
 	return TypeWithdrawVesting
 }
 
+//Data returns the operation data WithdrawVestingOperation.
 func (op *WithdrawVestingOperation) Data() interface{} {
 	return op
 }
 
-// struct LimitOrderCreateOperation{}
+//LimitOrderCreateOperation represents limit_order_create operation data.
 type LimitOrderCreateOperation struct {
 	Owner        string `json:"owner"`
 	OrderID      uint32 `json:"orderid"`
@@ -148,58 +168,66 @@ type LimitOrderCreateOperation struct {
 	Expiration   *Time  `json:"expiration"`
 }
 
+//Type function that defines the type of operation LimitOrderCreateOperation.
 func (op *LimitOrderCreateOperation) Type() OpType {
 	return TypeLimitOrderCreate
 }
 
+//Data returns the operation data LimitOrderCreateOperation.
 func (op *LimitOrderCreateOperation) Data() interface{} {
 	return op
 }
 
-// struct LimitOrderCancelOperation{}
+//LimitOrderCancelOperation represents limit_order_cancel operation data.
 type LimitOrderCancelOperation struct {
 	Owner   string `json:"owner"`
 	OrderID uint32 `json:"orderid"`
 }
 
+//Type function that defines the type of operation LimitOrderCancelOperation.
 func (op *LimitOrderCancelOperation) Type() OpType {
 	return TypeLimitOrderCancel
 }
 
+//Data returns the operation data LimitOrderCancelOperation.
 func (op *LimitOrderCancelOperation) Data() interface{} {
 	return op
 }
 
-// struct FeedPublishOperation{}
+//FeedPublishOperation represents feed_publish operation data.
 type FeedPublishOperation struct {
 	Publisher    string    `json:"publisher"`
 	ExchangeRate *ExchRate `json:"exchange_rate"`
 }
 
+//Type function that defines the type of operation FeedPublishOperation.
 func (op *FeedPublishOperation) Type() OpType {
 	return TypeFeedPublish
 }
 
+//Data returns the operation data FeedPublishOperation.
 func (op *FeedPublishOperation) Data() interface{} {
 	return op
 }
 
-// struct ConvertOperation{}
+//ConvertOperation represents convert operation data.
 type ConvertOperation struct {
 	Owner     string `json:"owner"`
 	RequestID uint32 `json:"requestid"`
 	Amount    *Asset `json:"amount"`
 }
 
+//Type function that defines the type of operation ConvertOperation.
 func (op *ConvertOperation) Type() OpType {
 	return TypeConvert
 }
 
+//Data returns the operation data ConvertOperation.
 func (op *ConvertOperation) Data() interface{} {
 	return op
 }
 
-// struct AccountCreateOperation{}
+//AccountCreateOperation represents account_create operation data.
 type AccountCreateOperation struct {
 	Fee            *Asset           `json:"fee"`
 	Creator        string           `json:"creator"`
@@ -211,15 +239,17 @@ type AccountCreateOperation struct {
 	JSONMetadata   *AccountMetadata `json:"json_metadata"`
 }
 
+//Type function that defines the type of operation AccountCreateOperation.
 func (op *AccountCreateOperation) Type() OpType {
 	return TypeAccountCreate
 }
 
+//Data returns the operation data AccountCreateOperation.
 func (op *AccountCreateOperation) Data() interface{} {
 	return op
 }
 
-// struct AccountUpdateOperation{}
+//AccountUpdateOperation represents account_update operation data.
 type AccountUpdateOperation struct {
 	Account      string           `json:"account"`
 	Owner        *Authority       `json:"owner"`
@@ -229,15 +259,17 @@ type AccountUpdateOperation struct {
 	JSONMetadata *AccountMetadata `json:"json_metadata"`
 }
 
+//Type function that defines the type of operation AccountUpdateOperation.
 func (op *AccountUpdateOperation) Type() OpType {
 	return TypeAccountUpdate
 }
 
+//Data returns the operation data AccountUpdateOperation.
 func (op *AccountUpdateOperation) Data() interface{} {
 	return op
 }
 
-// struct WitnessUpdateOperation{}
+//WitnessUpdateOperation represents witness_update operation data.
 type WitnessUpdateOperation struct {
 	Owner           string              `json:"owner"`
 	URL             string              `json:"url"`
@@ -246,44 +278,50 @@ type WitnessUpdateOperation struct {
 	Fee             *Asset              `json:"fee"`
 }
 
+//Type function that defines the type of operation WitnessUpdateOperation.
 func (op *WitnessUpdateOperation) Type() OpType {
 	return TypeWitnessUpdate
 }
 
+//Data returns the operation data WitnessUpdateOperation.
 func (op *WitnessUpdateOperation) Data() interface{} {
 	return op
 }
 
-// struct AccountWitnessVoteOperation{}
+//AccountWitnessVoteOperation represents account_witness_vote operation data.
 type AccountWitnessVoteOperation struct {
 	Account string `json:"account"`
 	Witness string `json:"witness"`
 	Approve bool   `json:"approve"`
 }
 
+//Type function that defines the type of operation AccountWitnessVoteOperation.
 func (op *AccountWitnessVoteOperation) Type() OpType {
 	return TypeAccountWitnessVote
 }
 
+//Data returns the operation data AccountWitnessVoteOperation.
 func (op *AccountWitnessVoteOperation) Data() interface{} {
 	return op
 }
 
-// struct AccountWitnessProxyOperation{}
+//AccountWitnessProxyOperation represents account_witness_proxy operation data.
 type AccountWitnessProxyOperation struct {
 	Account string `json:"account"`
 	Proxy   string `json:"proxy"`
 }
 
+//Type function that defines the type of operation AccountWitnessProxyOperation.
 func (op *AccountWitnessProxyOperation) Type() OpType {
 	return TypeAccountWitnessProxy
 }
 
+//Data returns the operation data AccountWitnessProxyOperation.
 func (op *AccountWitnessProxyOperation) Data() interface{} {
 	return op
 }
 
-// struct POWOperation{}
+//POWOperation represents pow operation data.
 type POWOperation struct {
 	WorkerAccount string           `json:"worker_account"`
 	BlockID       string           `json:"block_id"`
@@ -292,58 +330,67 @@ type POWOperation struct {
 	Props         *ChainProperties `json:"props"`
 }
 
+//Type function that defines the type of operation POWOperation.
 func (op *POWOperation) Type() OpType {
 	return TypePOW
 }
 
+//Data returns the operation data POWOperation.
 func (op *POWOperation) Data() interface{} {
 	return op
 }
 
-// struct CustomOperation{}
+//CustomOperation represents custom operation data.
 type CustomOperation struct {
 	RequiredAuths []string `json:"required_auths"`
 	ID            uint16   `json:"id"`
 	Datas         string   `json:"data"`
 }
 
+//Type function that defines the type of operation CustomOperation.
 func (op *CustomOperation) Type() OpType {
 	return TypeCustom
 }
 
+//Data returns the operation data CustomOperation.
 func (op *CustomOperation) Data() interface{} {
 	return op
 }
 
-// struct ReportOverProductionOperation{}
+//ReportOverProductionOperation represents report_over_production operation data.
 type ReportOverProductionOperation struct {
 	Reporter string `json:"reporter"`
 }
 
+//Type function that defines the type of operation ReportOverProductionOperation.
 func (op *ReportOverProductionOperation) Type() OpType {
 	return TypeReportOverProduction
 }
 
+//Data returns the operation data ReportOverProductionOperation.
 func (op *ReportOverProductionOperation) Data() interface{} {
 	return op
 }
 
-// struct DeleteCommentOperation{}
+//DeleteCommentOperation represents delete_comment operation data.
 type DeleteCommentOperation struct {
 	Author   string `json:"author"`
 	Permlink string `json:"permlink"`
 }
 
+//Type function that defines the type of operation DeleteCommentOperation.
 func (op *DeleteCommentOperation) Type() OpType {
 	return TypeDeleteComment
 }
 
+//Data returns the operation data DeleteCommentOperation.
 func (op *DeleteCommentOperation) Data() interface{} {
 	return op
 }
 
 // struct CustomJSONOperation{} in to file operation_custom_json.go
-// struct CommentOptionsOperation{}
+
+//CommentOptionsOperation represents comment_options operation data.
 type CommentOptionsOperation struct {
 	Author               string        `json:"author"`
 	Permlink             string        `json:"permlink"`
@@ -354,15 +401,17 @@ type CommentOptionsOperation struct {
 	Extensions           []interface{} `json:"extensions"`
 }
 
+//Type function that defines the type of operation CommentOptionsOperation.
 func (op *CommentOptionsOperation) Type() OpType {
 	return TypeCommentOptions
 }
 
+//Data returns the operation data CommentOptionsOperation.
 func (op *CommentOptionsOperation) Data() interface{} {
 	return op
 }
 
-// struct SetWithdrawVestingRouteOperation{}
+//SetWithdrawVestingRouteOperation represents set_withdraw_vesting_route operation data.
 type SetWithdrawVestingRouteOperation struct {
 	FromAccount string `json:"from_account"`
 	ToAccount   string `json:"to_account"`
@@ -370,15 +419,17 @@ type SetWithdrawVestingRouteOperation struct {
 	AutoVest    bool   `json:"auto_vest"`
 }
 
+//Type function that defines the type of operation SetWithdrawVestingRouteOperation.
 func (op *SetWithdrawVestingRouteOperation) Type() OpType {
 	return TypeSetWithdrawVestingRoute
 }
 
+//Data returns the operation data SetWithdrawVestingRouteOperation.
 func (op *SetWithdrawVestingRouteOperation) Data() interface{} {
 	return op
 }
 
-// struct LimitOrderCreate2Operation{}
+//LimitOrderCreate2Operation represents limit_order_create2 operation data.
 type LimitOrderCreate2Operation struct {
 	Owner        string    `json:"owner"`
 	OrderID      uint32    `json:"orderid"`
@@ -388,44 +439,50 @@ type LimitOrderCreate2Operation struct {
 	Expiration   *Time     `json:"expiration"`
 }
 
+//Type function that defines the type of operation LimitOrderCreate2Operation.
 func (op *LimitOrderCreate2Operation) Type() OpType {
 	return TypeLimitOrderCreate2
 }
 
+//Data returns the operation data LimitOrderCreate2Operation.
 func (op *LimitOrderCreate2Operation) Data() interface{} {
 	return op
 }
 
-// struct ChallengeAuthorityOperation{}
+//ChallengeAuthorityOperation represents challenge_authority operation data.
 type ChallengeAuthorityOperation struct {
 	Challenger   string `json:"challenger"`
 	Challenged   string `json:"challenged"`
 	RequireOwner bool   `json:"require_owner"`
 }
 
+//Type function that defines the type of operation ChallengeAuthorityOperation.
 func (op *ChallengeAuthorityOperation) Type() OpType {
 	return TypeChallengeAuthority
 }
 
+//Data returns the operation data ChallengeAuthorityOperation.
 func (op *ChallengeAuthorityOperation) Data() interface{} {
 	return op
 }
 
-// struct ProveAuthorityOperation{}
+//ProveAuthorityOperation represents prove_authority operation data.
 type ProveAuthorityOperation struct {
 	Challenged   string `json:"challenged"`
 	RequireOwner bool   `json:"require_owner"`
 }
 
+//Type function that defines the type of operation ProveAuthorityOperation.
 func (op *ProveAuthorityOperation) Type() OpType {
 	return TypeProveAuthority
 }
 
+//Data returns the operation data ProveAuthorityOperation.
 func (op *ProveAuthorityOperation) Data() interface{} {
 	return op
 }
 
-// struct RequestAccountRecoveryOperation{}
+//RequestAccountRecoveryOperation represents request_account_recovery operation data.
 type RequestAccountRecoveryOperation struct {
 	RecoveryAccount   string        `json:"recovery_account"`
 	AccountToRecover  string        `json:"account_to_recover"`
@@ -433,15 +490,17 @@ type RequestAccountRecoveryOperation struct {
 	Extensions        []interface{} `json:"extensions"`
 }
 
+//Type function that defines the type of operation RequestAccountRecoveryOperation.
 func (op *RequestAccountRecoveryOperation) Type() OpType {
 	return TypeRequestAccountRecovery
 }
 
+//Data returns the operation data RequestAccountRecoveryOperation.
 func (op *RequestAccountRecoveryOperation) Data() interface{} {
 	return op
 }
 
-// struct RecoverAccountOperation{}
+//RecoverAccountOperation represents recover_account operation data.
 type RecoverAccountOperation struct {
 	AccountToRecover     string        `json:"account_to_recover"`
 	NewOwnerAuthority    *Authority    `json:"new_owner_authority"`
@@ -449,30 +508,34 @@ type RecoverAccountOperation struct {
 	Extensions           []interface{} `json:"extensions"`
 }
 
+//Type function that defines the type of operation RecoverAccountOperation.
 func (op *RecoverAccountOperation) Type() OpType {
 	return TypeRecoverAccount
 }
 
+//Data returns the operation data RecoverAccountOperation.
 func (op *RecoverAccountOperation) Data() interface{} {
 	return op
 }
 
-// struct ChangeRecoveryAccountOperation{}
+//ChangeRecoveryAccountOperation represents change_recovery_account operation data.
 type ChangeRecoveryAccountOperation struct {
 	AccountToRecover   string        `json:"account_to_recover"`
 	NewRecoveryAccount string        `json:"new_recovery_account"`
 	Extensions         []interface{} `json:"extensions"`
 }
 
+//Type function that defines the type of operation ChangeRecoveryAccountOperation.
 func (op *ChangeRecoveryAccountOperation) Type() OpType {
 	return TypeChangeRecoveryAccount
 }
 
+//Data returns the operation data ChangeRecoveryAccountOperation.
 func (op *ChangeRecoveryAccountOperation) Data() interface{} {
 	return op
 }
 
-// struct EscrowTransferOperation{}
+//EscrowTransferOperation represents escrow_transfer operation data.
 type EscrowTransferOperation struct {
 	From                 string `json:"from"`
 	To                   string `json:"to"`
@@ -486,15 +549,17 @@ type EscrowTransferOperation struct {
 	EscrowExpiration     *Time  `json:"escrow_expiration"`
 }
 
+//Type function that defines the type of operation EscrowTransferOperation.
 func (op *EscrowTransferOperation) Type() OpType {
 	return TypeEscrowTransfer
 }
 
+//Data returns the operation data EscrowTransferOperation.
 func (op *EscrowTransferOperation) Data() interface{} {
 	return op
 }
 
-// struct EscrowDisputeOperation{}
+//EscrowDisputeOperation represents escrow_dispute operation data.
 type EscrowDisputeOperation struct {
 	From     string `json:"from"`
 	To       string `json:"to"`
@@ -503,15 +568,17 @@ type EscrowDisputeOperation struct {
 	EscrowID uint32 `json:"escrow_id"`
 }
 
+//Type function that defines the type of operation EscrowDisputeOperation.
 func (op *EscrowDisputeOperation) Type() OpType {
 	return TypeEscrowDispute
 }
 
+//Data returns the operation data EscrowDisputeOperation.
 func (op *EscrowDisputeOperation) Data() interface{} {
 	return op
 }
 
-// struct EscrowReleaseOperation{}
+//EscrowReleaseOperation represents escrow_release operation data.
 type EscrowReleaseOperation struct {
 	From        string `json:"from"`
 	To          string `json:"to"`
@@ -523,29 +590,33 @@ type EscrowReleaseOperation struct {
 	SteemAmount *Asset `json:"steem_amount"`
 }
 
+//Type function that defines the type of operation EscrowReleaseOperation.
 func (op *EscrowReleaseOperation) Type() OpType {
 	return TypeEscrowRelease
 }
 
+//Data returns the operation data EscrowReleaseOperation.
 func (op *EscrowReleaseOperation) Data() interface{} {
 	return op
 }
 
-// struct POW2Operation{}
+//POW2Operation represents pow2 operation data.
 type POW2Operation struct {
 	Input      *POW2Input `json:"input"`
 	PowSummary uint32     `json:"pow_summary"`
 }
 
+//Type function that defines the type of operation POW2Operation.
 func (op *POW2Operation) Type() OpType {
 	return TypePOW2
 }
 
+//Data returns the operation data POW2Operation.
 func (op *POW2Operation) Data() interface{} {
 	return op
 }
 
-// struct EscrowApproveOperation{}
+//EscrowApproveOperation represents escrow_approve operation data.
 type EscrowApproveOperation struct {
 	From     string `json:"from"`
 	To       string `json:"to"`
@@ -555,15 +626,17 @@ type EscrowApproveOperation struct {
 	Approve  bool   `json:"approve"`
 }
 
+//Type function that defines the type of operation EscrowApproveOperation.
 func (op *EscrowApproveOperation) Type() OpType {
 	return TypeEscrowApprove
 }
 
+//Data returns the operation data EscrowApproveOperation.
 func (op *EscrowApproveOperation) Data() interface{} {
 	return op
 }
 
-// struct TransferToSavingsOperation{}
+//TransferToSavingsOperation represents transfer_to_savings operation data.
 type TransferToSavingsOperation struct {
 	From   string `json:"from"`
 	To     string `json:"to"`
@@ -571,15 +644,17 @@ type TransferToSavingsOperation struct {
 	Memo   string `json:"memo"`
 }
 
+//Type function that defines the type of operation TransferToSavingsOperation.
 func (op *TransferToSavingsOperation) Type() OpType {
 	return TypeTransferToSavings
 }
 
+//Data returns the operation data TransferToSavingsOperation.
 func (op *TransferToSavingsOperation) Data() interface{} {
 	return op
 }
 
-// struct TransferFromSavingsOperation{}
+//TransferFromSavingsOperation represents transfer_from_savings operation data.
 type TransferFromSavingsOperation struct {
 	From      string `json:"from"`
 	RequestID uint32 `json:"request_id"`
@@ -588,29 +663,33 @@ type TransferFromSavingsOperation struct {
 	Memo      string `json:"memo"`
 }
 
+//Type function that defines the type of operation TransferFromSavingsOperation.
 func (op *TransferFromSavingsOperation) Type() OpType {
 	return TypeTransferFromSavings
 }
 
+//Data returns the operation data TransferFromSavingsOperation.
 func (op *TransferFromSavingsOperation) Data() interface{} {
 	return op
 }
 
-// struct CancelTransferFromSavingsOperation{}
+//CancelTransferFromSavingsOperation represents cancel_transfer_from_savings operation data.
 type CancelTransferFromSavingsOperation struct {
 	From      string `json:"from"`
 	RequestID uint32 `json:"request_id"`
 }
 
+//Type function that defines the type of operation CancelTransferFromSavingsOperation.
 func (op *CancelTransferFromSavingsOperation) Type() OpType {
 	return TypeCancelTransferFromSavings
 }
 
+//Data returns the operation data CancelTransferFromSavingsOperation.
 func (op *CancelTransferFromSavingsOperation) Data() interface{} {
 	return op
 }
 
-// struct CustomBinaryOperation{}
+//CustomBinaryOperation represents custom_binary operation data.
 type CustomBinaryOperation struct {
 	RequiredOwnerAuths   []string `json:"required_owner_auths"`
 	RequiredActiveAuths  []string `json:"required_active_auths"`
@@ -620,74 +699,84 @@ type CustomBinaryOperation struct {
 	Datas                []byte   `json:"data"`
 }
 
+//Type function that defines the type of operation CustomBinaryOperation.
 func (op *CustomBinaryOperation) Type() OpType {
 	return TypeCustomBinary
 }
 
+//Data returns the operation data CustomBinaryOperation.
 func (op *CustomBinaryOperation) Data() interface{} {
 	return op
 }
 
-// struct DeclineVotingRightsOperation{}
+//DeclineVotingRightsOperation represents decline_voting_rights operation data.
 type DeclineVotingRightsOperation struct {
 	Account string `json:"account"`
 	Decline bool   `json:"decline"`
 }
 
+//Type function that defines the type of operation DeclineVotingRightsOperation.
 func (op *DeclineVotingRightsOperation) Type() OpType {
 	return TypeDeclineVotingRights
 }
 
+//Data returns the operation data DeclineVotingRightsOperation.
 func (op *DeclineVotingRightsOperation) Data() interface{} {
 	return op
 }
 
-// struct ResetAccountOperation{}
+//ResetAccountOperation represents reset_account operation data.
 type ResetAccountOperation struct {
 	ResetAccount      string     `json:"reset_account"`
 	AccountToReset    string     `json:"Account_to_reset"`
 	NewOwnerAuthority *Authority `json:"new_owner_authority"`
 }
 
+//Type function that defines the type of operation ResetAccountOperation.
 func (op *ResetAccountOperation) Type() OpType {
 	return TypeResetAccount
 }
 
+//Data returns the operation data ResetAccountOperation.
 func (op *ResetAccountOperation) Data() interface{} {
 	return op
 }
 
-// struct SetResetAccountOperation{}
+//SetResetAccountOperation represents set_reset_account operation data.
 type SetResetAccountOperation struct {
 	Account             string `json:"account"`
 	CurrentResetAccount string `json:"current_reset_account"`
 	ResetAccount        string `json:"reset_account"`
 }
 
+//Type function that defines the type of operation SetResetAccountOperation.
 func (op *SetResetAccountOperation) Type() OpType {
 	return TypeSetResetAccount
 }
 
+//Data returns the operation data SetResetAccountOperation.
 func (op *SetResetAccountOperation) Data() interface{} {
 	return op
 }
 
-// struct DelegateVestingSharesOperation{}
+//DelegateVestingSharesOperation represents delegate_vesting_shares operation data.
 type DelegateVestingSharesOperation struct {
 	Delegator     string `json:"delegator"`
 	Delegatee     string `json:"delegatee"`
 	VestingShares *Asset `json:"vesting_shares"`
 }
 
+//Type function that defines the type of operation DelegateVestingSharesOperation.
 func (op *DelegateVestingSharesOperation) Type() OpType {
 	return TypeDelegateVestingShares
 }
 
+//Data returns the operation data DelegateVestingSharesOperation.
 func (op *DelegateVestingSharesOperation) Data() interface{} {
 	return op
 }
 
-// struct AccountCreateWithDelegationOperation{}
+//AccountCreateWithDelegationOperation represents account_create_with_delegation operation data.
 type AccountCreateWithDelegationOperation struct {
 	Fee            *Asset           `json:"fee"`
 	Delegation     *Asset           `json:"delegation"`
@@ -701,29 +790,33 @@ type AccountCreateWithDelegationOperation struct {
 	Extensions     []interface{}    `json:"extensions"`
 }
 
+//Type function that defines the type of operation AccountCreateWithDelegationOperation.
 func (op *AccountCreateWithDelegationOperation) Type() OpType {
 	return TypeAccountCreateWithDelegation
 }
 
+//Data returns the operation data AccountCreateWithDelegationOperation.
 func (op *AccountCreateWithDelegationOperation) Data() interface{} {
 	return op
 }
 
-// struct AccountMetadataOperation{}
+//AccountMetadataOperation represents account_metadata operation data.
 type AccountMetadataOperation struct {
 	Account      string           `json:"account"`
 	JSONMetadata *AccountMetadata `json:"json_metadata"`
 }
 
+//Type function that defines the type of operation AccountMetadataOperation.
 func (op *AccountMetadataOperation) Type() OpType {
 	return TypeAccountMetadata
 }
 
+//Data returns the operation data AccountMetadataOperation.
 func (op *AccountMetadataOperation) Data() interface{} {
 	return op
 }
 
-// struct ProposalCreateOperation{}
+//ProposalCreateOperation represents proposal_create operation data.
 type ProposalCreateOperation struct {
 	Author             string             `json:"author"`
 	Title              string             `json:"title"`
@@ -734,15 +827,17 @@ type ProposalCreateOperation struct {
 	Extensions         []interface{}      `json:"extensions"`
 }
 
+//Type function that defines the type of operation ProposalCreateOperation.
 func (op *ProposalCreateOperation) Type() OpType {
 	return TypeProposalCreate
 }
 
+//Data returns the operation data ProposalCreateOperation.
 func (op *ProposalCreateOperation) Data() interface{} {
 	return op
 }
 
-// struct ProposalUpdateOperation{}
+//ProposalUpdateOperation represents proposal_update operation data.
 type ProposalUpdateOperation struct {
 	Author                   string        `json:"author"`
 	Title                    string        `json:"title"`
@@ -757,15 +852,17 @@ type ProposalUpdateOperation struct {
 	Extensions               []interface{} `json:"extensions"`
 }
 
+//Type function that defines the type of operation ProposalUpdateOperation.
 func (op *ProposalUpdateOperation) Type() OpType {
 	return TypeProposalUpdate
 }
 
+//Data returns the operation data ProposalUpdateOperation.
 func (op *ProposalUpdateOperation) Data() interface{} {
 	return op
 }
 
-// struct ProposalDeleteOperation{}
+//ProposalDeleteOperation represents proposal_delete operation data.
 type ProposalDeleteOperation struct {
 	Author     string        `json:"author"`
 	Title      string        `json:"title"`
@@ -773,30 +870,35 @@ type ProposalDeleteOperation struct {
 	Extensions []interface{} `json:"extensions"`
 }
 
+//Type function that defines the type of operation ProposalDeleteOperation.
 func (op *ProposalDeleteOperation) Type() OpType {
 	return TypeProposalDelete
 }
 
+//Data returns the operation data ProposalDeleteOperation.
 func (op *ProposalDeleteOperation) Data() interface{} {
 	return op
 }
 
-// struct ChainPropertiesUpdateOperation{}
+//ChainPropertiesUpdateOperation represents chain_properties_update operation data.
 type ChainPropertiesUpdateOperation struct {
 	Owner string        `json:"owner"`
 	Props []interface{} `json:"props"`
 }
 
+//Type function that defines the type of operation ChainPropertiesUpdateOperation.
 func (op *ChainPropertiesUpdateOperation) Type() OpType {
 	return TypeChainPropertiesUpdate
 }
 
+//Data returns the operation data ChainPropertiesUpdateOperation.
 func (op *ChainPropertiesUpdateOperation) Data() interface{} {
 	return op
 }
 
 //Virtual Operation
-// struct FillConvertRequestOperation{}
+
+//FillConvertRequestOperation represents fill_convert_request operation data.
 type FillConvertRequestOperation struct {
 	Owner     string `json:"owner"`
 	Requestid uint32 `json:"requestid"`
@@ -804,15 +906,17 @@ type FillConvertRequestOperation struct {
 	AmountOut *Asset `json:"amount_out"`
 }
 
+//Type function that defines the type of operation FillConvertRequestOperation.
 func (op *FillConvertRequestOperation) Type() OpType {
 	return TypeFillConvertRequest
 }
 
+//Data returns the operation data FillConvertRequestOperation.
 func (op *FillConvertRequestOperation) Data() interface{} {
 	return op
 }
 
-// struct AuthorRewardOperation{}
+//AuthorRewardOperation represents author_reward operation data.
 type AuthorRewardOperation struct {
 	Author        string `json:"author"`
 	Permlink      string `json:"permlink"`
@@ -821,15 +925,17 @@ type AuthorRewardOperation struct {
 	VestingPayout *Asset `json:"vesting_payout"`
 }
 
+//Type function that defines the type of operation AuthorRewardOperation.
 func (op *AuthorRewardOperation) Type() OpType {
 	return TypeAuthorReward
 }
 
+//Data returns the operation data AuthorRewardOperation.
 func (op *AuthorRewardOperation) Data() interface{} {
 	return op
 }
 
-// struct CurationRewardOperation{}
+//CurationRewardOperation represents curation_reward operation data.
 type CurationRewardOperation struct {
 	Curator         string `json:"curator"`
 	Reward          *Asset `json:"reward"`
@@ -837,58 +943,66 @@ type CurationRewardOperation struct {
 	CommentPermlink string `json:"comment_permlink"`
 }
 
+//Type function that defines the type of operation CurationRewardOperation.
 func (op *CurationRewardOperation) Type() OpType {
 	return TypeCurationReward
 }
 
+//Data returns the operation data CurationRewardOperation.
 func (op *CurationRewardOperation) Data() interface{} {
 	return op
 }
 
-// struct CommentRewardOperation{}
+//CommentRewardOperation represents comment_reward operation data.
 type CommentRewardOperation struct {
 	Author   string `json:"author"`
 	Permlink string `json:"permlink"`
 	Payout   *Asset `json:"payout"`
 }
 
+//Type function that defines the type of operation CommentRewardOperation.
 func (op *CommentRewardOperation) Type() OpType {
 	return TypeCommentReward
 }
 
+//Data returns the operation data CommentRewardOperation.
 func (op *CommentRewardOperation) Data() interface{} {
 	return op
 }
 
-// struct LiquidityRewardOperation{}
+//LiquidityRewardOperation represents liquidity_reward operation data.
 type LiquidityRewardOperation struct {
 	Owner  string `json:"owner"`
 	Payout *Asset `json:"payout"`
 }
 
+//Type function that defines the type of operation LiquidityRewardOperation.
 func (op *LiquidityRewardOperation) Type() OpType {
 	return TypeLiquidityReward
 }
 
+//Data returns the operation data LiquidityRewardOperation.
 func (op *LiquidityRewardOperation) Data() interface{} {
 	return op
 }
 
-// struct InterestOperation{}
+//InterestOperation represents interest operation data.
 type InterestOperation struct {
 	Owner    string `json:"owner"`
 	Interest *Asset `json:"interest"`
 }
 
+//Type function that defines the type of operation InterestOperation.
 func (op *InterestOperation) Type() OpType {
 	return TypeInterest
 }
 
+//Data returns the operation data InterestOperation.
 func (op *InterestOperation) Data() interface{} {
 	return op
 }
 
-// struct FillVestingWithdrawOperation{}
+//FillVestingWithdrawOperation represents fill_vesting_withdraw operation data.
 type FillVestingWithdrawOperation struct {
 	FromAccount string `json:"from_account"`
 	ToAccount   string `json:"to_account"`
@@ -896,15 +1010,17 @@ type FillVestingWithdrawOperation struct {
 	Deposited   *Asset `json:"deposited"`
 }
 
+//Type function that defines the type of operation FillVestingWithdrawOperation.
 func (op *FillVestingWithdrawOperation) Type() OpType {
 	return TypeFillVestingWithdraw
 }
 
+//Data returns the operation data FillVestingWithdrawOperation.
 func (op *FillVestingWithdrawOperation) Data() interface{} {
 	return op
 }
 
-// struct FillOrderOperation{}
+//FillOrderOperation represents fill_order operation data.
 type FillOrderOperation struct {
 	CurrentOwner   string `json:"current_owner"`
 	CurrentOrderid uint32 `json:"current_orderid"`
@@ -914,28 +1030,32 @@ type FillOrderOperation struct {
 	OpenPays       *Asset `json:"open_pays"`
 }
 
+//Type function that defines the type of operation FillOrderOperation.
 func (op *FillOrderOperation) Type() OpType {
 	return TypeFillOrder
 }
 
+//Data returns the operation data FillOrderOperation.
 func (op *FillOrderOperation) Data() interface{} {
 	return op
 }
 
-// struct ShutdownWitnessOperation{}
+//ShutdownWitnessOperation represents shutdown_witness operation data.
 type ShutdownWitnessOperation struct {
 	Owner string `json:"owner"`
 }
 
+//Type function that defines the type of operation ShutdownWitnessOperation.
 func (op *ShutdownWitnessOperation) Type() OpType {
 	return TypeShutdownWitness
 }
 
+//Data returns the operation data ShutdownWitnessOperation.
 func (op *ShutdownWitnessOperation) Data() interface{} {
 	return op
 }
 
-// struct FillTransferFromSavingsOperation{}
+//FillTransferFromSavingsOperation represents fill_transfer_from_savings operation data.
 type FillTransferFromSavingsOperation struct {
 	From      string `json:"from"`
 	To        string `json:"to"`
@@ -944,42 +1064,48 @@ type FillTransferFromSavingsOperation struct {
 	Memo      string `json:"memo"`
 }
 
+//Type function that defines the type of operation FillTransferFromSavingsOperation.
 func (op *FillTransferFromSavingsOperation) Type() OpType {
 	return TypeFillTransferFromSavings
 }
 
+//Data returns the operation data FillTransferFromSavingsOperation.
 func (op *FillTransferFromSavingsOperation) Data() interface{} {
 	return op
 }
 
-// struct HardforkOperation{}
+//HardforkOperation represents hardfork operation data.
 type HardforkOperation struct {
 	HardforkID uint32 `json:"hardfork_id"`
 }
 
+//Type function that defines the type of operation HardforkOperation.
 func (op *HardforkOperation) Type() OpType {
 	return TypeHardfork
 }
 
+//Data returns the operation data HardforkOperation.
 func (op *HardforkOperation) Data() interface{} {
 	return op
 }
 
-// struct CommentPayoutUpdateOperation{}
+//CommentPayoutUpdateOperation represents comment_payout_update operation data.
 type CommentPayoutUpdateOperation struct {
 	Author   string `json:"author"`
 	Permlink string `json:"permlink"`
 }
 
+//Type function that defines the type of operation CommentPayoutUpdateOperation.
 func (op *CommentPayoutUpdateOperation) Type() OpType {
 	return TypeCommentPayoutUpdate
 }
 
+//Data returns the operation data CommentPayoutUpdateOperation.
 func (op *CommentPayoutUpdateOperation) Data() interface{} {
 	return op
 }
 
-// struct CommentBenefactorRewardOperation{}
+//CommentBenefactorRewardOperation represents comment_benefactor_reward operation data.
 type CommentBenefactorRewardOperation struct {
 	Benefactor string `json:"benefactor"`
 	Author     string `json:"author"`
@@ -987,38 +1113,44 @@ type CommentBenefactorRewardOperation struct {
 	Reward     *Asset `json:"reward"`
 }
 
+//Type function that defines the type of operation CommentBenefactorRewardOperation.
 func (op *CommentBenefactorRewardOperation) Type() OpType {
 	return TypeCommentBenefactorReward
 }
 
+//Data returns the operation data CommentBenefactorRewardOperation.
 func (op *CommentBenefactorRewardOperation) Data() interface{} {
 	return op
 }
 
-// struct ReturnVestingDelegationOperation{}
+//ReturnVestingDelegationOperation represents return_vesting_delegation operation data.
 type ReturnVestingDelegationOperation struct {
 	Account       string `json:"account"`
 	VestingShares *Asset `json:"vesting_shares"`
 }
 
+//Type function that defines the type of operation ReturnVestingDelegationOperation.
 func (op *ReturnVestingDelegationOperation) Type() OpType {
 	return TypeReturnVestingDelegation
 }
 
+//Data returns the operation data ReturnVestingDelegationOperation.
 func (op *ReturnVestingDelegationOperation) Data() interface{} {
 	return op
 }
 
-// struct UnknownOperation{}
+//UnknownOperation represents Unknown operation data.
 type UnknownOperation struct {
 	kind OpType
 	data *json.RawMessage
 }
 
+//Type function that defines the type of operation UnknownOperation.
 func (op *UnknownOperation) Type() OpType {
 	return op.kind
 }
 
+//Data returns the operation data UnknownOperation.
 func (op *UnknownOperation) Data() interface{} {
 	return op.data
 }

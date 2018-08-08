@@ -10,10 +10,12 @@ import (
 
 const apiID = "operation_history"
 
+//API plug-in structure
 type API struct {
 	caller transports.Caller
 }
 
+//NewAPI plug-in initialization
 func NewAPI(caller transports.Caller) *API {
 	return &API{caller}
 }
@@ -32,7 +34,7 @@ func (api *API) raw(method string, params interface{}) (*json.RawMessage, error)
 func (api *API) GetOpsInBlock(blockNum uint32, onlyVirtual bool) ([]*types.OperationObject, error) {
 	raw, err := api.raw("get_ops_in_block", []interface{}{blockNum, onlyVirtual})
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(err, "")
 	}
 	var resp []*types.OperationObject
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
@@ -45,7 +47,7 @@ func (api *API) GetOpsInBlock(blockNum uint32, onlyVirtual bool) ([]*types.Opera
 func (api *API) GetTransaction(id string) (*types.Transaction, error) {
 	raw, err := api.raw("get_transaction", []string{id})
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(err, "")
 	}
 	var resp types.Transaction
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {

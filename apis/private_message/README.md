@@ -1,4 +1,4 @@
-# Network Broadcast API
+# Private Message API
 
 This package adds support for `private_message`.
 

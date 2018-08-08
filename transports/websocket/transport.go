@@ -8,10 +8,10 @@ import (
 	"time"
 
 	// Vendor
-	"github.com/asuleymanov/golos-go/tomb"
 	"github.com/asuleymanov/jsonrpc2"
 	"github.com/asuleymanov/websocket"
 	"github.com/pkg/errors"
+	"gopkg.in/tomb.v2"
 )
 
 const (

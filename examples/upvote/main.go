@@ -2,12 +2,10 @@ package main
 
 import (
 	// Stdlib
+	"errors"
 	"flag"
 	"fmt"
 	"log"
-
-	// RPC
-	"github.com/asuleymanov/golos-go"
 
 	// Vendor
 	"github.com/pkg/errors"

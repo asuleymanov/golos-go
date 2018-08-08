@@ -1,23 +1,24 @@
 package client
 
 import (
+	"time"
+
 	"github.com/asuleymanov/golos-go/apis/network_broadcast"
 	"github.com/asuleymanov/golos-go/transactions"
 	"github.com/asuleymanov/golos-go/types"
-	"time"
 )
 
 //SendTrx generates and sends an array of transactions to GOLOS.
 func (client *Client) SendTrx(username string, strx []types.Operation) (*BResp, error) {
 	var bresp BResp
 
-	// Получение необходимых параметров
+	// Getting the necessary parameters
 	props, err := client.Database.GetDynamicGlobalProperties()
 	if err != nil {
 		return nil, err
 	}
 
-	// Создание транзакции
+	// Creating a Transaction
 	refBlockPrefix, err := transactions.RefBlockPrefix(props.HeadBlockID)
 	if err != nil {
 		return nil, err
@@ -27,7 +28,7 @@ func (client *Client) SendTrx(username string, strx []types.Operation) (*BResp, 
 		RefBlockPrefix: refBlockPrefix,
 	})
 
-	// Добавление операций в транзакцию
+	// Adding Operations to a Transaction
 	for _, val := range strx {
 		tx.PushOperation(val)
 	}
@@ -38,18 +39,18 @@ func (client *Client) SendTrx(username string, strx []types.Operation) (*BResp, 
 	}
 	tx.Expiration = &tm
 
-	// Получаем необходимый для подписи ключ
+	// Obtain the key required for signing
 	privKeys, err := client.SigningKeys(strx[0])
 	if err != nil {
 		return nil, err
 	}
 
-	// Подписываем транзакцию
+	// Sign the transaction
 	if err := tx.Sign(privKeys, client.Chain); err != nil {
 		return nil, err
 	}
 
-	// Отправка транзакции
+	// Sending a transaction
 	var resp *network_broadcast.BroadcastResponse
 	if client.AsyncProtocol {
 		err = client.NetworkBroadcast.BroadcastTransaction(tx.Transaction)
@@ -57,12 +58,12 @@ func (client *Client) SendTrx(username string, strx []types.Operation) (*BResp, 
 		resp, err = client.NetworkBroadcast.BroadcastTransactionSynchronous(tx.Transaction)
 	}
 
-	bresp.JSONTrx = JSONTrxString(tx)
+	bresp.JSONTrx, _ = JSONTrxString(tx)
 
 	if err != nil {
 		return &bresp, err
 	}
-	if resp != nil {
+	if resp != nil && !client.AsyncProtocol {
 		bresp.ID = resp.ID
 		bresp.BlockNum = resp.BlockNum
 		bresp.TrxNum = resp.TrxNum

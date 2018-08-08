@@ -16,14 +16,17 @@ import (
 	"golang.org/x/crypto/ripemd160"
 )
 
+//Encoder structure for the converter
 type Encoder struct {
 	w io.Writer
 }
 
+//NewEncoder initializing a new converter
 func NewEncoder(w io.Writer) *Encoder {
 	return &Encoder{w}
 }
 
+//EncodeVarint converting int64 to byte
 func (encoder *Encoder) EncodeVarint(i int64) error {
 	if i >= 0 {
 		return encoder.EncodeUVarint(uint64(i))
@@ -34,12 +37,14 @@ func (encoder *Encoder) EncodeVarint(i int64) error {
 	return encoder.writeBytes(b[:n])
 }
 
+//EncodeUVarint converting uint64 to byte
 func (encoder *Encoder) EncodeUVarint(i uint64) error {
 	b := make([]byte, binary.MaxVarintLen64)
 	n := binary.PutUvarint(b, i)
 	return encoder.writeBytes(b[:n])
 }
 
+//EncodeNumber converting number to byte
 func (encoder *Encoder) EncodeNumber(v interface{}) error {
 	if err := binary.Write(encoder.w, binary.LittleEndian, v); err != nil {
 		return errors.Wrapf(err, "encoder: failed to write number: %v", v)
@@ -47,6 +52,7 @@ func (encoder *Encoder) EncodeNumber(v interface{}) error {
 	return nil
 }
 
+//EncodeArrString converting []string to byte
 func (encoder *Encoder) EncodeArrString(v []string) error {
 	if err := encoder.EncodeUVarint(uint64(len(v))); err != nil {
 		return errors.Wrapf(err, "encoder: failed to write string: %v", v)
@@ -62,6 +68,7 @@ func (encoder *Encoder) EncodeArrString(v []string) error {
 	return nil
 }
 
+//Encode function that determines the input values of which converter to use
 func (encoder *Encoder) Encode(v interface{}) error {
 	if marshaller, ok := v.(TransactionMarshaller); ok {
 		return marshaller.MarshalTransaction(encoder)
@@ -99,6 +106,7 @@ func (encoder *Encoder) Encode(v interface{}) error {
 	}
 }
 
+//EncodeString converting string to byte
 func (encoder *Encoder) EncodeString(v string) error {
 	if err := encoder.EncodeUVarint(uint64(len(v))); err != nil {
 		return errors.Wrapf(err, "encoder: failed to write string: %v", v)
@@ -121,6 +129,7 @@ func (encoder *Encoder) writeString(s string) error {
 	return nil
 }
 
+//EncodeBool converting bool to byte
 func (encoder *Encoder) EncodeBool(b bool) error {
 	if b {
 		return encoder.EncodeNumber(byte(1))
@@ -128,11 +137,15 @@ func (encoder *Encoder) EncodeBool(b bool) error {
 	return encoder.EncodeNumber(byte(0))
 }
 
+//EncodeMoney converting Asset to byte
 func (encoder *Encoder) EncodeMoney(s string) error {
 	r, _ := regexp.Compile("^[0-9]+\\.?[0-9]* [A-Za-z0-9]+$")
 	if r.MatchString(s) {
 		asset := strings.Split(s, " ")
-		amm, _ := strconv.ParseInt(strings.Replace(asset[0], ".", "", -1), 10, 64)
+		amm, errParsInt := strconv.ParseInt(strings.Replace(asset[0], ".", "", -1), 10, 64)
+		if errParsInt != nil {
+			return errParsInt
+		}
 		ind := strings.Index(asset[0], ".")
 		var perc int
 		if ind == -1 {
@@ -161,6 +174,7 @@ func (encoder *Encoder) EncodeMoney(s string) error {
 	return errors.New("Expecting amount like '99.000 SYMBOL'")
 }
 
+//EncodePubKey converting PubKey to byte
 func (encoder *Encoder) EncodePubKey(s string) error {
 	pkn1 := strings.Join(strings.Split(s, "")[3:], "")
 	b58 := base58.Decode(pkn1)

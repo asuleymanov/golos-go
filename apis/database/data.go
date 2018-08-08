@@ -4,17 +4,80 @@ import (
 	"github.com/asuleymanov/golos-go/types"
 )
 
-//BlockHeader
-type BlockHeader struct {
-	Number                uint32        `json:"-"`
-	Previous              string        `json:"previous"`
-	Timestamp             string        `json:"timestamp"`
-	Witness               string        `json:"witness"`
-	TransactionMerkleRoot string        `json:"transaction_merkle_root"`
-	Extensions            []interface{} `json:"extensions"`
+//Bandwidth structure for the GetAccountBandwidth function
+type Bandwidth struct {
+	ID                  *types.Int   `json:"id"`
+	Account             string       `json:"account"`
+	Type                string       `json:"type"`
+	AverageBandwidth    *types.Int   `json:"average_bandwidth"`
+	LifetimeBandwidth   *types.Int64 `json:"lifetime_bandwidth"`
+	LastBandwidthUpdate *types.Time  `json:"last_bandwidth_update"`
 }
 
-//Block
+//Account structure for the GetAccounts function
+type Account struct {
+	ID                            *types.Int             `json:"id"`
+	Name                          string                 `json:"name"`
+	Owner                         *types.Authority       `json:"owner"`
+	Active                        *types.Authority       `json:"active"`
+	Posting                       *types.Authority       `json:"posting"`
+	MemoKey                       string                 `json:"memo_key"`
+	JSONMetadata                  *types.AccountMetadata `json:"json_metadata"`
+	Proxy                         string                 `json:"proxy"`
+	LastOwnerUpdate               *types.Time            `json:"last_owner_update"`
+	LastAccountUpdate             *types.Time            `json:"last_account_update"`
+	Created                       *types.Time            `json:"created"`
+	Mined                         bool                   `json:"mined"`
+	OwnerChallenged               bool                   `json:"owner_challenged"`
+	ActiveChallenged              bool                   `json:"active_challenged"`
+	LastOwnerProved               *types.Time            `json:"last_owner_proved"`
+	LastActiveProved              *types.Time            `json:"last_active_proved"`
+	RecoveryAccount               string                 `json:"recovery_account"`
+	LastAccountRecovery           *types.Time            `json:"last_account_recovery"`
+	ResetAccount                  string                 `json:"reset_account"`
+	CommentCount                  *types.Int             `json:"comment_count"`
+	LifetimeVoteCount             *types.Int             `json:"lifetime_vote_count"`
+	PostCount                     *types.Int             `json:"post_count"`
+	CanVote                       bool                   `json:"can_vote"`
+	VotingPower                   int                    `json:"voting_power"`
+	LastVoteTime                  *types.Time            `json:"last_vote_time"`
+	Balance                       *types.Asset           `json:"balance"`
+	SavingsBalance                *types.Asset           `json:"savings_balance"`
+	SbdBalance                    *types.Asset           `json:"sbd_balance"`
+	SbdSeconds                    string                 `json:"sbd_seconds"`
+	SbdSecondsLastUpdate          *types.Time            `json:"sbd_seconds_last_update"`
+	SbdLastInterestPayment        *types.Time            `json:"sbd_last_interest_payment"`
+	SavingsSbdBalance             *types.Asset           `json:"savings_sbd_balance"`
+	SavingsSbdSeconds             string                 `json:"savings_sbd_seconds"`
+	SavingsSbdSecondsLastUpdate   *types.Time            `json:"savings_sbd_seconds_last_update"`
+	SavingsSbdLastInterestPayment *types.Time            `json:"savings_sbd_last_interest_payment"`
+	SavingsWithdrawRequests       *types.Int             `json:"savings_withdraw_requests"`
+	VestingShares                 *types.Asset           `json:"vesting_shares"`
+	VestingWithdrawRate           *types.Asset           `json:"vesting_withdraw_rate"`
+	NextVestingWithdrawal         *types.Time            `json:"next_vesting_withdrawal"`
+	Withdrawn                     *types.Int             `json:"withdrawn"`
+	ToWithdraw                    *types.Int             `json:"to_withdraw"`
+	WithdrawRoutes                *types.Int             `json:"withdraw_routes"`
+	CurationRewards               *types.Int             `json:"curation_rewards"`
+	PostingRewards                *types.Int             `json:"posting_rewards"`
+	ProxiedVsfVotes               []*types.Int           `json:"proxied_vsf_votes"`
+	WitnessesVotedFor             *types.Int             `json:"witnesses_voted_for"`
+	AverageBandwidth              *types.Int             `json:"average_bandwidth"`
+	LifetimeBandwidth             *types.Int64           `json:"lifetime_bandwidth"`
+	LastBandwidthUpdate           *types.Time            `json:"last_bandwidth_update"`
+	AverageMarketBandwidth        *types.Int             `json:"average_market_bandwidth"`
+	LastMarketBandwidthUpdate     *types.Time            `json:"last_market_bandwidth_update"`
+	LastPost                      *types.Time            `json:"last_post"`
+	LastRootPost                  *types.Time            `json:"last_root_post"`
+	PostBandwidth                 int64                  `json:"post_bandwidth"`
+	NewAverageBandwidth           *types.Int64           `json:"new_average_bandwidth"`
+	NewAverageMarketBandwidth     *types.Int64           `json:"new_average_market_bandwidth"`
+	VestingBalance                *types.Asset           `json:"vesting_balance"`
+	Reputation                    *types.Int64           `json:"reputation"`
+	WitnessVotes                  []string               `json:"witness_votes"`
+}
+
+//Block structure for the GetBlock function
 type Block struct {
 	Number                uint32               `json:"-"`
 	Timestamp             *types.Time          `json:"timestamp"`
@@ -26,7 +89,28 @@ type Block struct {
 	Transactions          []*types.Transaction `json:"transactions"`
 }
 
-//Config
+//BlockHeader structure for the GetBlockHeader function
+type BlockHeader struct {
+	Number                uint32        `json:"-"`
+	Previous              string        `json:"previous"`
+	Timestamp             string        `json:"timestamp"`
+	Witness               string        `json:"witness"`
+	TransactionMerkleRoot string        `json:"transaction_merkle_root"`
+	Extensions            []interface{} `json:"extensions"`
+}
+
+//ChainProperties structure for the GetChainProperties function
+type ChainProperties struct {
+	AccountCreationFee          *types.Asset `json:"account_creation_fee"`
+	MaximumBlockSize            uint32       `json:"maximum_block_size"`
+	SBDInterestRate             uint16       `json:"sbd_interest_rate"`
+	CreateAccountMinGolosFee    *types.Asset `json:"create_account_min_golos_fee"`
+	CreateAccountMinDelegation  *types.Asset `json:"create_account_min_delegation"`
+	CreateAccountDelegationTime uint32       `json:"create_account_delegation_time"`
+	MinDelegation               *types.Asset `json:"min_delegation"`
+}
+
+//Config structure for the GetConfig function.
 type Config struct {
 	SteemitBuildTestnet                   bool         `json:"STEEMIT_BUILD_TESTNET"`
 	GrapheneCurrentDBVersion              string       `json:"GRAPHENE_CURRENT_DB_VERSION"`
@@ -137,7 +221,31 @@ type Config struct {
 	BlockchainName                        string       `json:"BLOCKCHAIN_NAME"`
 }
 
-//DynamicGlobalProperties
+//ConversionRequests structure for the GetConversionRequests function.
+type ConversionRequests struct {
+	ID             *types.Int   `json:"id"`
+	Owner          string       `json:"owner"`
+	Requestid      *types.Int   `json:"requestid"`
+	Amount         *types.Asset `json:"amount"`
+	ConversionDate *types.Time  `json:"conversion_date"`
+}
+
+//DatabaseInfo structure for the GetDatabaseInfo function.
+type DatabaseInfo struct {
+	TotalSize    uint64              `json:"total_size"`
+	FreeSize     uint64              `json:"free_size"`
+	ReservedSize uint64              `json:"reserved_size"`
+	UsedSize     uint64              `json:"used_size"`
+	IndexList    []DatabaseInfoIndex `json:"index_list"`
+}
+
+//DatabaseInfoIndex additional structure for the function GetDatabaseInfo.
+type DatabaseInfoIndex struct {
+	Name        string `json:"name"`
+	RecordCount uint32 `json:"record_count"`
+}
+
+//DynamicGlobalProperties structure for the GetDynamicGlobalProperties function.
 type DynamicGlobalProperties struct {
 	Time                     *types.Time  `json:"time"`
 	TotalPow                 *types.Int   `json:"total_pow"`
@@ -167,83 +275,46 @@ type DynamicGlobalProperties struct {
 	MaxVirtualBandwidth      *types.Int   `json:"max_virtual_bandwidth"`
 }
 
-//ChainProperties
-type ChainProperties struct {
-	AccountCreationFee *types.Asset `json:"account_creation_fee"`
-	MaximumBlockSize   *types.Int   `json:"maximum_block_size"`
-	SbdInterestRate    *types.Int   `json:"sbd_interest_rate"`
+//VestingDelegationExpiration structure for the GetExpiringVestingDelegations function.
+type VestingDelegationExpiration struct {
+	ID            uint64       `json:"id"`
+	Delegator     string       `json:"delegator"`
+	VestingShares *types.Asset `json:"vesting_shares"`
+	Expiration    *types.Time  `json:"expiration"`
 }
 
-//NextScheduledHardfork
+//NextScheduledHardfork structure for the GetNextScheduledHardfork function.
 type NextScheduledHardfork struct {
 	HfVersion string      `json:"hf_version"`
 	LiveTime  *types.Time `json:"live_time"`
 }
 
-//Account
-type Account struct {
-	ID                            *types.Int             `json:"id"`
-	Name                          string                 `json:"name"`
-	Owner                         *types.Authority       `json:"owner"`
-	Active                        *types.Authority       `json:"active"`
-	Posting                       *types.Authority       `json:"posting"`
-	MemoKey                       string                 `json:"memo_key"`
-	JSONMetadata                  *types.AccountMetadata `json:"json_metadata"`
-	Proxy                         string                 `json:"proxy"`
-	LastOwnerUpdate               *types.Time            `json:"last_owner_update"`
-	LastAccountUpdate             *types.Time            `json:"last_account_update"`
-	Created                       *types.Time            `json:"created"`
-	Mined                         bool                   `json:"mined"`
-	OwnerChallenged               bool                   `json:"owner_challenged"`
-	ActiveChallenged              bool                   `json:"active_challenged"`
-	LastOwnerProved               *types.Time            `json:"last_owner_proved"`
-	LastActiveProved              *types.Time            `json:"last_active_proved"`
-	RecoveryAccount               string                 `json:"recovery_account"`
-	LastAccountRecovery           *types.Time            `json:"last_account_recovery"`
-	ResetAccount                  string                 `json:"reset_account"`
-	CommentCount                  *types.Int             `json:"comment_count"`
-	LifetimeVoteCount             *types.Int             `json:"lifetime_vote_count"`
-	PostCount                     *types.Int             `json:"post_count"`
-	CanVote                       bool                   `json:"can_vote"`
-	VotingPower                   int                    `json:"voting_power"`
-	LastVoteTime                  *types.Time            `json:"last_vote_time"`
-	Balance                       *types.Asset           `json:"balance"`
-	SavingsBalance                *types.Asset           `json:"savings_balance"`
-	SbdBalance                    *types.Asset           `json:"sbd_balance"`
-	SbdSeconds                    string                 `json:"sbd_seconds"`
-	SbdSecondsLastUpdate          *types.Time            `json:"sbd_seconds_last_update"`
-	SbdLastInterestPayment        *types.Time            `json:"sbd_last_interest_payment"`
-	SavingsSbdBalance             *types.Asset           `json:"savings_sbd_balance"`
-	SavingsSbdSeconds             string                 `json:"savings_sbd_seconds"`
-	SavingsSbdSecondsLastUpdate   *types.Time            `json:"savings_sbd_seconds_last_update"`
-	SavingsSbdLastInterestPayment *types.Time            `json:"savings_sbd_last_interest_payment"`
-	SavingsWithdrawRequests       *types.Int             `json:"savings_withdraw_requests"`
-	VestingShares                 *types.Asset           `json:"vesting_shares"`
-	VestingWithdrawRate           *types.Asset           `json:"vesting_withdraw_rate"`
-	NextVestingWithdrawal         *types.Time            `json:"next_vesting_withdrawal"`
-	Withdrawn                     *types.Int             `json:"withdrawn"`
-	ToWithdraw                    *types.Int             `json:"to_withdraw"`
-	WithdrawRoutes                *types.Int             `json:"withdraw_routes"`
-	CurationRewards               *types.Int             `json:"curation_rewards"`
-	PostingRewards                *types.Int             `json:"posting_rewards"`
-	ProxiedVsfVotes               []*types.Int           `json:"proxied_vsf_votes"`
-	WitnessesVotedFor             *types.Int             `json:"witnesses_voted_for"`
-	AverageBandwidth              *types.Int             `json:"average_bandwidth"`
-	LifetimeBandwidth             *types.Int64           `json:"lifetime_bandwidth"`
-	LastBandwidthUpdate           *types.Time            `json:"last_bandwidth_update"`
-	AverageMarketBandwidth        *types.Int             `json:"average_market_bandwidth"`
-	LastMarketBandwidthUpdate     *types.Time            `json:"last_market_bandwidth_update"`
-	LastPost                      *types.Time            `json:"last_post"`
-	LastRootPost                  *types.Time            `json:"last_root_post"`
-	PostBandwidth                 int64                  `json:"post_bandwidth"`
-	NewAverageBandwidth           *types.Int64           `json:"new_average_bandwidth"`
-	NewAverageMarketBandwidth     *types.Int64           `json:"new_average_market_bandwidth"`
-	VestingBalance                *types.Asset           `json:"vesting_balance"`
-	Reputation                    *types.Int64           `json:"reputation"`
-	WitnessVotes                  []string               `json:"witness_votes"`
+//OwnerHistory structure for the GetOwnerHistory function.
+type OwnerHistory struct {
+	ID                     int              `json:"id"`
+	Account                string           `json:"account"`
+	PreviousOwnerAuthority *types.Authority `json:"previous_owner_authority"`
+	LastValidTime          string           `json:"last_valid_time"`
 }
 
-//SavingsWithdraw
+//ProposalObject structure for the GetProposedTransaction function.
+type ProposalObject struct {
+	Author                    string           `json:"author"`
+	Title                     string           `json:"title"`
+	Memo                      string           `json:"memo"`
+	ExpirationTime            *types.Time      `json:"expiration_time"`
+	ReviewPeriodTime          *types.Time      `json:"review_period_time"`
+	ProposedOperations        types.Operations `json:"proposed_operations"`
+	RequiredActiveApprovals   []string         `json:"required_active_approvals"`
+	AvailableActiveApprovals  []string         `json:"available_active_approvals"`
+	RequiredOwnerApprovals    []string         `json:"required_owner_approvals"`
+	AvailableOwnerApprovals   []string         `json:"available_owner_approvals"`
+	RequiredPostingApprovals  []string         `json:"required_posting_approvals"`
+	AvailablePostingApprovals []string         `json:"available_posting_approvals"`
+	AvailableKeyApprovals     []string         `json:"available_key_approvals"`
+}
+
+//SavingsWithdraw structure for the GetSavingsWithdrawFrom and GetSavingsWithdrawTo functions.
 type SavingsWithdraw struct {
 	ID        *types.ID    `json:"id"`
 	From      string       `json:"from"`
@@ -254,24 +325,16 @@ type SavingsWithdraw struct {
 	Complete  *types.Time  `json:"complete"`
 }
 
-//ConversionRequests
-type ConversionRequests struct {
-	ID             *types.Int   `json:"id"`
-	Owner          string       `json:"owner"`
-	Requestid      *types.Int   `json:"requestid"`
-	Amount         *types.Asset `json:"amount"`
-	ConversionDate *types.Time  `json:"conversion_date"`
+//VestingDelegation structure for the GetVestingDelegations function.
+type VestingDelegation struct {
+	ID                uint64       `json:"id"`
+	Delegator         string       `json:"delegator"`
+	Delegatee         string       `json:"delegatee"`
+	VestingShares     *types.Asset `json:"vesting_shares"`
+	MinDelegationTime *types.Time  `json:"min_delegation_time"`
 }
 
-type Bandwidth struct {
-	ID                  *types.Int   `json:"id"`
-	Account             string       `json:"account"`
-	Type                string       `json:"type"`
-	AverageBandwidth    *types.Int   `json:"average_bandwidth"`
-	LifetimeBandwidth   *types.Int64 `json:"lifetime_bandwidth"`
-	LastBandwidthUpdate *types.Time  `json:"last_bandwidth_update"`
-}
-
+//LookupAccountNames structure for the LookupAccountNames function.
 type LookupAccountNames struct {
 	ID                            int                    `json:"id"`
 	Name                          string                 `json:"name"`
@@ -329,55 +392,4 @@ type LookupAccountNames struct {
 	PostBandwidth                 *types.Int             `json:"post_bandwidth"`
 	NewAverageBandwidth           string                 `json:"new_average_bandwidth"`
 	NewAverageMarketBandwidth     string                 `json:"new_average_market_bandwidth"`
-}
-
-type OwnerHistory struct {
-	ID                     int              `json:"id"`
-	Account                string           `json:"account"`
-	PreviousOwnerAuthority *types.Authority `json:"previous_owner_authority"`
-	LastValidTime          string           `json:"last_valid_time"`
-}
-
-type ProposalObject struct {
-	Author                    string           `json:"author"`
-	Title                     string           `json:"title"`
-	Memo                      string           `json:"memo"`
-	ExpirationTime            *types.Time      `json:"expiration_time"`
-	ReviewPeriodTime          *types.Time      `json:"review_period_time"`
-	ProposedOperations        types.Operations `json:"proposed_operations"`
-	RequiredActiveApprovals   []string         `json:"required_active_approvals"`
-	AvailableActiveApprovals  []string         `json:"available_active_approvals"`
-	RequiredOwnerApprovals    []string         `json:"required_owner_approvals"`
-	AvailableOwnerApprovals   []string         `json:"available_owner_approvals"`
-	RequiredPostingApprovals  []string         `json:"required_posting_approvals"`
-	AvailablePostingApprovals []string         `json:"available_posting_approvals"`
-	AvailableKeyApprovals     []string         `json:"available_key_approvals"`
-}
-
-type DatabaseInfoIndex struct {
-	Name        string `json:"name"`
-	RecordCount uint32 `json:"record_count"`
-}
-
-type DatabaseInfo struct {
-	TotalSize    uint64              `json:"total_size"`
-	FreeSize     uint64              `json:"free_size"`
-	ReservedSize uint64              `json:"reserved_size"`
-	UsedSize     uint64              `json:"used_size"`
-	IndexList    []DatabaseInfoIndex `json:"index_list"`
-}
-
-type VestingDelegation struct {
-	Id                uint64       `json:"id"`
-	Delegator         string       `json:"delegator"`
-	Delegatee         string       `json:"delegatee"`
-	VestingShares     *types.Asset `json:"vesting_shares"`
-	MinDelegationTime *types.Time  `json:"min_delegation_time"`
-}
-
-type VestingDelegationExpiration struct {
-	Id            uint64       `json:"id"`
-	Delegator     string       `json:"delegator"`
-	VestingShares *types.Asset `json:"vesting_shares"`
-	Expiration    *types.Time  `json:"expiration"`
 }

@@ -89,8 +89,10 @@ type Operation interface {
 	Data() interface{}
 }
 
+//Operations structure from the set Operation.
 type Operations []Operation
 
+//UnmarshalJSON unpacking the JSON parameter in the Operations type.
 func (ops *Operations) UnmarshalJSON(data []byte) error {
 	var tuples []*operationTuple
 	if err := json.Unmarshal(data, &tuples); err != nil {
@@ -106,6 +108,7 @@ func (ops *Operations) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+//MarshalJSON function for packing the Operations type in JSON.
 func (ops Operations) MarshalJSON() ([]byte, error) {
 	tuples := make([]*operationTuple, 0, len(ops))
 	for _, op := range ops {
@@ -122,6 +125,7 @@ type operationTuple struct {
 	Data Operation
 }
 
+//MarshalJSON function for packing the operationTuple type in JSON.
 func (op *operationTuple) MarshalJSON() ([]byte, error) {
 	return JSONMarshal([]interface{}{
 		op.Type,
@@ -129,14 +133,7 @@ func (op *operationTuple) MarshalJSON() ([]byte, error) {
 	})
 }
 
-func JSONMarshal(t interface{}) ([]byte, error) {
-	buffer := &bytes.Buffer{}
-	encoder := json.NewEncoder(buffer)
-	encoder.SetEscapeHTML(false)
-	err := encoder.Encode(t)
-	return buffer.Bytes(), err
-}
-
+//UnmarshalJSON unpacking the JSON parameter in the operationTuple type.
 func (op *operationTuple) UnmarshalJSON(data []byte) error {
 	// The operation object is [opType, opBody].
 	raw := make([]*json.RawMessage, 2)
@@ -172,4 +169,13 @@ func (op *operationTuple) UnmarshalJSON(data []byte) error {
 	op.Type = opType
 	op.Data = opData
 	return nil
+}
+
+//JSONMarshal the function of packing with the processing of HTML tags.
+func JSONMarshal(t interface{}) ([]byte, error) {
+	buffer := &bytes.Buffer{}
+	encoder := json.NewEncoder(buffer)
+	encoder.SetEscapeHTML(false)
+	err := encoder.Encode(t)
+	return buffer.Bytes(), err
 }

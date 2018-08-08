@@ -1,11 +1,10 @@
 package types
 
 import (
+	"errors"
+
 	// RPC
 	"github.com/asuleymanov/golos-go/encoding/transaction"
-
-	// Vendor
-	"github.com/pkg/errors"
 )
 
 // Transaction represents a blockchain transaction.

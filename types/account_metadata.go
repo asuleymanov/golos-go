@@ -6,8 +6,10 @@ import (
 	"strconv"
 
 	"github.com/asuleymanov/golos-go/encoding/transaction"
+	"github.com/pkg/errors"
 )
 
+//AccountMetadata type from parameter JSON
 type AccountMetadata struct {
 	Profile ProfileJSON `json:"profile,omitempty"`
 }
@@ -16,6 +18,7 @@ type rawAccountMetadata struct {
 	Profile ProfileJSON `json:"profile,omitempty"`
 }
 
+//ProfileJSON additional structure for the AccountMetadata type.
 type ProfileJSON struct {
 	Name         string `json:"name,omitempty"`
 	ProfileImage string `json:"profile_image,omitempty"`
@@ -26,17 +29,20 @@ type ProfileJSON struct {
 	Website      string `json:"website,omitempty"`
 }
 
+//UnmarshalJSON unpacking the JSON parameter in the AccountMetadata type.
 func (op *AccountMetadata) UnmarshalJSON(p []byte) error {
 	var raw rawAccountMetadata
 
-	str, _ := strconv.Unquote(string(p))
+	str, errUnq := strconv.Unquote(string(p))
+	if errUnq != nil {
+		return errUnq
+	}
 	if str == "" {
 		return nil
 	}
 
 	if err := json.Unmarshal([]byte(str), &raw); err != nil {
-		fmt.Printf("ERROR: AccountMedata unmarshal error: %s\n", err)
-		return nil
+		return errors.Wrap(err, "ERROR: AccountMedata unmarshal error")
 	}
 
 	op.Profile = ProfileJSON{
@@ -51,6 +57,7 @@ func (op *AccountMetadata) UnmarshalJSON(p []byte) error {
 	return nil
 }
 
+//MarshalJSON function for packing the AccountMetadata type in JSON.
 func (op *AccountMetadata) MarshalJSON() ([]byte, error) {
 	ans, err := json.Marshal(&rawAccountMetadata{
 		Profile: ProfileJSON{
@@ -69,6 +76,7 @@ func (op *AccountMetadata) MarshalJSON() ([]byte, error) {
 	return []byte(strconv.Quote(string(ans))), nil
 }
 
+//MarshalTransaction is a function of converting type AccountMetadata to bytes.
 func (op *AccountMetadata) MarshalTransaction(encoder *transaction.Encoder) error {
 	ans, err := json.Marshal(op)
 	if err != nil {
@@ -85,6 +93,7 @@ func (op *AccountMetadata) MarshalTransaction(encoder *transaction.Encoder) erro
 	return enc.Err()
 }
 
+//String function convert type AccountMetadata to string.
 func (op *AccountMetadata) String() string {
 	return fmt.Sprintf("%#v", op)
 }

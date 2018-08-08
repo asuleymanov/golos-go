@@ -4,7 +4,7 @@ import (
 	"github.com/asuleymanov/golos-go/types"
 )
 
-//ChainProperties
+//ChainProperties additional structure for the functions GetFeedHistory, GetWitnessSchedule, GetWitnessByAccount, GetWitnesses and GetWitnessByVote .
 type ChainProperties struct {
 	AccountCreationFee          *types.Asset `json:"account_creation_fee"`
 	MaximumBlockSize            uint32       `json:"maximum_block_size"`
@@ -15,20 +15,20 @@ type ChainProperties struct {
 	MinDelegation               *types.Asset `json:"min_delegation"`
 }
 
-//CurrentMedianHistoryPrice
+//CurrentMedianHistoryPrice structure for the GetCurrentMedianHistoryPrice function. And additional structure for the functions GetFeedHistory, GetWitnessByAccount, GetWitnesses and GetWitnessByVote.
 type CurrentMedianHistoryPrice struct {
 	Base  *types.Asset `json:"base"`
 	Quote *types.Asset `json:"quote"`
 }
 
-//FeedHistory
+//FeedHistory structure for the GetFeedHistory function.
 type FeedHistory struct {
 	ID                   *types.Int                   `json:"id"`
 	CurrentMedianHistory *CurrentMedianHistoryPrice   `json:"current_median_history"`
 	PriceHistory         []*CurrentMedianHistoryPrice `json:"price_history"`
 }
 
-//WitnessSchedule
+//WitnessSchedule structure for the GetWitnessSchedule function.
 type WitnessSchedule struct {
 	ID                            *types.Int       `json:"id"`
 	CurrentVirtualTime            string           `json:"current_virtual_time"`
@@ -43,7 +43,7 @@ type WitnessSchedule struct {
 	MajorityVersion               string           `json:"majority_version"`
 }
 
-//Witness
+//Witness structure for the GetWitnessByAccount, GetWitnesses and GetWitnessByVote function.
 type Witness struct {
 	ID                    *types.Int                 `json:"id"`
 	Owner                 string                     `json:"owner"`

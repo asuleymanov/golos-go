@@ -2,6 +2,7 @@ package tags
 
 import "github.com/asuleymanov/golos-go/types"
 
+//DiscussionQuery structure used in queries.
 type DiscussionQuery struct {
 	Tag            string   `json:"tag"`
 	Limit          uint32   `json:"limit"`
@@ -13,6 +14,7 @@ type DiscussionQuery struct {
 	ParentPermlink string   `json:"parent_permlink"`
 }
 
+//Content structure for the GetDiscussionsByActive, GetDiscussionsByAuthorBeforeDate, GetDiscussionsByBlog, GetDiscussionsByCashout, GetDiscussionsByChildren, GetDiscussionsByComments, GetDiscussionsByCreated, GetDiscussionsByFeed, GetDiscussionsByHot, GetDiscussionsByPayout, GetDiscussionsByPromoted, GetDiscussionsByTrending and GetDiscussionsByVotes functions.
 type Content struct {
 	ID                      *types.ID              `json:"id"`
 	Author                  string                 `json:"author"`
@@ -62,6 +64,7 @@ type Content struct {
 	RebloggedBy             []interface{}          `json:"reblogged_by"`
 }
 
+//VoteState additional structure for the functions GetDiscussionsByActive, GetDiscussionsByAuthorBeforeDate, GetDiscussionsByBlog, GetDiscussionsByCashout, GetDiscussionsByChildren, GetDiscussionsByComments, GetDiscussionsByCreated, GetDiscussionsByFeed, GetDiscussionsByHot, GetDiscussionsByPayout, GetDiscussionsByPromoted, GetDiscussionsByTrending and GetDiscussionsByVotes.
 type VoteState struct {
 	Voter   string      `json:"voter"`
 	Weight  *types.Int  `json:"weight"`
@@ -70,7 +73,7 @@ type VoteState struct {
 	Time    *types.Time `json:"time"`
 }
 
-//TrendingTags
+//TrendingTags structure for the GetTrendingTags function.
 type TrendingTags struct {
 	Name                  string       `json:"name"`
 	TotalChildrenRshares2 string       `json:"total_children_rshares2"`

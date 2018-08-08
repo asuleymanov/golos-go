@@ -1,7 +1,7 @@
 package client
 
 import (
-	"github.com/pkg/errors"
+	"errors"
 
 	"github.com/asuleymanov/golos-go/encoding/wif"
 	"github.com/asuleymanov/golos-go/types"
@@ -66,7 +66,7 @@ func (client *Client) SigningKeys(trx types.Operation) ([][]byte, error) {
 	var keys [][]byte
 
 	if client.CurrentKeys == nil {
-		return nil, errors.New("client Keys not initialized. Use SetKeys method")
+		return nil, errors.New("Client Keys not initialized. Use SetKeys method")
 	}
 
 	opKeys := OpTypeKey[trx.Type()]

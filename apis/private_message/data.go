@@ -4,6 +4,7 @@ import (
 	"github.com/asuleymanov/golos-go/types"
 )
 
+//Message structure for the GetInbox and GetOutbox function.
 type Message struct {
 	ID               *types.Int  `json:"id"`
 	From             string      `json:"from"`

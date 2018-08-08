@@ -1,12 +1,12 @@
-# Account by Key API
+# Account History API
 
-This package adds support for `account_by_key`.
+This package adds support for `account_history`.
 
 ## State
 
 | **ID** | **Command Name** | **Version** |
 | :-: | :-: | :-: |
-| 1 | get_key_references | **RAW** |
+| 1 | get_account_history | **DONE** |
 
 ## License
 

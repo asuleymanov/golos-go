@@ -21,7 +21,11 @@ func SetAsset(amount float64, symbol string) *types.Asset {
 //FollowersList returns the subscriber's list of subscribers
 func (client *Client) FollowersList(username string) ([]string, error) {
 	var followers []string
-	fc, _ := client.Follow.GetFollowCount(username)
+	fc, err := client.Follow.GetFollowCount(username)
+	if err != nil {
+		return followers, err
+	}
+
 	fccount := fc.FollowerCount
 	i := 0
 	for i < fccount {
@@ -42,7 +46,11 @@ func (client *Client) FollowersList(username string) ([]string, error) {
 //FollowingList returns the list of user subscriptions
 func (client *Client) FollowingList(username string) ([]string, error) {
 	var following []string
-	fc, _ := client.Follow.GetFollowCount(username)
+	fc, err := client.Follow.GetFollowCount(username)
+	if err != nil {
+		return following, err
+	}
+
 	fccount := fc.FollowingCount
 	i := 0
 	for i < fccount {
@@ -203,16 +211,35 @@ func (client *Client) GetPostBandwidth(username string) (int64, error) {
 	return int64(newPostBandwidth), nil
 }
 
-func JSONTrxString(v *transactions.SignedTransaction) string {
-	ans, _ := types.JSONMarshal(v)
-	return string(ans)
+//JSONTrxString generate Trx to String
+func JSONTrxString(v *transactions.SignedTransaction) (string, error) {
+	ans, err := types.JSONMarshal(v)
+	if err != nil {
+		return "", err
+	}
+	return string(ans), nil
 }
 
-func JSONOpString(v []types.Operation) string {
+//JSONOpString generate Operations to String
+func JSONOpString(v []types.Operation) (string, error) {
 	var tx types.Operations
 
 	tx = append(tx, v...)
 
-	ans, _ := types.JSONMarshal(tx)
-	return string(ans)
+	ans, err := types.JSONMarshal(tx)
+	if err != nil {
+		return "", err
+	}
+	return string(ans), nil
+}
+
+//GenerateProposalOperation generate []Operation to ProposalOperations
+func GenerateProposalOperation(ops []types.Operation) types.ProposalOperations {
+	var ans types.ProposalOperations
+
+	for _, val := range ops {
+		ans = append(ans, types.ProposalOperation{Operation: val, OperationType: val.Type()})
+	}
+
+	return ans
 }

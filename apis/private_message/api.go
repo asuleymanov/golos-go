@@ -10,10 +10,12 @@ import (
 
 const apiID = "private_message"
 
+//API plug-in structure
 type API struct {
 	caller transports.Caller
 }
 
+//NewAPI plug-in initialization
 func NewAPI(caller transports.Caller) *API {
 	return &API{caller}
 }
@@ -33,7 +35,7 @@ func (api *API) GetInbox(to string, limit, offset uint16) (*[]Message, error) {
 	raw, err := api.raw("get_inbox", []interface{}{to, t, limit, offset})
 
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(err, "")
 	}
 	var resp []Message
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
@@ -49,7 +51,7 @@ func (api *API) GetOutbox(from string, limit, offset uint16) (*[]Message, error)
 	raw, err := api.raw("get_outbox", []interface{}{from, t, limit, offset})
 
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(err, "")
 	}
 	var resp []Message
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {

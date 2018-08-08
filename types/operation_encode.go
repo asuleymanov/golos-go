@@ -7,6 +7,8 @@ import (
 )
 
 // Add-on encode
+
+//MarshalTransaction is a function of converting type Authority to bytes.
 func (auth *Authority) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeNumber(uint32(auth.WeightThreshold))
@@ -25,6 +27,7 @@ func (auth *Authority) MarshalTransaction(encoder *transaction.Encoder) error {
 	return enc.Err()
 }
 
+//MarshalTransaction is a function of converting type ExchRate to bytes.
 func (exch *ExchRate) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.Encode(exch.Base)
@@ -32,6 +35,7 @@ func (exch *ExchRate) MarshalTransaction(encoder *transaction.Encoder) error {
 	return enc.Err()
 }
 
+//MarshalTransaction is a function of converting type ChainPropertiesOLD to bytes.
 func (cp *ChainPropertiesOLD) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.Encode(cp.AccountCreationFee)
@@ -40,6 +44,7 @@ func (cp *ChainPropertiesOLD) MarshalTransaction(encoder *transaction.Encoder) e
 	return enc.Err()
 }
 
+//MarshalTransaction is a function of converting type ChainProperties to bytes.
 func (cp *ChainProperties) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.Encode(cp.AccountCreationFee)
@@ -52,7 +57,7 @@ func (cp *ChainProperties) MarshalTransaction(encoder *transaction.Encoder) erro
 	return enc.Err()
 }
 
-// encode VoteOperation{}
+//MarshalTransaction is a function of converting type VoteOperation to bytes.
 func (op *VoteOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeVote.Code()))
@@ -63,7 +68,7 @@ func (op *VoteOperation) MarshalTransaction(encoder *transaction.Encoder) error 
 	return enc.Err()
 }
 
-// encode CommentOperation{}
+//MarshalTransaction is a function of converting type CommentOperation to bytes.
 func (op *CommentOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeComment.Code()))
@@ -81,7 +86,7 @@ func (op *CommentOperation) MarshalTransaction(encoder *transaction.Encoder) err
 	return enc.Err()
 }
 
-// encode TransferOperation{}
+//MarshalTransaction is a function of converting type TransferOperation to bytes.
 func (op *TransferOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeTransfer.Code()))
@@ -92,7 +97,7 @@ func (op *TransferOperation) MarshalTransaction(encoder *transaction.Encoder) er
 	return enc.Err()
 }
 
-// encode TransferToVestingOperation{}
+//MarshalTransaction is a function of converting type TransferToVestingOperation to bytes.
 func (op *TransferToVestingOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeTransferToVesting.Code()))
@@ -102,7 +107,7 @@ func (op *TransferToVestingOperation) MarshalTransaction(encoder *transaction.En
 	return enc.Err()
 }
 
-// encode WithdrawVestingOperation{}
+//MarshalTransaction is a function of converting type WithdrawVestingOperation to bytes.
 func (op *WithdrawVestingOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeWithdrawVesting.Code()))
@@ -111,7 +116,7 @@ func (op *WithdrawVestingOperation) MarshalTransaction(encoder *transaction.Enco
 	return enc.Err()
 }
 
-// encode LimitOrderCreateOperation{}
+//MarshalTransaction is a function of converting type LimitOrderCreateOperation to bytes.
 func (op *LimitOrderCreateOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeLimitOrderCreate.Code()))
@@ -124,7 +129,7 @@ func (op *LimitOrderCreateOperation) MarshalTransaction(encoder *transaction.Enc
 	return enc.Err()
 }
 
-// encode LimitOrderCancelOperation{}
+//MarshalTransaction is a function of converting type LimitOrderCancelOperation to bytes.
 func (op *LimitOrderCancelOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeLimitOrderCancel.Code()))
@@ -133,7 +138,7 @@ func (op *LimitOrderCancelOperation) MarshalTransaction(encoder *transaction.Enc
 	return enc.Err()
 }
 
-// encode FeedPublishOperation{}
+//MarshalTransaction is a function of converting type FeedPublishOperation to bytes.
 func (op *FeedPublishOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeFeedPublish.Code()))
@@ -142,7 +147,7 @@ func (op *FeedPublishOperation) MarshalTransaction(encoder *transaction.Encoder)
 	return enc.Err()
 }
 
-// encode ConvertOperation{}
+//MarshalTransaction is a function of converting type ConvertOperation to bytes.
 func (op *ConvertOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeConvert.Code()))
@@ -152,7 +157,7 @@ func (op *ConvertOperation) MarshalTransaction(encoder *transaction.Encoder) err
 	return enc.Err()
 }
 
-// encode AccountCreateOperation{}
+//MarshalTransaction is a function of converting type AccountCreateOperation to bytes.
 func (op *AccountCreateOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeAccountCreate.Code()))
@@ -167,7 +172,7 @@ func (op *AccountCreateOperation) MarshalTransaction(encoder *transaction.Encode
 	return enc.Err()
 }
 
-// encode AccountUpdateOperation{}
+//MarshalTransaction is a function of converting type AccountUpdateOperation to bytes.
 func (op *AccountUpdateOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeAccountUpdate.Code()))
@@ -186,7 +191,7 @@ func (op *AccountUpdateOperation) MarshalTransaction(encoder *transaction.Encode
 	return enc.Err()
 }
 
-// encode WitnessUpdateOperation{}
+//MarshalTransaction is a function of converting type WitnessUpdateOperation to bytes.
 func (op *WitnessUpdateOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeWitnessUpdate.Code()))
@@ -198,7 +203,7 @@ func (op *WitnessUpdateOperation) MarshalTransaction(encoder *transaction.Encode
 	return enc.Err()
 }
 
-// encode AccountWitnessVoteOperation{}
+//MarshalTransaction is a function of converting type AccountWitnessVoteOperation to bytes.
 func (op *AccountWitnessVoteOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeAccountWitnessVote.Code()))
@@ -208,7 +213,7 @@ func (op *AccountWitnessVoteOperation) MarshalTransaction(encoder *transaction.E
 	return enc.Err()
 }
 
-// encode AccountWitnessProxyOperation{}
+//MarshalTransaction is a function of converting type AccountWitnessProxyOperation to bytes.
 func (op *AccountWitnessProxyOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeAccountWitnessProxy.Code()))
@@ -220,7 +225,8 @@ func (op *AccountWitnessProxyOperation) MarshalTransaction(encoder *transaction.
 // encode POWOperation{}
 // encode CustomOperation{}
 // encode ReportOverProductionOperation{}
-// encode DeleteCommentOperation{}
+
+//MarshalTransaction is a function of converting type DeleteCommentOperation to bytes.
 func (op *DeleteCommentOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeDeleteComment.Code()))
@@ -230,7 +236,8 @@ func (op *DeleteCommentOperation) MarshalTransaction(encoder *transaction.Encode
 }
 
 // encode CustomJSONOperation{} in to file operation_custom_json.go
-// encode CommentOptionsOperation{}
+
+//MarshalTransaction is a function of converting type CommentOptionsOperation to bytes.
 func (op *CommentOptionsOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeCommentOptions.Code()))
@@ -262,7 +269,7 @@ func (op *CommentOptionsOperation) MarshalTransaction(encoder *transaction.Encod
 	return enc.Err()
 }
 
-// encode SetWithdrawVestingRouteOperation{}
+//MarshalTransaction is a function of converting type SetWithdrawVestingRouteOperation to bytes.
 func (op *SetWithdrawVestingRouteOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeSetWithdrawVestingRoute.Code()))
@@ -273,7 +280,7 @@ func (op *SetWithdrawVestingRouteOperation) MarshalTransaction(encoder *transact
 	return enc.Err()
 }
 
-// encode LimitOrderCreate2Operation{}
+//MarshalTransaction is a function of converting type LimitOrderCreate2Operation to bytes.
 func (op *LimitOrderCreate2Operation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeLimitOrderCreate2.Code()))
@@ -286,7 +293,7 @@ func (op *LimitOrderCreate2Operation) MarshalTransaction(encoder *transaction.En
 	return enc.Err()
 }
 
-// encode ChallengeAuthorityOperation{}
+//MarshalTransaction is a function of converting type ChallengeAuthorityOperation to bytes.
 func (op *ChallengeAuthorityOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeChallengeAuthority.Code()))
@@ -296,7 +303,7 @@ func (op *ChallengeAuthorityOperation) MarshalTransaction(encoder *transaction.E
 	return enc.Err()
 }
 
-// encode ProveAuthorityOperation{}
+//MarshalTransaction is a function of converting type ProveAuthorityOperation to bytes.
 func (op *ProveAuthorityOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeProveAuthority.Code()))
@@ -305,7 +312,7 @@ func (op *ProveAuthorityOperation) MarshalTransaction(encoder *transaction.Encod
 	return enc.Err()
 }
 
-// encode RequestAccountRecoveryOperation{}
+//MarshalTransaction is a function of converting type RequestAccountRecoveryOperation to bytes.
 func (op *RequestAccountRecoveryOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeRequestAccountRecovery.Code()))
@@ -317,7 +324,7 @@ func (op *RequestAccountRecoveryOperation) MarshalTransaction(encoder *transacti
 	return enc.Err()
 }
 
-// encode RecoverAccountOperation{}
+//MarshalTransaction is a function of converting type RecoverAccountOperation to bytes.
 func (op *RecoverAccountOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeRecoverAccount.Code()))
@@ -329,7 +336,7 @@ func (op *RecoverAccountOperation) MarshalTransaction(encoder *transaction.Encod
 	return enc.Err()
 }
 
-// encode ChangeRecoveryAccountOperation{}
+//MarshalTransaction is a function of converting type ChangeRecoveryAccountOperation to bytes.
 func (op *ChangeRecoveryAccountOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeChangeRecoveryAccount.Code()))
@@ -339,7 +346,7 @@ func (op *ChangeRecoveryAccountOperation) MarshalTransaction(encoder *transactio
 	return enc.Err()
 }
 
-// encode EscrowTransferOperation{}
+//MarshalTransaction is a function of converting type EscrowTransferOperation to bytes.
 func (op *EscrowTransferOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeEscrowTransfer.Code()))
@@ -356,7 +363,7 @@ func (op *EscrowTransferOperation) MarshalTransaction(encoder *transaction.Encod
 	return enc.Err()
 }
 
-// encode EscrowDisputeOperation{}
+//MarshalTransaction is a function of converting type EscrowDisputeOperation to bytes.
 func (op *EscrowDisputeOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeEscrowDispute.Code()))
@@ -368,7 +375,7 @@ func (op *EscrowDisputeOperation) MarshalTransaction(encoder *transaction.Encode
 	return enc.Err()
 }
 
-// encode EscrowReleaseOperation{}
+//MarshalTransaction is a function of converting type EscrowReleaseOperation to bytes.
 func (op *EscrowReleaseOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeEscrowRelease.Code()))
@@ -384,7 +391,8 @@ func (op *EscrowReleaseOperation) MarshalTransaction(encoder *transaction.Encode
 }
 
 // encode POW2Operation{}
-// encode EscrowApproveOperation{}
+
+//MarshalTransaction is a function of converting type EscrowApproveOperation to bytes.
 func (op *EscrowApproveOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeEscrowApprove.Code()))
@@ -397,7 +405,7 @@ func (op *EscrowApproveOperation) MarshalTransaction(encoder *transaction.Encode
 	return enc.Err()
 }
 
-// encode TransferToSavingsOperation{}
+//MarshalTransaction is a function of converting type TransferToSavingsOperation to bytes.
 func (op *TransferToSavingsOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeTransferToSavings.Code()))
@@ -408,7 +416,7 @@ func (op *TransferToSavingsOperation) MarshalTransaction(encoder *transaction.En
 	return enc.Err()
 }
 
-// encode TransferFromSavingsOperation{}
+//MarshalTransaction is a function of converting type TransferFromSavingsOperation to bytes.
 func (op *TransferFromSavingsOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeTransferFromSavings.Code()))
@@ -420,7 +428,7 @@ func (op *TransferFromSavingsOperation) MarshalTransaction(encoder *transaction.
 	return enc.Err()
 }
 
-// encode CancelTransferFromSavingsOperation{}
+//MarshalTransaction is a function of converting type CancelTransferFromSavingsOperation to bytes.
 func (op *CancelTransferFromSavingsOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeCancelTransferFromSavings.Code()))
@@ -430,7 +438,8 @@ func (op *CancelTransferFromSavingsOperation) MarshalTransaction(encoder *transa
 }
 
 // encode CustomBinaryOperation{}
-// encode DeclineVotingRightsOperation{}
+
+//MarshalTransaction is a function of converting type DeclineVotingRightsOperation to bytes.
 func (op *DeclineVotingRightsOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeDeclineVotingRights.Code()))
@@ -439,7 +448,7 @@ func (op *DeclineVotingRightsOperation) MarshalTransaction(encoder *transaction.
 	return enc.Err()
 }
 
-// encode ResetAccountOperation{}
+//MarshalTransaction is a function of converting type ResetAccountOperation to bytes.
 func (op *ResetAccountOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeResetAccount.Code()))
@@ -449,7 +458,7 @@ func (op *ResetAccountOperation) MarshalTransaction(encoder *transaction.Encoder
 	return enc.Err()
 }
 
-// encode SetResetAccountOperation{}
+//MarshalTransaction is a function of converting type SetResetAccountOperation to bytes.
 func (op *SetResetAccountOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeSetResetAccount.Code()))
@@ -459,7 +468,7 @@ func (op *SetResetAccountOperation) MarshalTransaction(encoder *transaction.Enco
 	return enc.Err()
 }
 
-// encode DelegateVestingSharesOperation{}
+//MarshalTransaction is a function of converting type DelegateVestingSharesOperation to bytes.
 func (op *DelegateVestingSharesOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeDelegateVestingShares.Code()))
@@ -469,7 +478,7 @@ func (op *DelegateVestingSharesOperation) MarshalTransaction(encoder *transactio
 	return enc.Err()
 }
 
-// encode AccountCreateWithDelegationOperation{}
+//MarshalTransaction is a function of converting type AccountCreateWithDelegationOperation to bytes.
 func (op *AccountCreateWithDelegationOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeAccountCreateWithDelegation.Code()))
@@ -487,7 +496,7 @@ func (op *AccountCreateWithDelegationOperation) MarshalTransaction(encoder *tran
 	return enc.Err()
 }
 
-// encode AccountMetadataOperation{}
+//MarshalTransaction is a function of converting type AccountMetadataOperation to bytes.
 func (op *AccountMetadataOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeAccountMetadata.Code()))
@@ -496,7 +505,7 @@ func (op *AccountMetadataOperation) MarshalTransaction(encoder *transaction.Enco
 	return enc.Err()
 }
 
-// encode ProposalCreateOperation{}
+//MarshalTransaction is a function of converting type ProposalCreateOperation to bytes.
 func (op *ProposalCreateOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeProposalCreate.Code()))
@@ -505,13 +514,14 @@ func (op *ProposalCreateOperation) MarshalTransaction(encoder *transaction.Encod
 	enc.Encode(op.Memo)
 	enc.Encode(op.ExpirationTime)
 	enc.Encode(op.ProposedOperations)
+	enc.Encode(byte(1))
 	enc.Encode(op.ReviewPeriodTime)
 	//enc.Encode(op.Extensions)
 	enc.Encode(byte(0))
 	return enc.Err()
 }
 
-// encode ProposalUpdateOperation{}
+//MarshalTransaction is a function of converting type ProposalUpdateOperation to bytes.
 func (op *ProposalUpdateOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeProposalUpdate.Code()))
@@ -530,7 +540,7 @@ func (op *ProposalUpdateOperation) MarshalTransaction(encoder *transaction.Encod
 	return enc.Err()
 }
 
-// encode ProposalDeleteOperation{}
+//MarshalTransaction is a function of converting type ProposalDeleteOperation to bytes.
 func (op *ProposalDeleteOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeProposalDelete.Code()))
@@ -542,7 +552,7 @@ func (op *ProposalDeleteOperation) MarshalTransaction(encoder *transaction.Encod
 	return enc.Err()
 }
 
-// encode ChainPropertiesUpdateOperation{}
+//MarshalTransaction is a function of converting type ChainPropertiesUpdateOperation to bytes.
 func (op *ChainPropertiesUpdateOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeChainPropertiesUpdate.Code()))

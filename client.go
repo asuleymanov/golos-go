@@ -102,7 +102,7 @@ func NewClient(url []string, chain string, options ...websocket.Option) (*Client
 
 	client.Chain, err = initChainID(chain)
 	if err != nil {
-		client.Chain = transactions.GolosChain
+		return nil, err
 	}
 
 	return client, nil
@@ -115,7 +115,7 @@ func (client *Client) Close() error {
 }
 
 func initClient(url []string, options ...websocket.Option) (*websocket.Transport, error) {
-	// Инициализация Websocket
+	// Initializing Websocket
 	t, err := websocket.NewTransport(url, options...)
 	if err != nil {
 		return nil, err
@@ -126,18 +126,19 @@ func initClient(url []string, options ...websocket.Option) (*websocket.Transport
 
 func initChainID(str string) (*transactions.Chain, error) {
 	var chainID transactions.Chain
-	// Определяем ChainId
+	// Define ChainId
 	switch str {
 	case "golos":
 		chainID = *transactions.GolosChain
 	case "test":
 		chainID = *transactions.TestChain
 	default:
-		return nil, errors.New("Chain not found")
+		return nil, errors.New("ChainId not found")
 	}
 	return &chainID, nil
 }
 
+//GenCommentMetadata generate default CommentMetadata
 func (client *Client) GenCommentMetadata(meta *types.ContentMetadata) *types.ContentMetadata {
 	if client.DefaultContentMetadata != nil {
 		for k := range client.DefaultContentMetadata {

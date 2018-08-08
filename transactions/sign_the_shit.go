@@ -4,19 +4,20 @@ import (
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/sha256"
+	//"encoding/hex"
 	"errors"
 	"fmt"
-	"github.com/asuleymanov/golos-go/rfc6979"
-	secp256k1 "github.com/btcsuite/btcd/btcec"
+	"github.com/btcsuite/btcd/btcec"
 	"log"
 	"math/big"
 )
 
+//SignSingle signature of the transaction by one of the keys
 func (tx *SignedTransaction) SignSingle(privB, data []byte) []byte {
 	privKeyBytes := [32]byte{}
 	copy(privKeyBytes[:], privB)
 
-	priv, _ := secp256k1.PrivKeyFromBytes(secp256k1.S256(), privKeyBytes[:])
+	priv, _ := btcec.PrivKeyFromBytes(btcec.S256(), privKeyBytes[:])
 	priEcdsa := priv.ToECDSA()
 	sigBytes := signBuffer(data, priEcdsa)
 
@@ -24,6 +25,8 @@ func (tx *SignedTransaction) SignSingle(privB, data []byte) []byte {
 }
 
 func signBuffer(buf []byte, privateKey *ecdsa.PrivateKey) []byte {
+	//log.Println("signBuffer buf=", hex.EncodeToString(buf))
+
 	// Hash a message.
 	alg := sha256.New()
 	alg.Write(buf)
@@ -33,22 +36,19 @@ func signBuffer(buf []byte, privateKey *ecdsa.PrivateKey) []byte {
 	return signBufferSha256(_hash, privateKey)
 }
 
-func signBufferSha256(bufSha256 []byte, privateKey *ecdsa.PrivateKey) []byte { // *secp256k1.Signature
+func signBufferSha256(bufSha256 []byte, privateKey *ecdsa.PrivateKey) []byte {
 	var bufSha256Clone = make([]byte, len(bufSha256))
 	copy(bufSha256Clone, bufSha256)
 
-	nonce := 0
+	key := (*btcec.PrivateKey)(privateKey)
 
 	for {
-		r, s, err := rfc6979.SignECDSA(privateKey, bufSha256Clone, sha256.New, nonce)
+		ecsignature, err := key.Sign(bufSha256Clone)
 
-		nonce++
 		if err != nil {
 			log.Println(err)
 			return nil
 		}
-
-		ecsignature := &secp256k1.Signature{R: r, S: s}
 
 		der := ecsignature.Serialize()
 		lenR := der[3]
@@ -60,8 +60,7 @@ func signBufferSha256(bufSha256 []byte, privateKey *ecdsa.PrivateKey) []byte { /
 			// bitcoind checks the bit length of R and S here. The ecdsa signature
 			// algorithm returns R and S mod N therefore they will be the bitsize of
 			// the curve, and thus correctly sized.
-			key := (*secp256k1.PrivateKey)(privateKey)
-			curve := secp256k1.S256()
+			curve := btcec.S256()
 			maxCounter := 4
 			for i := 0; i < maxCounter; i++ {
 				pk, err := recoverKeyFromSignature(curve, ecsignature, bufSha256Clone, i, true)
@@ -97,7 +96,7 @@ func signBufferSha256(bufSha256 []byte, privateKey *ecdsa.PrivateKey) []byte { /
 	}
 }
 
-func recoverKeyFromSignature(curve *secp256k1.KoblitzCurve, sig *secp256k1.Signature, msg []byte, iter int, doChecks bool) (*secp256k1.PublicKey, error) {
+func recoverKeyFromSignature(curve *btcec.KoblitzCurve, sig *btcec.Signature, msg []byte, iter int, doChecks bool) (*btcec.PublicKey, error) {
 	rx := new(big.Int).Mul(curve.Params().N,
 		new(big.Int).SetInt64(int64(iter/2)))
 	rx.Add(rx, sig.R)
@@ -147,14 +146,14 @@ func recoverKeyFromSignature(curve *secp256k1.KoblitzCurve, sig *secp256k1.Signa
 	// step to prevent the jacobian conversion back and forth.
 	qx, qy := curve.Add(sRx, sRy, minuseGx, minuseGy)
 
-	return &secp256k1.PublicKey{
+	return &btcec.PublicKey{
 		Curve: curve,
 		X:     qx,
 		Y:     qy,
 	}, nil
 }
 
-func decompressPoint(curve *secp256k1.KoblitzCurve, x *big.Int, ybit bool) (*big.Int, error) {
+func decompressPoint(curve *btcec.KoblitzCurve, x *big.Int, ybit bool) (*big.Int, error) {
 	// TODO: This will probably only work for secp256k1 due to
 	// optimizations.
 

@@ -20,6 +20,7 @@ func EncodeTags(tag []string) []string {
 	return arrEncTag
 }
 
+//DecodeTags transliteration of an array of tags
 func DecodeTags(tags []string) []string {
 	arrDecTag := make([]string, 0)
 	for _, tag := range tags {
@@ -38,6 +39,7 @@ func EncodeTag(tag string) string {
 	return str
 }
 
+//DecodeTag transliteration of a tag
 func DecodeTag(tag string) string {
 	if len(tag) < 5 {
 		return tag
@@ -72,6 +74,7 @@ func EncodeTitle(title string) string {
 	return str
 }
 
+//DecodeTitle transliteration of the title
 func DecodeTitle(title string) string {
 	str, _ := decode(title)
 	return str

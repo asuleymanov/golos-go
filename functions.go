@@ -3,19 +3,14 @@ package client
 import (
 	// Stdlib
 	"encoding/hex"
-	"log"
 	"strconv"
 	"strings"
 	"time"
 
 	// Vendor
-	"github.com/pkg/errors"
-
-	// RPC
-	"github.com/asuleymanov/golos-go/encoding/wif"
-	"github.com/asuleymanov/golos-go/transactions"
 	"github.com/asuleymanov/golos-go/translit"
 	"github.com/asuleymanov/golos-go/types"
+	"github.com/pkg/errors"
 )
 
 const fdt = `"20060102t150405"`
@@ -23,9 +18,12 @@ const fdt = `"20060102t150405"`
 //Vote for publication
 func (client *Client) Vote(username, authorname, permlink string, weight int) (*OperResp, error) {
 	if weight > 10000 {
-		weight = 10000
+		return nil, errors.New("The weight can not be greater than 10,000 and less than -10000")
 	}
-	if client.VerifyVoterWeight(authorname, permlink, username, weight) {
+	bvvw, evvw := client.VerifyVoterWeight(authorname, permlink, username, weight)
+	if evvw != nil {
+		return nil, evvw
+	} else if evvw == nil && !bvvw {
 		return nil, errors.New("The voter is on the list")
 	}
 
@@ -50,7 +48,15 @@ func (client *Client) MultiVote(username, author, permlink string, arrvote []Arr
 	var arrvotes []ArrVote
 
 	for _, v := range arrvote {
-		if client.VerifyDelegatePostingKeySign(v.User, username) && !client.VerifyVoter(author, permlink, v.User) {
+		bvdpks, evdpks := client.VerifyDelegatePostingKeySign(v.User, username)
+		bvv, evv := client.VerifyVoter(author, permlink, v.User)
+		if evdpks != nil {
+			return nil, evdpks
+		}
+		if evv != nil {
+			return nil, evv
+		}
+		if bvdpks && !bvv {
 			arrvotes = append(arrvotes, v)
 		}
 	}
@@ -77,7 +83,11 @@ func (client *Client) MultiVote(username, author, permlink string, arrvote []Arr
 func (client *Client) Comment(username, authorname, ppermlink, body string, o *PCOptions) (*OperResp, error) {
 	var trx []types.Operation
 
-	times, _ := strconv.Unquote(time.Now().Add(30 * time.Second).UTC().Format(fdt))
+	times, errUnq := strconv.Unquote(time.Now().Add(30 * time.Second).UTC().Format(fdt))
+	if errUnq != nil {
+		errors.Wrapf(errUnq, "")
+	}
+
 	permlink := "re-" + authorname + "-" + ppermlink + "-" + times
 	permlink = strings.Replace(permlink, ".", "-", -1)
 
@@ -103,16 +113,16 @@ func (client *Client) Comment(username, authorname, ppermlink, body string, o *P
 }
 
 //Post creating a publication
-func (client *Client) Post(authorname, title, body, permlink, ptag, postImage string, tags []string, o *PCOptions) (*OperResp, error) {
+func (client *Client) Post(authorname, title, body, permlink, ppermlink, postImage string, tags []string, o *PCOptions) (*OperResp, error) {
 	if permlink == "" {
 		permlink = translit.EncodeTitle(title)
-	} 
-	
+	}
+
 	tag := translit.EncodeTags(tags)
-	if ptag == "" {
-		ptag = translit.EncodeTag(tags[0])
+	if ppermlink == "" {
+		ppermlink = translit.EncodeTag(tags[0])
 	} else {
-		ptag = translit.EncodeTag(ptag)
+		ppermlink = translit.EncodeTag(ppermlink)
 	}
 
 	jsonMeta := &types.ContentMetadata{
@@ -124,7 +134,7 @@ func (client *Client) Post(authorname, title, body, permlink, ptag, postImage st
 	var trx []types.Operation
 	txp := &types.CommentOperation{
 		ParentAuthor:   "",
-		ParentPermlink: ptag,
+		ParentPermlink: ppermlink,
 		Author:         authorname,
 		Permlink:       permlink,
 		Title:          title,
@@ -143,10 +153,17 @@ func (client *Client) Post(authorname, title, body, permlink, ptag, postImage st
 
 //DeleteComment deleting a publication or comment
 func (client *Client) DeleteComment(authorname, permlink string) (*OperResp, error) {
-	if client.VerifyVotes(authorname, permlink) {
+	bvv, evv := client.VerifyVotes(authorname, permlink)
+	if evv != nil {
+		return nil, evv
+	} else if evv == nil && !bvv {
 		return nil, errors.New("You can not delete already there are voted")
 	}
-	if client.VerifyComments(authorname, permlink) {
+
+	bec, eec := client.ExistComments(authorname, permlink)
+	if eec != nil {
+		return nil, eec
+	} else if eec == nil && !bec {
 		return nil, errors.New("You can not delete already have comments")
 	}
 	var trx []types.Operation
@@ -170,6 +187,7 @@ empty value
 */
 func (client *Client) Follows(follower, following, what string) (*OperResp, error) {
 	var trx []types.Operation
+
 	js := types.FollowOperation{
 		Follower:  follower,
 		Following: following,
@@ -204,7 +222,10 @@ func (client *Client) Follows(follower, following, what string) (*OperResp, erro
 
 //Reblog repost records
 func (client *Client) Reblog(username, authorname, permlink string) (*OperResp, error) {
-	if client.VerifyReblogs(authorname, permlink, username) {
+	bvr, evr := client.VerifyReblogs(authorname, permlink, username)
+	if evr != nil {
+		return nil, evr
+	} else if evr == nil && !bvr {
 		return nil, errors.New("The user already did repost")
 	}
 
@@ -297,52 +318,32 @@ func (client *Client) MultiTransfer(username string, arrtrans []ArrTransfer) (*O
 }
 
 //Login checking the user's key for the possibility of operations in GOLOS.
-func (client *Client) Login(username, key string) bool {
-	jsonString := "[\"login\",{\"account\":\"" + username + "\",\"app\":\"golos-go\"}]"
+func (client *Client) Login(username, key string) (bool, error) {
+	js := types.LoginOperation{
+		Account: username,
+	}
 
-	strx := &types.CustomJSONOperation{
+	jsonString, errj := types.MarshalCustomJSON(js)
+	if errj != nil {
+		return false, errj
+	}
+
+	var trx []types.Operation
+
+	tx := &types.CustomJSONOperation{
 		RequiredAuths:        []string{},
 		RequiredPostingAuths: []string{username},
 		ID:                   "login",
 		JSON:                 jsonString,
 	}
 
-	props, err := client.Database.GetDynamicGlobalProperties()
+	trx = append(trx, tx)
+	_, err := client.SendTrx(username, trx)
 	if err != nil {
-		return false
+		return false, err
 	}
 
-	// Создание транзакции
-	refBlockPrefix, err := transactions.RefBlockPrefix(props.HeadBlockID)
-	if err != nil {
-		return false
-	}
-	tx := transactions.NewSignedTransaction(&types.Transaction{
-		RefBlockNum:    transactions.RefBlockNum(props.HeadBlockNumber),
-		RefBlockPrefix: refBlockPrefix,
-	})
-
-	// Добавление операций в транзакцию
-	tx.PushOperation(strx)
-
-	// Получаем необходимый для подписи ключ
-	var keys [][]byte
-	privKey, _ := wif.Decode(string([]byte(key)))
-	keys = append(keys, privKey)
-
-	// Подписываем транзакцию
-	if err := tx.Sign(keys, client.Chain); err != nil {
-		return false
-	}
-
-	// Отправка транзакции
-	resp, err := client.NetworkBroadcast.BroadcastTransactionSynchronous(tx.Transaction)
-
-	if err != nil {
-		return false
-	}
-	log.Println("[Login] Block -> ", resp.BlockNum, " User -> ", username)
-	return true
+	return true, nil
 }
 
 //LimitOrderCancel restrict order Cancel
@@ -364,14 +365,13 @@ func (client *Client) LimitOrderCreate(owner string, sell, buy *types.Asset, ord
 	var trx []types.Operation
 
 	expiration := time.Now().Add(3600000 * time.Second).UTC()
-	fok := false
 
 	tx := &types.LimitOrderCreateOperation{
 		Owner:        owner,
 		OrderID:      orderid,
 		AmountToSell: sell,
 		MinToReceive: buy,
-		FillOrKill:   fok,
+		FillOrKill:   false,
 		Expiration:   &types.Time{&expiration},
 	}
 
@@ -380,12 +380,11 @@ func (client *Client) LimitOrderCreate(owner string, sell, buy *types.Asset, ord
 	return &OperResp{NameOper: "LimitOrderCreate", Bresp: resp}, err
 }
 
-//LimitOrderCreate сreation of a limit order based on a certain rate.
+//LimitOrderCreate2 сreation of a limit order based on a certain rate.
 func (client *Client) LimitOrderCreate2(owner string, sell, base, quote *types.Asset, orderid uint32) (*OperResp, error) {
 	var trx []types.Operation
 
 	expiration := time.Now().Add(3600000 * time.Second).UTC()
-	fok := false
 
 	tx := &types.LimitOrderCreate2Operation{
 		Owner:        owner,
@@ -395,7 +394,7 @@ func (client *Client) LimitOrderCreate2(owner string, sell, base, quote *types.A
 			Base:  base,
 			Quote: quote,
 		},
-		FillOrKill: fok,
+		FillOrKill: false,
 		Expiration: &types.Time{&expiration},
 	}
 
@@ -753,20 +752,17 @@ func (client *Client) SetWithdrawVestingRoute(from, to string, percent uint16, a
 }
 
 //ProposalCreate allows you to create a list of operations and send it to the block of the sign for signing by those who are mentioned in the transactions.
-/*func (client *Client) ProposalCreate(author, title, memo string, listop []types.Operation, reviewperiod int64) (*OperResp, error) {
+func (client *Client) ProposalCreate(author, title, memo string, listop []types.Operation, reviewperiod int64) (*OperResp, error) {
 	var trx []types.Operation
-	var op types.Operations
 
-	expiration := time.Now().Add(3600000 * time.Second).UTC()
+	expiration := time.Now().Add(43000 * time.Second).UTC()
 	reviewperiodtime := time.Now().Add(time.Duration(reviewperiod) * time.Minute).UTC()
-
-	op = append(op, listop...)
 
 	tx := &types.ProposalCreateOperation{
 		Author:             author,
 		Title:              title,
 		Memo:               memo,
-		ProposedOperations: op,
+		ProposedOperations: GenerateProposalOperation(listop),
 		ExpirationTime:     &types.Time{&expiration},
 		ReviewPeriodTime:   &types.Time{&reviewperiodtime},
 		Extensions:         []interface{}{},
@@ -775,7 +771,7 @@ func (client *Client) SetWithdrawVestingRoute(from, to string, percent uint16, a
 	trx = append(trx, tx)
 	resp, err := client.SendTrx(author, trx)
 	return &OperResp{NameOper: "ProposalCreate", Bresp: resp}, err
-}*/
+}
 
 //ProposalDelete allows you to delete a previously created list of operations.
 func (client *Client) ProposalDelete(author, title, requester string) (*OperResp, error) {
@@ -798,7 +794,10 @@ func (client *Client) ProposalDelete(author, title, requester string) (*OperResp
 func (client *Client) SendPrivateMessage(from, to, message string) (*OperResp, error) {
 	var trx []types.Operation
 
-	req, _ := client.Database.GetAccounts([]string{from, to})
+	req, errGetAcc := client.Database.GetAccounts([]string{from, to})
+	if errGetAcc != nil {
+		return nil, errGetAcc
+	}
 
 	js := types.PrivateMessageOperation{
 		From:             from,

@@ -9,10 +9,12 @@ import (
 
 const apiID = "witness_api"
 
+//API plug-in structure
 type API struct {
 	caller transports.Caller
 }
 
+//NewAPI plug-in initialization
 func NewAPI(caller transports.Caller) *API {
 	return &API{caller}
 }
@@ -32,7 +34,7 @@ func (api *API) GetActiveWitnesses() ([]string, error) {
 	raw, err := api.raw("get_active_witnesses", emptyParams)
 
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(err, "")
 	}
 	var resp []string
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
@@ -41,24 +43,11 @@ func (api *API) GetActiveWitnesses() ([]string, error) {
 	return resp, nil
 }
 
-//GetMinerQueue api request get_miner_queue
-func (api *API) GetMinerQueue() ([]string, error) {
-	raw, err := api.raw("get_miner_queue", emptyParams)
-	if err != nil {
-		return nil, err
-	}
-	var resp []string
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_miner_queue response", apiID)
-	}
-	return resp, nil
-}
-
 //GetCurrentMedianHistoryPrice api request get_current_median_history_price
 func (api *API) GetCurrentMedianHistoryPrice() (*CurrentMedianHistoryPrice, error) {
 	raw, err := api.raw("get_current_median_history_price", emptyParams)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(err, "")
 	}
 	var resp CurrentMedianHistoryPrice
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
@@ -71,7 +60,7 @@ func (api *API) GetCurrentMedianHistoryPrice() (*CurrentMedianHistoryPrice, erro
 func (api *API) GetFeedHistory() (*FeedHistory, error) {
 	raw, err := api.raw("get_feed_history", emptyParams)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(err, "")
 	}
 	var resp FeedHistory
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
@@ -80,11 +69,50 @@ func (api *API) GetFeedHistory() (*FeedHistory, error) {
 	return &resp, nil
 }
 
+//GetMinerQueue api request get_miner_queue
+func (api *API) GetMinerQueue() ([]string, error) {
+	raw, err := api.raw("get_miner_queue", emptyParams)
+	if err != nil {
+		return nil, errors.Wrapf(err, "")
+	}
+	var resp []string
+	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
+		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_miner_queue response", apiID)
+	}
+	return resp, nil
+}
+
+//GetWitnessByAccount api request get_witness_by_account
+func (api *API) GetWitnessByAccount(author string) (*Witness, error) {
+	raw, err := api.raw("get_witness_by_account", []string{author})
+	if err != nil {
+		return nil, errors.Wrapf(err, "")
+	}
+	var resp Witness
+	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
+		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_witness_by_account response", apiID)
+	}
+	return &resp, nil
+}
+
+//GetWitnessCount api request get_witness_count
+func (api *API) GetWitnessCount() (uint32, error) {
+	raw, err := api.raw("get_witness_count", emptyParams)
+	if err != nil {
+		return 0, errors.Wrapf(err, "")
+	}
+	var resp uint32
+	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
+		return 0, errors.Wrapf(err, "golos: %v: failed to unmarshal get_witness_count response", apiID)
+	}
+	return resp, nil
+}
+
 //GetWitnessSchedule api request get_witness_schedule
 func (api *API) GetWitnessSchedule() (*WitnessSchedule, error) {
 	raw, err := api.raw("get_witness_schedule", emptyParams)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(err, "")
 	}
 	var resp WitnessSchedule
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
@@ -97,26 +125,13 @@ func (api *API) GetWitnessSchedule() (*WitnessSchedule, error) {
 func (api *API) GetWitnesses(id []uint32) ([]*Witness, error) {
 	raw, err := api.raw("get_witnesses", [][]uint32{id})
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(err, "")
 	}
 	var resp []*Witness
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
 		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_witnesses response", apiID)
 	}
 	return resp, nil
-}
-
-//GetWitnessByAccount api request get_witness_by_account
-func (api *API) GetWitnessByAccount(author string) (*Witness, error) {
-	raw, err := api.raw("get_witness_by_account", []string{author})
-	if err != nil {
-		return nil, err
-	}
-	var resp Witness
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_witness_by_account response", apiID)
-	}
-	return &resp, nil
 }
 
 //GetWitnessByVote api request get_witnesses_by_vote
@@ -126,7 +141,7 @@ func (api *API) GetWitnessByVote(author string, limit uint) ([]*Witness, error) 
 	}
 	raw, err := api.raw("get_witnesses_by_vote", []interface{}{author, limit})
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(err, "")
 	}
 	var resp []*Witness
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
@@ -142,24 +157,11 @@ func (api *API) LookupWitnessAccounts(author string, limit uint) ([]string, erro
 	}
 	raw, err := api.raw("lookup_witness_accounts", []interface{}{author, limit})
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(err, "")
 	}
 	var resp []string
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
 		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal lookup_witness_accounts response", apiID)
-	}
-	return resp, nil
-}
-
-//GetWitnessCount api request get_witness_count
-func (api *API) GetWitnessCount() (uint32, error) {
-	raw, err := api.raw("get_witness_count", emptyParams)
-	if err != nil {
-		return 0, err
-	}
-	var resp uint32
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return 0, errors.Wrapf(err, "golos: %v: failed to unmarshal get_witness_count response", apiID)
 	}
 	return resp, nil
 }

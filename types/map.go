@@ -5,16 +5,10 @@ import (
 	"errors"
 )
 
+//StringInt64Map type from parameter JSON
 type StringInt64Map map[string]int64
 
-/*func (m StringInt64Map) MarshalJSON() ([]byte, error) {
-	xs := make([]interface{}, len(m))
-	for k, v := range m {
-		xs = append(xs, []interface{}{k, v})
-	}
-	return json.Marshal(xs)
-}*/
-
+//MarshalJSON function for packing the StringInt64Map type in JSON.
 func (m StringInt64Map) MarshalJSON() ([]byte, error) {
 	xs := make([]interface{}, 0, len(m))
 	for k, v := range m {
@@ -23,6 +17,7 @@ func (m StringInt64Map) MarshalJSON() ([]byte, error) {
 	return JSONMarshal(xs)
 }
 
+//UnmarshalJSON unpacking the JSON parameter in the StringInt64Map type.
 func (m *StringInt64Map) UnmarshalJSON(data []byte) error {
 	var xs [][]interface{}
 	if err := json.Unmarshal(data, &xs); err != nil {

@@ -18,12 +18,14 @@ import (
 var (
 	TypeFollow         = "follow"
 	TypeReblog         = "reblog"
+	TypeLogin          = "login"
 	TypePrivateMessage = "private_message"
 )
 
 var customJSONDataObjects = map[string]interface{}{
 	TypeFollow:         &FollowOperation{},
 	TypeReblog:         &ReblogOperation{},
+	TypeLogin:          &LoginOperation{},
 	TypePrivateMessage: &PrivateMessageOperation{},
 }
 
@@ -33,7 +35,7 @@ var customJSONDataObjects = map[string]interface{}{
 //             (id)
 //             (json) )
 
-// CustomJSONOperation represents custom_json operation data.
+//CustomJSONOperation represents custom_json operation data.
 type CustomJSONOperation struct {
 	RequiredAuths        []string `json:"required_auths"`
 	RequiredPostingAuths []string `json:"required_posting_auths"`
@@ -41,14 +43,17 @@ type CustomJSONOperation struct {
 	JSON                 string   `json:"json"`
 }
 
+//Type function that defines the type of operation.
 func (op *CustomJSONOperation) Type() OpType {
 	return TypeCustomJSON
 }
 
+//Data returns the operation data.
 func (op *CustomJSONOperation) Data() interface{} {
 	return op
 }
 
+//UnmarshalData unpacking the JSON parameter in the CustomJSONOperation type.
 func (op *CustomJSONOperation) UnmarshalData() (interface{}, error) {
 	// Get the corresponding data object template.
 	template, ok := customJSONDataObjects[op.ID]
@@ -65,8 +70,7 @@ func (op *CustomJSONOperation) UnmarshalData() (interface{}, error) {
 	if op.JSON[0] == '[' {
 		rawTuple := make([]json.RawMessage, 2)
 		if err := json.NewDecoder(strings.NewReader(op.JSON)).Decode(&rawTuple); err != nil {
-			return nil, errors.Wrapf(err,
-				"failed to unmarshal CustomJSONOperation.JSON: \n%v", op.JSON)
+			return nil, errors.Wrapf(err, "failed to unmarshal CustomJSONOperation.JSON: \n%v", op.JSON)
 		}
 		if rawTuple[1] == nil {
 			return nil, errors.Errorf("invalid CustomJSONOperation.JSON: \n%v", op.JSON)
@@ -78,13 +82,13 @@ func (op *CustomJSONOperation) UnmarshalData() (interface{}, error) {
 
 	// Unmarshal into the new object instance.
 	if err := json.NewDecoder(bodyReader).Decode(opData); err != nil {
-		return nil, errors.Wrapf(err,
-			"failed to unmarshal CustomJSONOperation.JSON: \n%v", op.JSON)
+		return nil, errors.Wrapf(err, "failed to unmarshal CustomJSONOperation.JSON: \n%v", op.JSON)
 	}
 
 	return opData, nil
 }
 
+//MarshalTransaction is a function of converting type CustomJSONOperation to bytes.
 func (op *CustomJSONOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeCustomJSON.Code()))

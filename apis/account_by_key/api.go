@@ -9,10 +9,12 @@ import (
 
 const apiID = "account_by_key"
 
+//API plug-in structure
 type API struct {
 	caller transports.Caller
 }
 
+//NewAPI plug-in initialization
 func NewAPI(caller transports.Caller) *API {
 	return &API{caller}
 }
@@ -27,7 +29,7 @@ func (api *API) raw(method string, params interface{}) (*json.RawMessage, error)
 	return &resp, nil
 }
 
-//GetKeyReferences
+//GetKeyReferences api request get_key_references
 func (api *API) GetKeyReferences(pubkey string) (*json.RawMessage, error) {
 	return api.raw("get_key_references", []interface{}{pubkey})
 }

@@ -5,41 +5,7 @@ import (
 	"github.com/asuleymanov/golos-go/types"
 )
 
-type FollowObject struct {
-	Follower  string   `json:"follower"`
-	Following string   `json:"following"`
-	What      []string `json:"what"`
-}
-
-type FeedEntry struct {
-	Author   string      `json:"author"`
-	Permlink string      `json:"permlink"`
-	ReblogBy []string    `json:"reblog_by"`
-	ReblogOn *types.Time `json:"reblog_on"`
-	EntryID  *types.Int  `json:"entry_id"`
-}
-
-type Feeds struct {
-	Comment  *CommentData `json:"comment"`
-	ReblogBy []string     `json:"reblog_by"`
-	ReblogOn *types.Time  `json:"reblog_on"`
-	EntryID  *types.Int   `json:"entry_id"`
-}
-
-type FollowCount struct {
-	Account        string `json:"account"`
-	FollowerCount  int    `json:"follower_count"`
-	FollowingCount int    `json:"following_count"`
-}
-
-type BlogEntries struct {
-	Author   string      `json:"author"`
-	Permlink string      `json:"permlink"`
-	Blog     string      `json:"blog"`
-	ReblogOn *types.Time `json:"reblog_on"`
-	EntryID  *types.Int  `json:"entry_id"`
-}
-
+//Blogs structure for the GetBlog function
 type Blogs struct {
 	Comment  *CommentData `json:"comment"`
 	Blog     string       `json:"blog"`
@@ -47,6 +13,7 @@ type Blogs struct {
 	EntryID  *types.Int   `json:"entry_id"`
 }
 
+//CommentData additional structure for the function GetBlog.
 type CommentData struct {
 	ID                   *types.Int             `json:"id"`
 	Author               string                 `json:"author"`
@@ -85,20 +52,18 @@ type CommentData struct {
 	AllowCurationRewards bool                   `json:"allow_curation_rewards"`
 }
 
-type AccountReputation struct {
-	Account    string      `json:"account"`
-	Reputation interface{} `json:"reputation"`
-}
-
+//BlogAuthors structure for the GetBlogAuthors function
 type BlogAuthors struct {
 	BlogAuthor []*BlogAuthor
 }
 
+//BlogAuthor additional structure for the function GetBlogAuthors.
 type BlogAuthor struct {
 	Name  string
 	Value float64
 }
 
+//UnmarshalJSON unpacking the JSON parameter in the BlogAuthors type.
 func (b *BlogAuthors) UnmarshalJSON(data []byte) error {
 	var v []interface{}
 	if err := json.Unmarshal(data, &v); err != nil {
@@ -111,4 +76,44 @@ func (b *BlogAuthors) UnmarshalJSON(data []byte) error {
 	}
 
 	return nil
+}
+
+//BlogEntries structure for the GetBlogEntries function
+type BlogEntries struct {
+	Author   string      `json:"author"`
+	Permlink string      `json:"permlink"`
+	Blog     string      `json:"blog"`
+	ReblogOn *types.Time `json:"reblog_on"`
+	EntryID  *types.Int  `json:"entry_id"`
+}
+
+//Feeds structure for the GetFeed function
+type Feeds struct {
+	Comment  *CommentData `json:"comment"`
+	ReblogBy []string     `json:"reblog_by"`
+	ReblogOn *types.Time  `json:"reblog_on"`
+	EntryID  *types.Int   `json:"entry_id"`
+}
+
+//FeedEntry structure for the GetFeedEntries function
+type FeedEntry struct {
+	Author   string      `json:"author"`
+	Permlink string      `json:"permlink"`
+	ReblogBy []string    `json:"reblog_by"`
+	ReblogOn *types.Time `json:"reblog_on"`
+	EntryID  *types.Int  `json:"entry_id"`
+}
+
+//FollowCount structure for the GetFollowCount function
+type FollowCount struct {
+	Account        string `json:"account"`
+	FollowerCount  int    `json:"follower_count"`
+	FollowingCount int    `json:"following_count"`
+}
+
+//FollowObject structure for the GetFollowers and GetFollowing functions
+type FollowObject struct {
+	Follower  string   `json:"follower"`
+	Following string   `json:"following"`
+	What      []string `json:"what"`
 }

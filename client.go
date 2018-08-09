@@ -128,8 +128,8 @@ func initChainID(str string) (*transactions.Chain, error) {
 	var chainID transactions.Chain
 	// Define ChainId
 	switch str {
-	case "golos":
-		chainID = *transactions.GolosChain
+	case "work":
+		chainID = *transactions.WorkChain
 	case "test":
 		chainID = *transactions.TestChain
 	default:

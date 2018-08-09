@@ -6,9 +6,11 @@ This package adds support for `network_broadcast_api`.
 
 | **ID** | **Command Name** | **Version** |
 | :-: | :-: | :-: |
-| 1 | broadcast_transaction | **DONE** |
-| 2 | broadcast_transaction_synchronous | **DONE** |
-| 3 | broadcast_block | **NONE** |
+| 1 | broadcast_block | **NONE** |
+| 2 | broadcast_transaction | **DONE** |
+| 3 | broadcast_transaction_synchronous | **DONE** |
+| 4 | broadcast_transaction_with_callback | **NONE** |
+
 
 ## License
 

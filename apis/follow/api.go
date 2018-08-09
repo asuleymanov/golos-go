@@ -22,7 +22,7 @@ func NewAPI(caller transports.Caller) *API {
 func (api *API) raw(method string, params interface{}) (*json.RawMessage, error) {
 	var resp json.RawMessage
 	if err := api.caller.Call("call", []interface{}{apiID, method, params}, &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to call %v\n", apiID, method)
+		return nil, errors.Wrapf(err, "%v: failed to call %v\n", apiID, method)
 	}
 	return &resp, nil
 }
@@ -31,36 +31,27 @@ func (api *API) raw(method string, params interface{}) (*json.RawMessage, error)
 func (api *API) GetAccountReputations(accounts []string) ([]uint32, error) {
 	raw, err := api.raw("get_account_reputations", []interface{}{accounts})
 	if err != nil {
-		return nil, errors.Wrapf(err, "")
+		return nil, err
 	}
 	var resp []uint32
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: follow_api: failed to unmarshal get_account_reputations response")
+		return nil, errors.Wrapf(err, "%v: failed to unmarshal get_account_reputations response", apiID)
 	}
 	return resp, nil
-}
-
-//GetAccounts api request get_accounts
-func (api *API) GetAccounts(accounts []string) (*json.RawMessage, error) {
-	raw, err := api.raw("get_accounts", []interface{}{accounts})
-	if err != nil {
-		return nil, errors.Wrapf(err, "")
-	}
-	return raw, nil
 }
 
 //GetBlog api request get_blog
 func (api *API) GetBlog(accountName string, entryID uint32, limit uint16) ([]*Blogs, error) {
 	if limit > 500 {
-		return nil, errors.New("golos: follow_api: get_blog -> limit must not exceed 500")
+		return nil, errors.Errorf("%v: get_blog -> limit must not exceed 500", apiID)
 	}
 	raw, err := api.raw("get_blog", []interface{}{accountName, entryID, limit})
 	if err != nil {
-		return nil, errors.Wrapf(err, "")
+		return nil, err
 	}
 	var resp []*Blogs
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: follow_api: failed to unmarshal get_feed response")
+		return nil, errors.Wrapf(err, "%v: failed to unmarshal get_feed response", apiID)
 	}
 	return resp, nil
 }
@@ -69,11 +60,11 @@ func (api *API) GetBlog(accountName string, entryID uint32, limit uint16) ([]*Bl
 func (api *API) GetBlogAuthors(author string) (*BlogAuthors, error) {
 	raw, err := api.raw("get_blog_authors", []interface{}{author})
 	if err != nil {
-		return nil, errors.Wrapf(err, "")
+		return nil, err
 	}
 	var resp BlogAuthors
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: market_history_api: failed to unmarshal get_blog_authors response")
+		return nil, errors.Wrapf(err, "market_history_api: failed to unmarshal get_blog_authors response", apiID)
 	}
 	return &resp, nil
 }
@@ -81,15 +72,15 @@ func (api *API) GetBlogAuthors(author string) (*BlogAuthors, error) {
 //GetBlogEntries api request get_blog_entries
 func (api *API) GetBlogEntries(accountName string, entryID uint32, limit uint16) ([]*BlogEntries, error) {
 	if limit > 500 {
-		return nil, errors.New("golos: follow_api: get_blog_entries -> limit must not exceed 500")
+		return nil, errors.Errorf("%v: get_blog_entries -> limit must not exceed 500", apiID)
 	}
 	raw, err := api.raw("get_blog_entries", []interface{}{accountName, entryID, limit})
 	if err != nil {
-		return nil, errors.Wrapf(err, "")
+		return nil, err
 	}
 	var resp []*BlogEntries
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: follow_api: failed to unmarshal get_feed_entries response")
+		return nil, errors.Wrapf(err, "%v: failed to unmarshal get_feed_entries response", apiID)
 	}
 	return resp, nil
 }
@@ -97,15 +88,15 @@ func (api *API) GetBlogEntries(accountName string, entryID uint32, limit uint16)
 //GetFeed api request get_feed
 func (api *API) GetFeed(accountName string, entryID uint32, limit uint16) ([]*Feeds, error) {
 	if limit > 500 {
-		return nil, errors.New("golos: follow_api: get_feed -> limit must not exceed 500")
+		return nil, errors.Errorf("%v: get_feed -> limit must not exceed 500", apiID)
 	}
 	raw, err := api.raw("get_feed", []interface{}{accountName, entryID, limit})
 	if err != nil {
-		return nil, errors.Wrapf(err, "")
+		return nil, err
 	}
 	var resp []*Feeds
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: follow_api: failed to unmarshal get_feed response")
+		return nil, errors.Wrapf(err, "%v: failed to unmarshal get_feed response", apiID)
 	}
 	return resp, nil
 }
@@ -113,15 +104,15 @@ func (api *API) GetFeed(accountName string, entryID uint32, limit uint16) ([]*Fe
 //GetFeedEntries api request get_feed_entries
 func (api *API) GetFeedEntries(accountName string, entryID uint32, limit uint16) ([]*FeedEntry, error) {
 	if limit > 500 {
-		return nil, errors.New("golos: follow_api: get_feed_entries -> limit must not exceed 500")
+		return nil, errors.Errorf("%v: get_feed_entries -> limit must not exceed 500", apiID)
 	}
 	raw, err := api.raw("get_feed_entries", []interface{}{accountName, entryID, limit})
 	if err != nil {
-		return nil, errors.Wrapf(err, "")
+		return nil, err
 	}
 	var resp []*FeedEntry
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: follow_api: failed to unmarshal get_feed_entries response")
+		return nil, errors.Wrapf(err, "%v: failed to unmarshal get_feed_entries response", apiID)
 	}
 	return resp, nil
 }
@@ -130,37 +121,61 @@ func (api *API) GetFeedEntries(accountName string, entryID uint32, limit uint16)
 func (api *API) GetFollowCount(accountName string) (*FollowCount, error) {
 	raw, err := api.raw("get_follow_count", []interface{}{accountName})
 	if err != nil {
-		return nil, errors.Wrapf(err, "")
+		return nil, err
 	}
 	var resp *FollowCount
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: follow_api: failed to unmarshal get_follow_count response")
+		return nil, errors.Wrapf(err, "%v: failed to unmarshal get_follow_count response", apiID)
 	}
 	return resp, nil
 }
 
 //GetFollowers api request get_followers
+/*
+kind:
+undefined
+blog
+ignore
+*/
 func (api *API) GetFollowers(accountName, start, kind string, limit uint16) ([]*FollowObject, error) {
+if limit > 1000 {
+		return nil, errors.Errorf("%v: get_followers -> limit must not exceed 1000", apiID)
+	}
+	if kind !="undefined" || kind !="blog" || kind !="ignore" {
+		return nil, errors.Errorf("%v: get_followers -> kind can take values only \"undefined\", \"blog\" and \"ignore\".", apiID)
+	}
 	raw, err := api.raw("get_followers", []interface{}{accountName, start, kind, limit})
 	if err != nil {
-		return nil, errors.Wrapf(err, "")
+		return nil, err
 	}
 	var resp []*FollowObject
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: follow_api: failed to unmarshal get_followers response")
+		return nil, errors.Wrapf(err, "%v: failed to unmarshal get_followers response", apiID)
 	}
 	return resp, nil
 }
 
 //GetFollowing api request get_following
+/*
+kind:
+undefined
+blog
+ignore
+*/
 func (api *API) GetFollowing(accountName, start, kind string, limit uint16) ([]*FollowObject, error) {
+if limit > 1000 {
+		return nil, errors.Errorf("%v: get_following -> limit must not exceed 1000", apiID)
+	}
+	if kind !="undefined" || kind !="blog" || kind !="ignore" {
+		return nil, errors.Errorf("%v: get_following -> kind can take values only \"undefined\", \"blog\" and \"ignore\".", apiID)
+	}
 	raw, err := api.raw("get_following", []interface{}{accountName, start, kind, limit})
 	if err != nil {
-		return nil, errors.Wrapf(err, "")
+		return nil, err
 	}
 	var resp []*FollowObject
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: follow_api: failed to unmarshal get_following response")
+		return nil, errors.Wrapf(err, "%v: failed to unmarshal get_following response", apiID)
 	}
 	return resp, nil
 }
@@ -169,11 +184,11 @@ func (api *API) GetFollowing(accountName, start, kind string, limit uint16) ([]*
 func (api *API) GetRebloggedBy(author, permlink string) ([]string, error) {
 	raw, err := api.raw("get_reblogged_by", []interface{}{author, permlink})
 	if err != nil {
-		return nil, errors.Wrapf(err, "")
+		return nil, err
 	}
 	var resp []string
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: market_history_api: failed to unmarshal get_reblogged_by response")
+		return nil, errors.Wrapf(err, "market_history_api: failed to unmarshal get_reblogged_by response", apiID)
 	}
 	return resp, nil
 }

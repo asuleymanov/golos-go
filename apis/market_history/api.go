@@ -24,7 +24,7 @@ var emptyParams = []string{}
 func (api *API) raw(method string, params interface{}) (*json.RawMessage, error) {
 	var resp json.RawMessage
 	if err := api.caller.Call("call", []interface{}{apiID, method, params}, &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to call %v\n", apiID, method)
+		return nil, errors.Wrapf(err, "%v: failed to call %v\n", apiID, method)
 	}
 	return &resp, nil
 }
@@ -33,11 +33,11 @@ func (api *API) raw(method string, params interface{}) (*json.RawMessage, error)
 func (api *API) GetMarketHistory(bSec uint32, start, end string) ([]*MarketHistory, error) {
 	raw, err := api.raw("get_market_history", []interface{}{bSec, start, end})
 	if err != nil {
-		return nil, errors.Wrapf(err, "")
+		return nil, err
 	}
 	var resp []*MarketHistory
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: market_history: failed to unmarshal get_market_history response")
+		return nil, errors.Wrapf(err, "%v: failed to unmarshal get_market_history response", apiID)
 	}
 	return resp, nil
 }
@@ -46,11 +46,11 @@ func (api *API) GetMarketHistory(bSec uint32, start, end string) ([]*MarketHisto
 func (api *API) GetMarketHistoryBuckets() ([]uint32, error) {
 	raw, err := api.raw("get_market_history_buckets", emptyParams)
 	if err != nil {
-		return nil, errors.Wrapf(err, "")
+		return nil, err
 	}
 	var resp []uint32
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: market_history: failed to unmarshal get_market_history_buckets response")
+		return nil, errors.Wrapf(err, "%v: failed to unmarshal get_market_history_buckets response", apiID)
 	}
 	return resp, nil
 }
@@ -59,11 +59,11 @@ func (api *API) GetMarketHistoryBuckets() ([]uint32, error) {
 func (api *API) GetOpenOrders(accountName string) ([]*OpenOrders, error) {
 	raw, err := api.raw("get_open_orders", []string{accountName})
 	if err != nil {
-		return nil, errors.Wrapf(err, "")
+		return nil, err
 	}
 	var resp []*OpenOrders
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_open_orders response", apiID)
+		return nil, errors.Wrapf(err, "%v: failed to unmarshal get_open_orders response", apiID)
 	}
 	return resp, nil
 }
@@ -71,15 +71,15 @@ func (api *API) GetOpenOrders(accountName string) ([]*OpenOrders, error) {
 //GetOrderBook api request get_order_book
 func (api *API) GetOrderBook(limit uint32) (*OrderBook, error) {
 	if limit > 1000 {
-		return nil, errors.New("golos: market_history: get_order_book -> limit must not exceed 1000")
+		return nil, errors.Errorf("%v: get_order_book -> limit must not exceed 1000", apiID)
 	}
 	raw, err := api.raw("get_order_book", []interface{}{limit})
 	if err != nil {
-		return nil, errors.Wrapf(err, "")
+		return nil, err
 	}
 	var resp *OrderBook
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: market_history: failed to unmarshal get_order_book response")
+		return nil, errors.Wrapf(err, "%v: failed to unmarshal get_order_book response", apiID)
 	}
 	return resp, nil
 }
@@ -89,15 +89,15 @@ func (api *API) GetOrderBook(limit uint32) (*OrderBook, error) {
 //GetRecentTrades api request get_recent_trades
 func (api *API) GetRecentTrades(limit uint32) ([]*Trades, error) {
 	if limit > 1000 {
-		return nil, errors.New("golos: market_history: get_order_book -> limit must not exceed 1000")
+		return nil, errors.Errorf("%v: get_order_book -> limit must not exceed 1000", apiID)
 	}
 	raw, err := api.raw("get_recent_trades", []interface{}{limit})
 	if err != nil {
-		return nil, errors.Wrapf(err, "")
+		return nil, err
 	}
 	var resp []*Trades
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: market_history: failed to unmarshal get_recent_trades response")
+		return nil, errors.Wrapf(err, "%v: failed to unmarshal get_recent_trades response", apiID)
 	}
 	return resp, nil
 }
@@ -106,11 +106,11 @@ func (api *API) GetRecentTrades(limit uint32) ([]*Trades, error) {
 func (api *API) GetTicker() (*Ticker, error) {
 	raw, err := api.raw("get_ticker", emptyParams)
 	if err != nil {
-		return nil, errors.Wrapf(err, "")
+		return nil, err
 	}
 	var resp *Ticker
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: market_history: failed to unmarshal get_ticker response")
+		return nil, errors.Wrapf(err, "%v: failed to unmarshal get_ticker response", apiID)
 	}
 	return resp, nil
 }
@@ -118,15 +118,15 @@ func (api *API) GetTicker() (*Ticker, error) {
 //GetTradeHistory api request get_trade_history
 func (api *API) GetTradeHistory(start, end string, limit uint32) ([]*Trades, error) {
 	if limit > 1000 {
-		return nil, errors.New("golos: market_history: get_order_book -> limit must not exceed 1000")
+		return nil, errors.Errorf("%v: get_order_book -> limit must not exceed 1000", apiID)
 	}
 	raw, err := api.raw("get_trade_history", []interface{}{start, end, limit})
 	if err != nil {
-		return nil, errors.Wrapf(err, "")
+		return nil, err
 	}
 	var resp []*Trades
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: market_history: failed to unmarshal get_trade_history response")
+		return nil, errors.Wrapf(err, "%v: failed to unmarshal get_trade_history response", apiID)
 	}
 	return resp, nil
 }
@@ -135,11 +135,11 @@ func (api *API) GetTradeHistory(start, end string, limit uint32) ([]*Trades, err
 func (api *API) GetVolume() (*Volume, error) {
 	raw, err := api.raw("get_volume", emptyParams)
 	if err != nil {
-		return nil, errors.Wrapf(err, "")
+		return nil, err
 	}
 	var resp *Volume
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: market_history: failed to unmarshal get_volume response")
+		return nil, errors.Wrapf(err, "%v: failed to unmarshal get_volume response", apiID)
 	}
 	return resp, nil
 }

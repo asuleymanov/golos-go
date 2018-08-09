@@ -189,5 +189,5 @@ func (client *Client) VerifyTrx(username string, strx types.Operation) (bool, er
 	if err != nil {
 		return false, err
 	}
-	return resp, nil
+	return *resp, nil
 }

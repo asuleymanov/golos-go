@@ -26,25 +26,15 @@ func (api *API) call(method string, params, resp interface{}) error {
 
 //BroadcastTransaction api request broadcast_transaction
 func (api *API) BroadcastTransaction(tx *types.Transaction) error {
-	params := []interface{}{tx}
-	return errors.Wrapf(api.call("broadcast_transaction", params, nil), "")
-}
-
-//BroadcastResponse structure for the BroadcastTransactionSynchronous function
-type BroadcastResponse struct {
-	ID       string `json:"id"`
-	BlockNum uint32 `json:"block_num"`
-	TrxNum   uint32 `json:"trx_num"`
-	Expired  bool   `json:"expired"`
+	return errors.Wrapf(api.call("broadcast_transaction", []interface{}{tx}, nil), "")
 }
 
 //BroadcastTransactionSynchronous api request broadcast_transaction_synchronous
 func (api *API) BroadcastTransactionSynchronous(tx *types.Transaction) (*BroadcastResponse, error) {
-	params := []interface{}{tx}
 	var raw json.RawMessage
-	err := api.call("broadcast_transaction_synchronous", params, &raw)
+	err := api.call("broadcast_transaction_synchronous", []interface{}{tx}, &raw)
 	if err != nil {
-		return nil, errors.Wrapf(err, "")
+		return nil, err
 	}
 
 	var resp BroadcastResponse

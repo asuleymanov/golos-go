@@ -5,8 +5,8 @@ type Chain struct {
 	ID string
 }
 
-//GolosChain ID GOLOS blockchain
-var GolosChain = &Chain{
+//WorkChain ID GOLOS blockchain
+var WorkChain = &Chain{
 	ID: "782a3039b478c839e4cb0c941ff4eaeb7df40bdd68bd441afd444b9da763de12",
 }
 

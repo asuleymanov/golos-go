@@ -20,12 +20,10 @@ func NewAPI(caller transports.Caller) *API {
 	return &API{caller}
 }
 
-var emptyParams = []string{}
-
 func (api *API) raw(method string, params interface{}) (*json.RawMessage, error) {
 	var resp json.RawMessage
 	if err := api.caller.Call("call", []interface{}{apiID, method, params}, &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to call %v\n", apiID, method)
+		return nil, errors.Wrapf(err, "%v: failed to call %v\n", apiID, method)
 	}
 	return &resp, nil
 }
@@ -34,11 +32,11 @@ func (api *API) raw(method string, params interface{}) (*json.RawMessage, error)
 func (api *API) GetOpsInBlock(blockNum uint32, onlyVirtual bool) ([]*types.OperationObject, error) {
 	raw, err := api.raw("get_ops_in_block", []interface{}{blockNum, onlyVirtual})
 	if err != nil {
-		return nil, errors.Wrapf(err, "")
+		return nil, err
 	}
 	var resp []*types.OperationObject
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_ops_in_block response", apiID)
+		return nil, errors.Wrapf(err, "%v: failed to unmarshal get_ops_in_block response", apiID)
 	}
 	return resp, nil
 }
@@ -47,11 +45,11 @@ func (api *API) GetOpsInBlock(blockNum uint32, onlyVirtual bool) ([]*types.Opera
 func (api *API) GetTransaction(id string) (*types.Transaction, error) {
 	raw, err := api.raw("get_transaction", []string{id})
 	if err != nil {
-		return nil, errors.Wrapf(err, "")
+		return nil, err
 	}
 	var resp types.Transaction
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to unmarshal get_transaction response", apiID)
+		return nil, errors.Wrapf(err, "%v: failed to unmarshal get_transaction response", apiID)
 	}
 	return &resp, nil
 }

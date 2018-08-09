@@ -19,12 +19,10 @@ func NewAPI(caller transports.Caller) *API {
 	return &API{caller}
 }
 
-var emptyParams = []string{}
-
 func (api *API) raw(method string, params interface{}) (*json.RawMessage, error) {
 	var resp json.RawMessage
 	if err := api.caller.Call("call", []interface{}{apiID, method, params}, &resp); err != nil {
-		return nil, errors.Wrapf(err, "golos: %v: failed to call %v\n", apiID, method)
+		return nil, errors.Wrapf(err, "%v: failed to call %v\n", apiID, method)
 	}
 	return &resp, nil
 }

@@ -28,14 +28,16 @@ func (client *Client) FollowersList(username string) ([]string, error) {
 
 	fccount := fc.FollowerCount
 	i := 0
+	startFollowers:=""
 	for i < fccount {
-		req, err := client.Follow.GetFollowers(username, "", "blog", 1000)
+		req, err := client.Follow.GetFollowers(username, startFollowers, "blog", 1000)
 		if err != nil {
 			return followers, err
 		}
 
 		for _, v := range req {
 			followers = append(followers, v.Follower)
+			startFollowers = v.Followers
 		}
 		i = i + 1000
 	}
@@ -53,14 +55,16 @@ func (client *Client) FollowingList(username string) ([]string, error) {
 
 	fccount := fc.FollowingCount
 	i := 0
+	startFollowing:=""
 	for i < fccount {
-		req, err := client.Follow.GetFollowing(username, "", "blog", 100)
+		req, err := client.Follow.GetFollowing(username, startFollowing, "blog", 100)
 		if err != nil {
 			return following, err
 		}
 
 		for _, v := range req {
 			following = append(following, v.Following)
+			startFollowing = v.Following
 		}
 		i = i + 100
 	}

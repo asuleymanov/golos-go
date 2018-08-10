@@ -37,7 +37,7 @@ func (client *Client) FollowersList(username string) ([]string, error) {
 
 		for _, v := range req {
 			followers = append(followers, v.Follower)
-			startFollowers = v.Followers
+			startFollowers = v.Follower
 		}
 		i = i + 1000
 	}

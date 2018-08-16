@@ -2,9 +2,10 @@ package translit
 
 import (
 	"bytes"
-	"log"
 	"regexp"
 	"strings"
+
+	"github.com/pkg/errors"
 )
 
 //EncodeTags transliteration of an array of tags
@@ -52,15 +53,15 @@ func DecodeTag(tag string) string {
 }
 
 //EncodeTitle transliteration of the title
-func EncodeTitle(title string) string {
+func EncodeTitle(title string) (string, error) {
 	if title == "" {
-		return title
+		return title, nil
 	}
 
 	var str string
 	reg, err := regexp.Compile("[^a-zA-Z0-9а-яА-Я.,]+")
 	if err != nil {
-		log.Fatal(err)
+		return "", errors.Wrapf(err, "EncodeTitle: ")
 	}
 	processedString := reg.ReplaceAllString(title, "-")
 	s1, _ := encode(processedString)
@@ -71,7 +72,7 @@ func EncodeTitle(title string) string {
 	} else {
 		str = strings.Join(s3, "")
 	}
-	return str
+	return str, nil
 }
 
 //DecodeTitle transliteration of the title

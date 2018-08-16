@@ -115,7 +115,11 @@ func (client *Client) Comment(username, authorname, ppermlink, body string, o *P
 //Post creating a publication
 func (client *Client) Post(authorname, title, body, permlink, ppermlink, postImage string, tags []string, o *PCOptions) (*OperResp, error) {
 	if permlink == "" {
-		permlink = translit.EncodeTitle(title)
+		var err error
+		permlink, err = translit.EncodeTitle(title)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	tag := translit.EncodeTags(tags)

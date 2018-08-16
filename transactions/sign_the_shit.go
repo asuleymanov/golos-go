@@ -5,26 +5,25 @@ import (
 	"crypto/elliptic"
 	"crypto/sha256"
 	//"encoding/hex"
-	"errors"
-	"fmt"
-	"github.com/btcsuite/btcd/btcec"
-	"log"
+	//"log"
 	"math/big"
+
+	"github.com/btcsuite/btcd/btcec"
+	"github.com/pkg/errors"
 )
 
 //SignSingle signature of the transaction by one of the keys
-func (tx *SignedTransaction) SignSingle(privB, data []byte) []byte {
+func (tx *SignedTransaction) SignSingle(privB, data []byte) ([]byte, error) {
 	privKeyBytes := [32]byte{}
 	copy(privKeyBytes[:], privB)
 
 	priv, _ := btcec.PrivKeyFromBytes(btcec.S256(), privKeyBytes[:])
 	priEcdsa := priv.ToECDSA()
-	sigBytes := signBuffer(data, priEcdsa)
 
-	return sigBytes
+	return signBuffer(data, priEcdsa)
 }
 
-func signBuffer(buf []byte, privateKey *ecdsa.PrivateKey) []byte {
+func signBuffer(buf []byte, privateKey *ecdsa.PrivateKey) ([]byte, error) {
 	//log.Println("signBuffer buf=", hex.EncodeToString(buf))
 
 	// Hash a message.
@@ -36,7 +35,7 @@ func signBuffer(buf []byte, privateKey *ecdsa.PrivateKey) []byte {
 	return signBufferSha256(_hash, privateKey)
 }
 
-func signBufferSha256(bufSha256 []byte, privateKey *ecdsa.PrivateKey) []byte {
+func signBufferSha256(bufSha256 []byte, privateKey *ecdsa.PrivateKey) ([]byte, error) {
 	var bufSha256Clone = make([]byte, len(bufSha256))
 	copy(bufSha256Clone, bufSha256)
 
@@ -46,8 +45,7 @@ func signBufferSha256(bufSha256 []byte, privateKey *ecdsa.PrivateKey) []byte {
 		ecsignature, err := key.Sign(bufSha256Clone)
 
 		if err != nil {
-			log.Println(err)
-			return nil
+			return nil, errors.Wrapf(err, "SignSingle[signBufferSha256]: ")
 		}
 
 		der := ecsignature.Serialize()
@@ -89,7 +87,9 @@ func signBufferSha256(bufSha256 []byte, privateKey *ecdsa.PrivateKey) []byte {
 					}
 					result = append(result, ecsignature.S.Bytes()...)
 
-					return result
+					return result, nil
+				} else if err != nil {
+					return nil, err
 				}
 			}
 		}
@@ -101,7 +101,7 @@ func recoverKeyFromSignature(curve *btcec.KoblitzCurve, sig *btcec.Signature, ms
 		new(big.Int).SetInt64(int64(iter/2)))
 	rx.Add(rx, sig.R)
 	if rx.Cmp(curve.Params().P) != -1 {
-		return nil, errors.New("calculated Rx is larger than curve P")
+		return nil, errors.New("SignSingle[recoverKeyFromSignature]: calculated Rx is larger than curve P")
 	}
 
 	// convert 02<Rx> to point R. (step 1.2 and 1.3). If we are on an odd
@@ -116,7 +116,7 @@ func recoverKeyFromSignature(curve *btcec.KoblitzCurve, sig *btcec.Signature, ms
 	if doChecks {
 		nRx, nRy := curve.ScalarMult(rx, ry, curve.Params().N.Bytes())
 		if nRx.Sign() != 0 || nRy.Sign() != 0 {
-			return nil, errors.New("n*R does not equal the point at infinity")
+			return nil, errors.New("SignSingle[recoverKeyFromSignature]: n*R does not equal the point at infinity")
 		}
 	}
 
@@ -172,7 +172,7 @@ func decompressPoint(curve *btcec.KoblitzCurve, x *big.Int, ybit bool) (*big.Int
 		y.Sub(curve.Params().P, y)
 	}
 	if ybit != isOdd(y) {
-		return nil, fmt.Errorf("ybit doesn't match oddness")
+		return nil, errors.New("SignSingle[decompressPoint]: ybit doesn't match oddness")
 	}
 	return y, nil
 }

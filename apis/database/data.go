@@ -396,7 +396,7 @@ type LookupAccountNames struct {
 
 //WithdrawVestingRoutes structure for the GetWithdrawRoutes function.
 type WithdrawVestingRoutes struct {
-FromAccount string `json:"from_account"`
+	FromAccount string `json:"from_account"`
 	ToAccount   string `json:"to_account"`
 	Percent     uint16 `json:"percent"`
 	AutoVest    bool   `json:"auto_vest"`
@@ -404,10 +404,10 @@ FromAccount string `json:"from_account"`
 
 //Escrow structure for the GetEscrow function.
 type Escrow struct {
-	EscrowID             uint32 `json:"escrow_id"`
-	From                 string `json:"from"`
-	To                   string `json:"to"`
-	Agent                string `json:"agent"`
+	EscrowID             uint32       `json:"escrow_id"`
+	From                 string       `json:"from"`
+	To                   string       `json:"to"`
+	Agent                string       `json:"agent"`
 	RatificationDeadline *types.Time  `json:"ratification_deadline"`
 	EscrowExpiration     *types.Time  `json:"escrow_expiration"`
 	SbdAmount            *types.Asset `json:"sbd_amount"`
@@ -417,8 +417,8 @@ type Escrow struct {
 
 //AccountRecoveryRequest structure for the GetRecoveryRequest function.
 type AccountRecoveryRequest struct {
-	ID   uint        `json:"id"`
-	AccountToRecover  string        `json:"account_to_recover"`
-	NewOwnerAuthority *types.Authority    `json:"new_owner_authority"`
-	Extensions        []interface{} `json:"extensions"`
+	ID                uint             `json:"id"`
+	AccountToRecover  string           `json:"account_to_recover"`
+	NewOwnerAuthority *types.Authority `json:"new_owner_authority"`
+	Extensions        []interface{}    `json:"extensions"`
 }

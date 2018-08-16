@@ -138,10 +138,10 @@ blog
 ignore
 */
 func (api *API) GetFollowers(accountName, start, kind string, limit uint16) ([]*FollowObject, error) {
-if limit > 1000 {
+	if limit > 1000 {
 		return nil, errors.Errorf("%v: get_followers -> limit must not exceed 1000", apiID)
 	}
-	if kind !="undefined" || kind !="blog" || kind !="ignore" {
+	if kind != "undefined" || kind != "blog" || kind != "ignore" {
 		return nil, errors.Errorf("%v: get_followers -> kind can take values only \"undefined\", \"blog\" and \"ignore\".", apiID)
 	}
 	raw, err := api.raw("get_followers", []interface{}{accountName, start, kind, limit})
@@ -163,10 +163,10 @@ blog
 ignore
 */
 func (api *API) GetFollowing(accountName, start, kind string, limit uint16) ([]*FollowObject, error) {
-if limit > 1000 {
+	if limit > 1000 {
 		return nil, errors.Errorf("%v: get_following -> limit must not exceed 1000", apiID)
 	}
-	if kind !="undefined" || kind !="blog" || kind !="ignore" {
+	if kind != "undefined" || kind != "blog" || kind != "ignore" {
 		return nil, errors.Errorf("%v: get_following -> kind can take values only \"undefined\", \"blog\" and \"ignore\".", apiID)
 	}
 	raw, err := api.raw("get_following", []interface{}{accountName, start, kind, limit})

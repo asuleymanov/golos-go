@@ -90,7 +90,10 @@ func (tx *SignedTransaction) Sign(privKeys [][]byte, chain *Chain) error {
 	var sigsHex []string
 
 	for _, privB := range privKeys {
-		sigBytes := tx.SignSingle(privB, data)
+		sigBytes, err := tx.SignSingle(privB, data)
+		if err != nil {
+			return err
+		}
 		sigsHex = append(sigsHex, hex.EncodeToString(sigBytes))
 	}
 

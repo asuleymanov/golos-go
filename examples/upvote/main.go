@@ -1,14 +1,12 @@
 package main
 
 import (
-	// Stdlib
 	"errors"
 	"flag"
 	"fmt"
 	"log"
 
-	// Vendor
-	"github.com/pkg/errors"
+	"github.com/asuleymanov/golos-go"
 )
 
 var (
@@ -17,7 +15,7 @@ var (
 )
 
 func main() {
-	cls, err := client.NewClient([]string{"wss://api.golos.cf", "wss://ws.golos.io"}, "golos")
+	cls, err := client.NewClient([]string{"wss://api.golos.cf", "wss://ws.golos.io"}, "work")
 	if err != nil {
 		log.Fatalln("Error:", err)
 	}

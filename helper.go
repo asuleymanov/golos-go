@@ -28,7 +28,7 @@ func (client *Client) FollowersList(username string) ([]string, error) {
 
 	fccount := fc.FollowerCount
 	i := 0
-	startFollowers:=""
+	startFollowers := ""
 	for i < fccount {
 		req, err := client.Follow.GetFollowers(username, startFollowers, "blog", 1000)
 		if err != nil {
@@ -55,7 +55,7 @@ func (client *Client) FollowingList(username string) ([]string, error) {
 
 	fccount := fc.FollowingCount
 	i := 0
-	startFollowing:=""
+	startFollowing := ""
 	for i < fccount {
 		req, err := client.Follow.GetFollowing(username, startFollowing, "blog", 100)
 		if err != nil {

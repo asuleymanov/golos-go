@@ -4,12 +4,12 @@ import (
 	"log"
 	"time"
 
-	client "github.com/asuleymanov/golos-go"
+	"github.com/asuleymanov/golos-go"
 	"github.com/asuleymanov/golos-go/types"
 )
 
 func main() {
-	cls, err := client.NewClient([]string{"wss://api.golos.cf", "wss://ws.golos.io"}, "golos")
+	cls, err := client.NewClient([]string{"wss://api.golos.cf", "wss://ws.golos.io"}, "work")
 	if err != nil {
 		log.Fatalln("Error:", err)
 	}

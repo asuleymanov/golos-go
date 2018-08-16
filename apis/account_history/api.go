@@ -33,10 +33,10 @@ func (api *API) GetAccountHistory(account string, from int64, limit uint32) ([]*
 	if limit > 10000 {
 		return nil, errors.Errorf("%v: get_account_history -> limit must not exceed 10000", apiID)
 	}
-	if from==0{
+	if from == 0 {
 		return nil, errors.Errorf("%v: get_account_history -> from can not have the value 0", apiID)
 	}
-	if from < int64(limit) && !(from<0){
+	if from < int64(limit) && !(from < 0) {
 		return nil, errors.Errorf("%v: get_account_history -> from must be greater than or equal to the limit", apiID)
 	}
 	raw, err := api.raw("get_account_history", []interface{}{account, from, limit})

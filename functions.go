@@ -321,8 +321,8 @@ func (client *Client) MultiTransfer(username string, arrtrans []ArrTransfer) (*O
 	return &OperResp{NameOper: "MultiTransfer", Bresp: resp}, err
 }
 
-//Login checking the user's key for the possibility of operations in GOLOS.
-func (client *Client) Login(username, key string) (bool, error) {
+//Login checking the user's posting key for the possibility of operations in GOLOS.
+func (client *Client) Login(username) (bool, error) {
 	js := types.LoginOperation{
 		Account: username,
 	}

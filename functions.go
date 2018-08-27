@@ -322,7 +322,7 @@ func (client *Client) MultiTransfer(username string, arrtrans []ArrTransfer) (*O
 }
 
 //Login checking the user's posting key for the possibility of operations in GOLOS.
-func (client *Client) Login(username) (bool, error) {
+func (client *Client) Login(username string) (bool, error) {
 	js := types.LoginOperation{
 		Account: username,
 	}

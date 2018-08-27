@@ -64,7 +64,7 @@ func (api *API) GetBlogAuthors(author string) (*BlogAuthors, error) {
 	}
 	var resp BlogAuthors
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "market_history_api: failed to unmarshal get_blog_authors response", apiID)
+		return nil, errors.Wrapf(err, "%v: failed to unmarshal get_blog_authors response", apiID)
 	}
 	return &resp, nil
 }
@@ -188,7 +188,7 @@ func (api *API) GetRebloggedBy(author, permlink string) ([]string, error) {
 	}
 	var resp []string
 	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "market_history_api: failed to unmarshal get_reblogged_by response", apiID)
+		return nil, errors.Wrapf(err, "%v: failed to unmarshal get_reblogged_by response", apiID)
 	}
 	return resp, nil
 }

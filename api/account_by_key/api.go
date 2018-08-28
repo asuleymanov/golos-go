@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 
 	"github.com/asuleymanov/golos-go/transports"
-	"github.com/pkg/errors"
 )
 
 const apiID = "account_by_key"
@@ -19,15 +18,16 @@ func NewAPI(caller transports.Caller) *API {
 	return &API{caller}
 }
 
-func (api *API) raw(method string, params interface{}) (*json.RawMessage, error) {
-	var resp json.RawMessage
-	if err := api.caller.Call("call", []interface{}{apiID, method, params}, &resp); err != nil {
-		return nil, errors.Wrapf(err, "%v: failed to call %v\n", apiID, method)
-	}
-	return &resp, nil
+func (api *API) call(method string, params, resp interface{}) error {
+	return api.caller.Call("call", []interface{}{apiID, method, params}, resp)
 }
 
 //GetKeyReferences api request get_key_references
 func (api *API) GetKeyReferences(pubkey string) (*json.RawMessage, error) {
-	return api.raw("get_key_references", []interface{}{pubkey})
+	var resp json.RawMessage
+	err := api.call("get_key_references", []interface{}{pubkey}, &resp)
+	if err != nil {
+		return nil, err
+	}
+	return &resp, nil
 }

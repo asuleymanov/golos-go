@@ -6,7 +6,6 @@ import (
 	"testing"
 )
 
-
 type testData struct {
 	WIF           string
 	PrivateKeyHex string

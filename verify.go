@@ -75,7 +75,7 @@ func (client *Client) VerifyReblogs(author, permlink, rebloger string) (bool, er
 		return false, errors.Wrapf(err, "Error Verify Reblogs: ")
 	}
 	for _, v := range ans {
-		if v == rebloger {
+		if *v == rebloger {
 			return true, nil
 		}
 	}

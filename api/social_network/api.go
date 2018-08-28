@@ -1,10 +1,7 @@
 package social_network
 
 import (
-	"encoding/json"
-
 	"github.com/asuleymanov/golos-go/transports"
-	"github.com/pkg/errors"
 )
 
 const apiID = "social_network"
@@ -19,12 +16,8 @@ func NewAPI(caller transports.Caller) *API {
 	return &API{caller}
 }
 
-func (api *API) raw(method string, params interface{}) (*json.RawMessage, error) {
-	var resp json.RawMessage
-	if err := api.caller.Call("call", []interface{}{apiID, method, params}, &resp); err != nil {
-		return nil, errors.Wrapf(err, "%v: failed to call %v\n", apiID, method)
-	}
-	return &resp, nil
+func (api *API) call(method string, params, resp interface{}) error {
+	return api.caller.Call("call", []interface{}{apiID, method, params}, resp)
 }
 
 //GetAccountVotes api request get_account_votes
@@ -35,13 +28,10 @@ func (api *API) GetAccountVotes(author string, opts ...interface{}) ([]*Votes, e
 	} else {
 		params = []interface{}{author}
 	}
-	raw, err := api.raw("get_account_votes", params)
+	var resp []*Votes
+	err := api.call("get_account_votes", params, &resp)
 	if err != nil {
 		return nil, err
-	}
-	var resp []*Votes
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "%v: failed to unmarshal get_account_votes response", apiID)
 	}
 	return resp, nil
 }
@@ -54,13 +44,10 @@ func (api *API) GetActiveVotes(author, permlink string, opts ...interface{}) ([]
 	} else {
 		params = []interface{}{author, permlink}
 	}
-	raw, err := api.raw("get_active_votes", params)
+	var resp []*VoteState
+	err := api.call("get_active_votes", params, &resp)
 	if err != nil {
 		return nil, err
-	}
-	var resp []*VoteState
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "%v: failed to unmarshal get_active_votes response", apiID)
 	}
 	return resp, nil
 }
@@ -75,13 +62,10 @@ func (api *API) GetContent(author, permlink string, opts ...interface{}) (*Conte
 	} else {
 		params = []interface{}{author, permlink}
 	}
-	raw, err := api.raw("get_content", params)
+	var resp Content
+	err := api.call("get_content", params, &resp)
 	if err != nil {
 		return nil, err
-	}
-	var resp Content
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "%v: failed to unmarshal get_content response", apiID)
 	}
 	return &resp, nil
 }
@@ -94,13 +78,10 @@ func (api *API) GetContentReplies(parentAuthor, parentPermlink string, opts ...i
 	} else {
 		params = []interface{}{parentAuthor, parentPermlink}
 	}
-	raw, err := api.raw("get_content_replies", params)
+	var resp []*Content
+	err := api.call("get_content_replies", params, &resp)
 	if err != nil {
 		return nil, err
-	}
-	var resp []*Content
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "%v: failed to unmarshal get_content_replies response", apiID)
 	}
 	return resp, nil
 }
@@ -113,13 +94,10 @@ func (api *API) GetRepliesByLastUpdate(startAuthor, startPermlink string, limit 
 	} else {
 		params = []interface{}{startAuthor, startPermlink, limit}
 	}
-	raw, err := api.raw("get_replies_by_last_update", params)
+	var resp []*Content
+	err := api.call("get_replies_by_last_update", params, &resp)
 	if err != nil {
 		return nil, err
-	}
-	var resp []*Content
-	if err := json.Unmarshal([]byte(*raw), &resp); err != nil {
-		return nil, errors.Wrapf(err, "%v: failed to unmarshal get_replies_by_last_update response", apiID)
 	}
 	return resp, nil
 }

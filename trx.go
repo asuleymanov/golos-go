@@ -3,7 +3,7 @@ package client
 import (
 	"time"
 
-	"github.com/asuleymanov/golos-go/apis/network_broadcast"
+	"github.com/asuleymanov/golos-go/api/network_broadcast"
 	"github.com/asuleymanov/golos-go/transactions"
 	"github.com/asuleymanov/golos-go/types"
 )

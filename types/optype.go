@@ -69,6 +69,7 @@ const (
 	TypeCommentPayoutUpdate         OpType = "comment_payout_update"
 	TypeCommentBenefactorReward     OpType = "comment_benefactor_reward"
 	TypeReturnVestingDelegation     OpType = "return_vesting_delegation"
+	TypeProducerRewardOperation OpType = "producer_reward_operation"
 )
 
 var opTypes = [...]OpType{

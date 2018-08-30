@@ -73,6 +73,7 @@ var dataObjects = map[OpType]Operation{
 	TypeCommentPayoutUpdate:         &CommentPayoutUpdateOperation{},
 	TypeCommentBenefactorReward:     &CommentBenefactorRewardOperation{},
 	TypeReturnVestingDelegation:     &ReturnVestingDelegationOperation{},
+	TypeProducerRewardOperation: &ProducerRewardOperationOperation{},
 }
 
 // Operation represents an operation stored in a transaction.

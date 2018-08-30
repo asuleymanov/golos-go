@@ -44,13 +44,13 @@ func (tx *SignedTransaction) Serialize() ([]byte, error) {
 }
 
 //Digest function that returns a digest from a serialized transaction
-func (tx *SignedTransaction) Digest(chain *Chain) ([]byte, error) {
+func (tx *SignedTransaction) Digest(chain string) ([]byte, error) {
 	var msgBuffer bytes.Buffer
 
 	// Write the chain ID.
-	rawChainID, err := hex.DecodeString(chain.ID)
+	rawChainID, err := hex.DecodeString(chain)
 	if err != nil {
-		return nil, errors.Wrapf(err, "failed to decode chain ID: %v", chain.ID)
+		return nil, errors.Wrapf(err, "failed to decode chain ID: %v", chain)
 	}
 
 	if _, err := msgBuffer.Write(rawChainID); err != nil {
@@ -73,10 +73,13 @@ func (tx *SignedTransaction) Digest(chain *Chain) ([]byte, error) {
 }
 
 //Sign function directly generating transaction signature
-func (tx *SignedTransaction) Sign(privKeys [][]byte, chain *Chain) error {
+func (tx *SignedTransaction) Sign(privKeys [][]byte, chain string) error {
 	var buf bytes.Buffer
-	chainid, _ := hex.DecodeString(chain.ID)
-
+	chainid, errdec := hex.DecodeString(chain)
+if errdec != nil {
+		return errdec
+	}
+	
 	txRaw, err := tx.Serialize()
 	if err != nil {
 		return err

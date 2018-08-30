@@ -46,7 +46,7 @@ func (client *Client) SendTrx(username string, strx []types.Operation) (*BResp, 
 	}
 
 	// Sign the transaction
-	if err := tx.Sign(privKeys, client.Chain); err != nil {
+	if err := tx.Sign(privKeys, client.chainID); err != nil {
 		return nil, err
 	}
 

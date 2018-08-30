@@ -766,7 +766,7 @@ func (client *Client) ProposalCreate(author, title, memo string, listop []types.
 		Author:             author,
 		Title:              title,
 		Memo:               memo,
-		ProposedOperations: GenerateProposalOperation(listop),
+		ProposedOperations: GenerateProposalObjects(listop),
 		ExpirationTime:     &types.Time{&expiration},
 		ReviewPeriodTime:   &types.Time{&reviewperiodtime},
 		Extensions:         []interface{}{},

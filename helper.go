@@ -88,7 +88,7 @@ func (client *Client) GetVotingPower(username string) (int, error) {
 	lvt := acc[0].LastVoteTime
 	dtn := time.Now()
 
-	regen := conf.Steemit100Percent * int(dtn.Sub(*lvt.Time).Seconds()) / conf.SteemitVoteRegenerationSeconds
+	regen := conf.Percent100 * int(dtn.Sub(*lvt.Time).Seconds()) / conf.VoteRegenerationSeconds
 	power := (vp + regen) // 100
 	if power > 10000 {
 		power = 10000
@@ -238,11 +238,11 @@ func JSONOpString(v []types.Operation) (string, error) {
 }
 
 //GenerateProposalOperation generate []Operation to ProposalOperations
-func GenerateProposalOperation(ops []types.Operation) types.ProposalOperations {
-	var ans types.ProposalOperations
+func GenerateProposalObjects(ops []types.Operation) types.ProposalObjects {
+	var ans types.ProposalObjects
 
 	for _, val := range ops {
-		ans = append(ans, types.ProposalOperation{Operation: val, OperationType: val.Type()})
+		ans = append(ans, types.ProposalObject{Operation: val, OperationType: val.Type()})
 	}
 
 	return ans

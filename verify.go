@@ -179,7 +179,7 @@ func (client *Client) VerifyTrx(username string, strx types.Operation) (bool, er
 	}
 
 	// Подписываем транзакцию
-	if err := tx.Sign(privKeys, client.Chain); err != nil {
+	if err := tx.Sign(privKeys, client.chainID); err != nil {
 		return false, err
 	}
 

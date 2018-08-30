@@ -1,8 +1,6 @@
 package client
 
 import (
-	"errors"
-	// RPC
 	"github.com/asuleymanov/golos-go/api/account_by_key"
 	"github.com/asuleymanov/golos-go/api/account_history"
 	"github.com/asuleymanov/golos-go/api/database"
@@ -14,7 +12,6 @@ import (
 	"github.com/asuleymanov/golos-go/api/social_network"
 	"github.com/asuleymanov/golos-go/api/tags"
 	"github.com/asuleymanov/golos-go/api/witness"
-	"github.com/asuleymanov/golos-go/transactions"
 	"github.com/asuleymanov/golos-go/transports"
 	"github.com/asuleymanov/golos-go/transports/websocket"
 	"github.com/asuleymanov/golos-go/types"
@@ -25,6 +22,8 @@ import (
 // e.g. Client.Database corresponds to database_api.
 type Client struct {
 	cc transports.CallCloser
+	
+	chainID string
 
 	AsyncProtocol bool
 
@@ -49,19 +48,20 @@ type Client struct {
 	// SocialNetwork represents social_network.
 	SocialNetwork *social_network.API
 
-	// PrivateMessage represents social_network.
+	// PrivateMessage represents private_message.
 	PrivateMessage *private_message.API
 
+	// Witness represents witness.
 	Witness *witness.API
 
+	// AccountHistory represents account_history.
 	AccountHistory *account_history.API
 
+	// OperationHistory represents operation_history.
 	OperationHistory *operation_history.API
 
+	// Tags represents tags.
 	Tags *tags.API
-
-	//Chain Id
-	Chain *transactions.Chain
 
 	// Current keys for operations
 	CurrentKeys *Keys
@@ -69,7 +69,7 @@ type Client struct {
 
 // NewClient creates a new RPC client that use the given CallCloser internally.
 // Initialize only server present API. Absent API initialized as nil value.
-func NewClient(url []string, chain string, options ...websocket.Option) (*Client, error) {
+func NewClient(url []string, options ...websocket.Option) (*Client, error) {
 	call, err := initClient(url, options...)
 	if err != nil {
 		return nil, err
@@ -100,10 +100,11 @@ func NewClient(url []string, chain string, options ...websocket.Option) (*Client
 
 	client.Tags = tags.NewAPI(client.cc)
 
-	client.Chain, err = initChainID(chain)
+	chainID, err := client.Database.GetConfig()
 	if err != nil {
 		return nil, err
 	}
+	client.chainID = chainID.ChainID
 
 	return client, nil
 }
@@ -122,20 +123,6 @@ func initClient(url []string, options ...websocket.Option) (*websocket.Transport
 	}
 
 	return t, nil
-}
-
-func initChainID(str string) (*transactions.Chain, error) {
-	var chainID transactions.Chain
-	// Define ChainId
-	switch str {
-	case "work":
-		chainID = *transactions.WorkChain
-	case "test":
-		chainID = *transactions.TestChain
-	default:
-		return nil, errors.New("ChainId not found")
-	}
-	return &chainID, nil
 }
 
 //GenCommentMetadata generate default CommentMetadata

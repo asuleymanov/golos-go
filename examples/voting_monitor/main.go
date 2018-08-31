@@ -67,6 +67,6 @@ func run(cls *client.Client) (err error) {
 		}
 
 		// Sleep for STEEMIT_BLOCK_INTERVAL seconds before the next iteration.
-		time.Sleep(time.Duration(config.SteemitBlockInterval) * time.Second)
+		time.Sleep(time.Duration(config.BlockInterval) * time.Second)
 	}
 }

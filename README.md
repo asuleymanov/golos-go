@@ -22,7 +22,7 @@ This is just a code snippet. Please check the `examples` directory
 for more complete and ready to use examples.
 
 ```go
-	cls,_ := client.NewClient([]string{"wss://ws.golos.io"},"work")
+	cls,_ := client.NewClient([]string{"wss://ws.golos.io"})
 	defer cls.Close()
 
 	// Get config.

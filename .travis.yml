@@ -1,6 +1,16 @@
 language: go
-go:
+sudo: false
+
+matrix:
+  include:
+    - go: 1.10.x
     - go: 1.11.x
+
 script:
-    - go test ./... -v
-    - go build
+  - go get -t -v ./...
+  - diff -u <(echo -n) <(gofmt -d .)
+  - go vet $(go list ./... | grep -v /vendor/)
+  - go test -v -race ./...
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)

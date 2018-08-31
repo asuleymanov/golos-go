@@ -15,7 +15,7 @@ var (
 )
 
 func main() {
-	cls, err := client.NewClient([]string{"wss://api.golos.cf", "wss://ws.golos.io"}, "work")
+	cls, err := client.NewClient([]string{"wss://api.golos.cf", "wss://ws.golos.io"})
 	if err != nil {
 		log.Fatalln("Error:", err)
 	}

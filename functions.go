@@ -376,7 +376,7 @@ func (client *Client) LimitOrderCreate(owner string, sell, buy *types.Asset, ord
 		AmountToSell: sell,
 		MinToReceive: buy,
 		FillOrKill:   false,
-		Expiration:   &types.Time{&expiration},
+		Expiration:   &types.Time{Time:&expiration},
 	}
 
 	trx = append(trx, tx)

@@ -26,7 +26,7 @@ type SignedTransaction struct {
 func NewSignedTransaction(tx *types.Transaction) *SignedTransaction {
 	if tx.Expiration == nil {
 		expiration := time.Now().Add(30 * time.Second).UTC()
-		tx.Expiration = &types.Time{Time:&expiration}
+		tx.Expiration = &types.Time{Time: &expiration}
 	}
 
 	return &SignedTransaction{tx}
@@ -76,10 +76,10 @@ func (tx *SignedTransaction) Digest(chain string) ([]byte, error) {
 func (tx *SignedTransaction) Sign(privKeys [][]byte, chain string) error {
 	var buf bytes.Buffer
 	chainid, errdec := hex.DecodeString(chain)
-if errdec != nil {
+	if errdec != nil {
 		return errdec
 	}
-	
+
 	txRaw, err := tx.Serialize()
 	if err != nil {
 		return err

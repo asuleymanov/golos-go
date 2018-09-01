@@ -2,7 +2,7 @@ package types
 
 //ProducerRewardOperationOperation represents producer_reward operation data.
 type ProducerRewardOperationOperation struct {
-	Producer       string `json:"producer"`
+	Producer      string `json:"producer"`
 	VestingShares *Asset `json:"vesting_shares"`
 }
 

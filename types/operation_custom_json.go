@@ -99,7 +99,6 @@ func (op *CustomJSONOperation) MarshalTransaction(encoder *transaction.Encoder) 
 	return enc.Err()
 }
 
-
 //FollowOperation the structure for the operation CustomJSONOperation.
 type FollowOperation struct {
 	Follower  string   `json:"follower"`
@@ -157,4 +156,3 @@ func MarshalCustomJSON(v interface{}) (string, error) {
 
 	return string(b), nil //strings.Replace(string(b), "\"", "\\\"", -1), nil
 }
-

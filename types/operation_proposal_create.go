@@ -6,13 +6,13 @@ import (
 
 //ProposalCreateOperation represents proposal_create operation data.
 type ProposalCreateOperation struct {
-	Author             string             `json:"author"`
-	Title              string             `json:"title"`
-	Memo               string             `json:"memo"`
+	Author             string          `json:"author"`
+	Title              string          `json:"title"`
+	Memo               string          `json:"memo"`
 	ProposedOperations ProposalObjects `json:"proposed_operations"`
-	ExpirationTime     *Time              `json:"expiration_time"`
-	ReviewPeriodTime   *Time              `json:"review_period_time"`
-	Extensions         []interface{}      `json:"extensions"`
+	ExpirationTime     *Time           `json:"expiration_time"`
+	ReviewPeriodTime   *Time           `json:"review_period_time"`
+	Extensions         []interface{}   `json:"extensions"`
 }
 
 //Type function that defines the type of operation ProposalCreateOperation.

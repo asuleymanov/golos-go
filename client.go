@@ -22,7 +22,7 @@ import (
 // e.g. Client.Database corresponds to database_api.
 type Client struct {
 	cc transports.CallCloser
-	
+
 	chainID string
 
 	AsyncProtocol bool

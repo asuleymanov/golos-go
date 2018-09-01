@@ -14,7 +14,7 @@ type Bandwidth struct {
 	LastBandwidthUpdate *types.Time  `json:"last_bandwidth_update"`
 }
 
-//Account structure for the GetAccounts function
+//Account structure for the GetAccounts and LookupAccountNames function
 type Account struct {
 	ID                            *types.Int             `json:"id"`
 	Name                          string                 `json:"name"`
@@ -53,28 +53,28 @@ type Account struct {
 	SavingsSbdLastInterestPayment *types.Time            `json:"savings_sbd_last_interest_payment"`
 	SavingsWithdrawRequests       *types.Int             `json:"savings_withdraw_requests"`
 	VestingShares                 *types.Asset           `json:"vesting_shares"`
+	DelegatedVestingShares        *types.Asset           `json:"delegated_vesting_shares"`
+	ReceivedVestingShares         *types.Asset           `json:"received_vesting_shares"`
 	VestingWithdrawRate           *types.Asset           `json:"vesting_withdraw_rate"`
 	NextVestingWithdrawal         *types.Time            `json:"next_vesting_withdrawal"`
-	Withdrawn                     *types.Int             `json:"withdrawn"`
-	ToWithdraw                    *types.Int             `json:"to_withdraw"`
-	WithdrawRoutes                *types.Int             `json:"withdraw_routes"`
-	CurationRewards               *types.Int             `json:"curation_rewards"`
-	PostingRewards                *types.Int             `json:"posting_rewards"`
-	ProxiedVsfVotes               []*types.Int           `json:"proxied_vsf_votes"`
-	WitnessesVotedFor             *types.Int             `json:"witnesses_voted_for"`
-	AverageBandwidth              *types.Int             `json:"average_bandwidth"`
-	LifetimeBandwidth             *types.Int64           `json:"lifetime_bandwidth"`
+	Withdrawn                     *types.UInt64          `json:"withdrawn"`
+	ToWithdraw                    *types.UInt64          `json:"to_withdraw"`
+	WithdrawRoutes                *types.UInt32          `json:"withdraw_routes"`
+	CurationRewards               *types.UInt32          `json:"curation_rewards"`
+	PostingRewards                *types.UInt32          `json:"posting_rewards"`
+	ProxiedVsfVotes               []types.UInt64         `json:"proxied_vsf_votes"`
+	WitnessesVotedFor             *types.UInt32          `json:"witnesses_voted_for"`
+	AverageBandwidth              *types.UInt64          `json:"average_bandwidth"`
+	AverageMarketBandwidth        *types.UInt32          `json:"average_market_bandwidth"`
+	LifetimeBandwidth             *types.UInt32          `json:"lifetime_bandwidth"`
+	LifetimeMarketBandwidth       *types.UInt32          `json:"lifetime_market_bandwidth"`
 	LastBandwidthUpdate           *types.Time            `json:"last_bandwidth_update"`
-	AverageMarketBandwidth        *types.Int             `json:"average_market_bandwidth"`
 	LastMarketBandwidthUpdate     *types.Time            `json:"last_market_bandwidth_update"`
 	LastPost                      *types.Time            `json:"last_post"`
 	LastRootPost                  *types.Time            `json:"last_root_post"`
-	PostBandwidth                 int64                  `json:"post_bandwidth"`
-	NewAverageBandwidth           *types.Int64           `json:"new_average_bandwidth"`
-	NewAverageMarketBandwidth     *types.Int64           `json:"new_average_market_bandwidth"`
-	VestingBalance                *types.Asset           `json:"vesting_balance"`
-	Reputation                    *types.Int64           `json:"reputation"`
+	PostBandwidth                 int                    `json:"post_bandwidth"`
 	WitnessVotes                  []string               `json:"witness_votes"`
+	Reputation                    *types.UInt64          `json:"reputation"`
 }
 
 //Block structure for the GetBlock function
@@ -113,8 +113,8 @@ type ChainProperties struct {
 //Config structure for the GetConfig function.
 type Config struct {
 	BuildTestnet                   bool         `json:"STEEMIT_BUILD_TESTNET"`
-	GrapheneCurrentDBVersion              string       `json:"GRAPHENE_CURRENT_DB_VERSION"`
-	SbdSymbol                             *types.Int   `json:"SBD_SYMBOL"`
+	GrapheneCurrentDBVersion       string       `json:"GRAPHENE_CURRENT_DB_VERSION"`
+	SbdSymbol                      *types.Int   `json:"SBD_SYMBOL"`
 	Percent100                     int          `json:"STEEMIT_100_PERCENT"`
 	Percent1                       *types.Int   `json:"STEEMIT_1_PERCENT"`
 	AddressPrefix                  string       `json:"STEEMIT_ADDRESS_PREFIX"`
@@ -216,9 +216,9 @@ type Config struct {
 	VestingWithdrawIntervalSeconds *types.Int   `json:"STEEMIT_VESTING_WITHDRAW_INTERVAL_SECONDS"`
 	VoteChangeLockoutPeriod        *types.Int   `json:"STEEMIT_VOTE_CHANGE_LOCKOUT_PERIOD"`
 	VoteRegenerationSeconds        int          `json:"STEEMIT_VOTE_REGENERATION_SECONDS"`
-	SteemSymbol                           string       `json:"STEEM_SYMBOL"`
-	VestsSymbol                           string       `json:"VESTS_SYMBOL"`
-	BlockchainName                        string       `json:"BLOCKCHAIN_NAME"`
+	SteemSymbol                    string       `json:"STEEM_SYMBOL"`
+	VestsSymbol                    string       `json:"VESTS_SYMBOL"`
+	BlockchainName                 string       `json:"BLOCKCHAIN_NAME"`
 }
 
 //ConversionRequests structure for the GetConversionRequests function.
@@ -269,10 +269,11 @@ type DynamicGlobalProperties struct {
 	ConfidentialSupply       *types.Asset `json:"confidential_supply"`
 	ConfidentialSBDSupply    *types.Asset `json:"confidential_sbd_supply"`
 	TotalRewardFundSteem     *types.Asset `json:"total_reward_fund_steem"`
-	TotalActivityFundSteem   string       `json:"total_activity_fund_steem"`
-	TotalActivityFundShares  *types.Int   `json:"total_activity_fund_shares"`
 	SBDInterestRate          *types.Int   `json:"sbd_interest_rate"`
 	MaxVirtualBandwidth      *types.Int   `json:"max_virtual_bandwidth"`
+	SBDPrintRate             uint16       `json:sbd_print_rate"`
+	ParticipationCount       uint16       `json:participation_count"`
+	VoteRegenerationPerDay   uint16       `json:"vote_regeneration_per_day"`
 }
 
 //VestingDelegationExpiration structure for the GetExpiringVestingDelegations function.
@@ -332,66 +333,6 @@ type VestingDelegation struct {
 	Delegatee         string       `json:"delegatee"`
 	VestingShares     *types.Asset `json:"vesting_shares"`
 	MinDelegationTime *types.Time  `json:"min_delegation_time"`
-}
-
-//LookupAccountNames structure for the LookupAccountNames function.
-type LookupAccountNames struct {
-	ID                            int                    `json:"id"`
-	Name                          string                 `json:"name"`
-	Owner                         *types.Authority       `json:"owner"`
-	Active                        *types.Authority       `json:"active"`
-	Posting                       *types.Authority       `json:"posting"`
-	MemoKey                       string                 `json:"memo_key"`
-	JSONMetadata                  *types.AccountMetadata `json:"json_metadata"`
-	Proxy                         string                 `json:"proxy"`
-	LastOwnerUpdate               string                 `json:"last_owner_update"`
-	LastAccountUpdate             string                 `json:"last_account_update"`
-	Created                       string                 `json:"created"`
-	Mined                         bool                   `json:"mined"`
-	OwnerChallenged               bool                   `json:"owner_challenged"`
-	ActiveChallenged              bool                   `json:"active_challenged"`
-	LastOwnerProved               string                 `json:"last_owner_proved"`
-	LastActiveProved              string                 `json:"last_active_proved"`
-	RecoveryAccount               string                 `json:"recovery_account"`
-	LastAccountRecovery           string                 `json:"last_account_recovery"`
-	ResetAccount                  string                 `json:"reset_account"`
-	CommentCount                  *types.Int             `json:"comment_count"`
-	LifetimeVoteCount             *types.Int             `json:"lifetime_vote_count"`
-	PostCount                     *types.Int             `json:"post_count"`
-	CanVote                       bool                   `json:"can_vote"`
-	VotingPower                   *types.Int             `json:"voting_power"`
-	LastVoteTime                  string                 `json:"last_vote_time"`
-	Balance                       *types.Asset           `json:"balance"`
-	SavingsBalance                *types.Asset           `json:"savings_balance"`
-	SbdBalance                    *types.Asset           `json:"sbd_balance"`
-	SbdSeconds                    string                 `json:"sbd_seconds"`
-	SbdSecondsLastUpdate          string                 `json:"sbd_seconds_last_update"`
-	SbdLastInterestPayment        string                 `json:"sbd_last_interest_payment"`
-	SavingsSbdBalance             *types.Asset           `json:"savings_sbd_balance"`
-	SavingsSbdSeconds             string                 `json:"savings_sbd_seconds"`
-	SavingsSbdSecondsLastUpdate   string                 `json:"savings_sbd_seconds_last_update"`
-	SavingsSbdLastInterestPayment string                 `json:"savings_sbd_last_interest_payment"`
-	SavingsWithdrawRequests       *types.Int             `json:"savings_withdraw_requests"`
-	VestingShares                 *types.Asset           `json:"vesting_shares"`
-	VestingWithdrawRate           *types.Asset           `json:"vesting_withdraw_rate"`
-	NextVestingWithdrawal         string                 `json:"next_vesting_withdrawal"`
-	Withdrawn                     *types.Int             `json:"withdrawn"`
-	ToWithdraw                    *types.Int             `json:"to_withdraw"`
-	WithdrawRoutes                *types.Int             `json:"withdraw_routes"`
-	CurationRewards               *types.Int             `json:"curation_rewards"`
-	PostingRewards                *types.Int             `json:"posting_rewards"`
-	ProxiedVsfVotes               []interface{}          `json:"proxied_vsf_votes"`
-	WitnessesVotedFor             *types.Int             `json:"witnesses_voted_for"`
-	AverageBandwidth              *types.Int             `json:"average_bandwidth"`
-	LifetimeBandwidth             string                 `json:"lifetime_bandwidth"`
-	LastBandwidthUpdate           string                 `json:"last_bandwidth_update"`
-	AverageMarketBandwidth        *types.Int             `json:"average_market_bandwidth"`
-	LastMarketBandwidthUpdate     string                 `json:"last_market_bandwidth_update"`
-	LastPost                      string                 `json:"last_post"`
-	LastRootPost                  string                 `json:"last_root_post"`
-	PostBandwidth                 *types.Int             `json:"post_bandwidth"`
-	NewAverageBandwidth           string                 `json:"new_average_bandwidth"`
-	NewAverageMarketBandwidth     string                 `json:"new_average_market_bandwidth"`
 }
 
 //WithdrawVestingRoutes structure for the GetWithdrawRoutes function.

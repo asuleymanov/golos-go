@@ -299,8 +299,8 @@ func (api *API) GetWithdrawRoutes(accountName, withdrawRouteType string) ([]*Wit
 }
 
 //LookupAccountNames api request lookup_account_names
-func (api *API) LookupAccountNames(accountNames []string) ([]*LookupAccountNames, error) {
-	var resp []*LookupAccountNames
+func (api *API) LookupAccountNames(accountNames []string) ([]*Account, error) {
+	var resp []*Account
 	err := api.call("lookup_account_names", [][]string{accountNames}, &resp)
 	if err != nil {
 		return nil, err

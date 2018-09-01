@@ -72,7 +72,7 @@ for more complete and ready to use examples.
 		}
 
 		// Sleep for STEEMIT_BLOCK_INTERVAL seconds before the next iteration.
-		time.Sleep(time.Duration(config.SteemitBlockInterval) * time.Second)
+		time.Sleep(time.Duration(config.BlockInterval) * time.Second)
 	}
 ```
 

@@ -376,7 +376,7 @@ func (client *Client) LimitOrderCreate(owner string, sell, buy *types.Asset, ord
 		AmountToSell: sell,
 		MinToReceive: buy,
 		FillOrKill:   false,
-		Expiration:   &types.Time{Time:&expiration},
+		Expiration:   &types.Time{Time: &expiration},
 	}
 
 	trx = append(trx, tx)
@@ -399,7 +399,7 @@ func (client *Client) LimitOrderCreate2(owner string, sell, base, quote *types.A
 			Quote: quote,
 		},
 		FillOrKill: false,
-		Expiration: &types.Time{Time:&expiration},
+		Expiration: &types.Time{Time: &expiration},
 	}
 
 	trx = append(trx, tx)
@@ -767,8 +767,8 @@ func (client *Client) ProposalCreate(author, title, memo string, listop []types.
 		Title:              title,
 		Memo:               memo,
 		ProposedOperations: GenerateProposalObjects(listop),
-		ExpirationTime:     &types.Time{Time:&expiration},
-		ReviewPeriodTime:   &types.Time{Time:&reviewperiodtime},
+		ExpirationTime:     &types.Time{Time: &expiration},
+		ReviewPeriodTime:   &types.Time{Time: &reviewperiodtime},
 		Extensions:         []interface{}{},
 	}
 

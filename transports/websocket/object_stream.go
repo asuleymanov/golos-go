@@ -24,13 +24,19 @@ func NewObjectStream(conn *websocket.Conn, writeTimeout, readTimeout time.Durati
 
 //WriteObject data record in ObjectStream
 func (stream *ObjectStream) WriteObject(v interface{}) error {
-	stream.conn.SetWriteDeadline(time.Now().Add(stream.writeTimeout))
+	err:=stream.conn.SetWriteDeadline(time.Now().Add(stream.writeTimeout))
+	if err!=nil {
+		return err
+	}
 	return stream.stream.WriteObject(v)
 }
 
 //ReadObject reading data from ObjectStream
 func (stream *ObjectStream) ReadObject(v interface{}) error {
-	stream.conn.SetReadDeadline(time.Now().Add(stream.readTimeout))
+	err:=stream.conn.SetReadDeadline(time.Now().Add(stream.readTimeout))
+	if err!=nil {
+		return err
+	}
 	return stream.stream.ReadObject(v)
 }
 

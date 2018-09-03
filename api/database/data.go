@@ -271,8 +271,8 @@ type DynamicGlobalProperties struct {
 	TotalRewardFundSteem     *types.Asset `json:"total_reward_fund_steem"`
 	SBDInterestRate          *types.Int   `json:"sbd_interest_rate"`
 	MaxVirtualBandwidth      *types.Int   `json:"max_virtual_bandwidth"`
-	SBDPrintRate             uint16       `json:sbd_print_rate"`
-	ParticipationCount       uint16       `json:participation_count"`
+	SBDPrintRate             uint16       `json:"sbd_print_rate"`
+	ParticipationCount       uint16       `json:"participation_count"`
 	VoteRegenerationPerDay   uint16       `json:"vote_regeneration_per_day"`
 }
 

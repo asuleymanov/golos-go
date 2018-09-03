@@ -28,7 +28,10 @@ func signBuffer(buf []byte, privateKey *ecdsa.PrivateKey) ([]byte, error) {
 
 	// Hash a message.
 	alg := sha256.New()
-	alg.Write(buf)
+	_,errAlg:=alg.Write(buf)
+	if errAlg!=nil {
+		return []byte{},errAlg
+	}
 
 	_hash := alg.Sum(nil)
 

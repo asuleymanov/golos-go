@@ -75,7 +75,7 @@ func GetPublicKey(prefix, privatekey string) string {
 	chHash := ripemd160.New()
 	_,errHash:=chHash.Write(priv.PubKey().SerializeCompressed())
 	if errHash != nil {
-		return "Invalid RipEmd160Hash write"
+		return errHash.Error()
 	}
 	nc := chHash.Sum(nil)
 	pk := append(priv.PubKey().SerializeCompressed(), nc[:4]...)

@@ -150,19 +150,19 @@ func GetCommentOptionsOperation(username, permlink string, options PCOptions) *t
 	var ext []interface{}
 	var av, acr bool
 	var vMap *types.Asset
+	var percentSD uint16
 	symbol := "GBG"
 	vMap = SetAsset(1000000.000, symbol)
-	psd := options.Percent
 	extens := []interface{}{}
 
 	switch options.Percent {
 	case 0:
 		vMap = SetAsset(0.000, symbol)
-		psd = 10000
+		percentSD = 10000
 	case 50:
-		psd = 10000
+		percentSD = 10000
 	default:
-		psd = 0
+		percentSD = 0
 	}
 
 	if options.AllowVotes == nil || *options.AllowVotes {
@@ -191,7 +191,7 @@ func GetCommentOptionsOperation(username, permlink string, options PCOptions) *t
 		Author:               username,
 		Permlink:             permlink,
 		MaxAcceptedPayout:    vMap,
-		PercentSteemDollars:  psd,
+		PercentSteemDollars:  percentSD,
 		AllowVotes:           av,
 		AllowCurationRewards: acr,
 		Extensions:           extens,

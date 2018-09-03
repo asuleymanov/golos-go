@@ -181,7 +181,10 @@ func (encoder *Encoder) EncodePubKey(s string) error {
 	chs := b58[len(b58)-4:]
 	pkn2 := b58[:len(b58)-4]
 	chHash := ripemd160.New()
-	chHash.Write(pkn2)
+	_,errHash:=chHash.Write(pkn2)
+	if errHash!=nil {
+		return errHash
+	}
 	nchs := chHash.Sum(nil)[:4]
 	if bytes.Equal(chs, nchs) {
 		if string(pkn2) == string(make([]byte, 33)) {

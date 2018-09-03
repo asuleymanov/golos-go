@@ -208,7 +208,7 @@ func (client *Client) GetPostBandwidth(username string) (int64, error) {
 	}
 
 	oldPostBandwidth := float64(resp[0].PostBandwidth)
-	deltaTimeMinutes := float64(time.Now().Sub(*resp[0].LastRootPost.Time).Minutes())
+	deltaTimeMinutes := float64(time.Until(*resp[0].LastRootPost.Time).Minutes())
 
 	newPostBandwidth := ((minutesPerDay - deltaTimeMinutes) / minutesPerDay) * oldPostBandwidth
 

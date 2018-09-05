@@ -26,7 +26,7 @@ func (op *CommentOperation) Data() interface{} {
 }
 
 //IsStoryOperation function specifies the type of publication.
-func (op *CommentOperation) IsStoryOperation() bool {
+func (op *CommentOperation) IsStory() bool {
 	return op.ParentAuthor == ""
 }
 

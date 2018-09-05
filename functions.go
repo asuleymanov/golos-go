@@ -9,7 +9,7 @@ import (
 	"time"
 
 	// Vendor
-	"github.com/asuleymanov/golos-go/translit"
+	"github.com/asuleymanov/translit"
 	"github.com/asuleymanov/golos-go/types"
 )
 

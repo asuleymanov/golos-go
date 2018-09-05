@@ -25,7 +25,7 @@ func (op *CommentOperation) Data() interface{} {
 	return op
 }
 
-//IsStoryOperation function specifies the type of publication.
+//IsStory function specifies the type of publication.
 func (op *CommentOperation) IsStory() bool {
 	return op.ParentAuthor == ""
 }
@@ -34,7 +34,7 @@ func (op *CommentOperation) IsStory() bool {
 func (op *CommentOperation) MarshalTransaction(encoder *transaction.Encoder) error {
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeComment.Code()))
-	if !op.IsStoryOperation() {
+	if !op.IsStory() {
 		enc.Encode(op.ParentAuthor)
 	} else {
 		enc.Encode(byte(0))

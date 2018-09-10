@@ -1,16 +1,14 @@
 package client
 
 import (
-	// Stdlib
 	"encoding/hex"
+	"errors"
 	"strconv"
 	"strings"
-	"errors"
 	"time"
 
-	// Vendor
-	"github.com/asuleymanov/translit"
 	"github.com/asuleymanov/golos-go/types"
+	"github.com/asuleymanov/translit"
 )
 
 const fdt = `"20060102t150405"`
@@ -85,7 +83,7 @@ func (client *Client) Comment(username, authorname, ppermlink, body string, o *P
 
 	times, errUnq := strconv.Unquote(time.Now().Add(30 * time.Second).UTC().Format(fdt))
 	if errUnq != nil {
-		return nil,errUnq
+		return nil, errUnq
 	}
 
 	permlink := "re-" + authorname + "-" + ppermlink + "-" + times

@@ -7,9 +7,9 @@ import (
 //AccountUpdateOperation represents account_update operation data.
 type AccountUpdateOperation struct {
 	Account      string           `json:"account"`
-	Owner        *Authority       `json:"owner"`
-	Active       *Authority       `json:"active"`
-	Posting      *Authority       `json:"posting"`
+	Owner        *Authority       `json:"owner,omitempty"`
+	Active       *Authority       `json:"active,omitempty"`
+	Posting      *Authority       `json:"posting,omitempty"`
 	MemoKey      string           `json:"memo_key"`
 	JSONMetadata *AccountMetadata `json:"json_metadata"`
 }
@@ -31,12 +31,18 @@ func (op *AccountUpdateOperation) MarshalTransaction(encoder *transaction.Encode
 	enc.EncodeString(op.Account)
 	if op.Owner != nil {
 		enc.Encode(op.Owner)
+	} else {
+		enc.Encode(byte(0))
 	}
 	if op.Active != nil {
 		enc.Encode(op.Active)
+	} else {
+		enc.Encode(byte(0))
 	}
 	if op.Posting != nil {
 		enc.Encode(op.Posting)
+	} else {
+		enc.Encode(byte(0))
 	}
 	enc.EncodePubKey(op.MemoKey)
 	enc.Encode(op.JSONMetadata)

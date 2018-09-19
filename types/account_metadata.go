@@ -20,8 +20,8 @@ type rawAccountMetadata struct {
 
 //ProfileJSON additional structure for the AccountMetadata type.
 type ProfileJSON struct {
-	Name         string `json:"name,omitempty"`
 	ProfileImage string `json:"profile_image,omitempty"`
+	Name         string `json:"name,omitempty"`
 	CoverImage   string `json:"cover_image,omitempty"`
 	Gender       string `json:"gender,omitempty"`
 	About        string `json:"about,omitempty"`

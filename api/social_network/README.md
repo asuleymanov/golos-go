@@ -8,10 +8,10 @@ This package adds support for `social_network`.
 | :-: | :-: | :-: |
 | 1 | get_account_votes | **DONE** |
 | 2 | get_active_votes | **DONE** |
-| 3 | get_all_content_replies | **NONE** |
+| 3 | get_all_content_replies | **DONE** |
 | 4 | get_content | **DONE** |
 | 5 | get_content_replies | **DONE** |
-| 6 | get_replies_by_last_update | **NONE** |
+| 6 | get_replies_by_last_update | **DONE** |
 
 ## License
 

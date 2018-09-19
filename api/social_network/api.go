@@ -53,6 +53,20 @@ func (api *API) GetActiveVotes(author, permlink string, opts ...interface{}) ([]
 }
 
 //GetAllContentReplies api request get_all_content_replies
+func (api *API) GetAllContentReplies(parentAuthor, parentPermlink string, opts ...interface{}) ([]*Content, error) {
+	var params []interface{}
+	if len(opts) > 0 {
+		params = []interface{}{parentAuthor, parentPermlink, opts[0]}
+	} else {
+		params = []interface{}{parentAuthor, parentPermlink}
+	}
+	var resp []*Content
+	err := api.call("get_all_content_replies", params, &resp)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
 
 //GetContent api request get_content
 func (api *API) GetContent(author, permlink string, opts ...interface{}) (*Content, error) {

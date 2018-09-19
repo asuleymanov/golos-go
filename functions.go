@@ -827,3 +827,53 @@ func (client *Client) SendPrivateMessage(from, to, message string) (*OperResp, e
 	resp, err := client.SendTrx(from, trx)
 	return &OperResp{NameOper: "SendPrivateMessage", Bresp: resp}, err
 }
+
+func (client *Client) AddPostingKeys(username string, addkeys []string) (*OperResp, error) {
+	var trx []types.Operation
+
+	var ka = map[string]int64{}
+	var aa = map[string]int64{}
+
+	r, e := client.Database.GetAccounts([]string{username})
+	if e != nil {
+		return nil, e
+	}
+
+	for k, v := range r[0].Posting.AccountAuths {
+		aa[k] = v
+	}
+
+	for k, v := range r[0].Posting.KeyAuths {
+		ka[k] = v
+	}
+
+	for _, k := range addkeys {
+		if strings.HasPrefix(k, "GLS") {
+			ka[k] = 1
+		} else {
+			aa[k] = 1
+		}
+	}
+
+	weight := r[0].Posting.WeightThreshold
+
+	memo := r[0].MemoKey
+	jsondata := r[0].JSONMetadata
+
+	posting := &types.Authority{
+		WeightThreshold: weight,
+		AccountAuths:    aa,
+		KeyAuths:        ka,
+	}
+
+	tx := &types.AccountUpdateOperation{
+		Account:      username,
+		Posting:      posting,
+		MemoKey:      memo,
+		JSONMetadata: jsondata,
+	}
+
+	trx = append(trx, tx)
+	resp, err := client.SendTrx(username, trx)
+	return &OperResp{NameOper: "AddPostingKeys", Bresp: resp}, err
+}

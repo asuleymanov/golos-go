@@ -3,6 +3,7 @@ package client
 import (
 	"encoding/hex"
 	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -828,26 +829,54 @@ func (client *Client) SendPrivateMessage(from, to, message string) (*OperResp, e
 	return &OperResp{NameOper: "SendPrivateMessage", Bresp: resp}, err
 }
 
-func (client *Client) AddPostingKeys(username string, addkeys []string) (*OperResp, error) {
+//AddKeys adds a key to the account
+/*
+keytype:
+0 - active
+1 - posting
+*/
+func (client *Client) AddKeys(username string, keytype int, keys []string) (*OperResp, error) {
 	var trx []types.Operation
 
 	var ka = map[string]int64{}
 	var aa = map[string]int64{}
+	var weight uint32
+
+	var active *types.Authority
+	var posting *types.Authority
 
 	r, e := client.Database.GetAccounts([]string{username})
 	if e != nil {
 		return nil, e
 	}
 
-	for k, v := range r[0].Posting.AccountAuths {
-		aa[k] = v
+	memo := r[0].MemoKey
+	jsondata := r[0].JSONMetadata
+
+	switch {
+	case keytype == 0:
+		for k, v := range r[0].Active.AccountAuths {
+			aa[k] = v
+		}
+
+		for k, v := range r[0].Active.KeyAuths {
+			ka[k] = v
+		}
+		weight = r[0].Active.WeightThreshold
+	case keytype == 1:
+		for k, v := range r[0].Posting.AccountAuths {
+			aa[k] = v
+		}
+
+		for k, v := range r[0].Posting.KeyAuths {
+			ka[k] = v
+		}
+		weight = r[0].Posting.WeightThreshold
+	default:
+		return nil, fmt.Errorf("The types parameter is invalid")
 	}
 
-	for k, v := range r[0].Posting.KeyAuths {
-		ka[k] = v
-	}
-
-	for _, k := range addkeys {
+	for _, k := range keys {
 		if strings.HasPrefix(k, "GLS") {
 			ka[k] = 1
 		} else {
@@ -855,25 +884,121 @@ func (client *Client) AddPostingKeys(username string, addkeys []string) (*OperRe
 		}
 	}
 
-	weight := r[0].Posting.WeightThreshold
-
-	memo := r[0].MemoKey
-	jsondata := r[0].JSONMetadata
-
-	posting := &types.Authority{
+	keylist := &types.Authority{
 		WeightThreshold: weight,
 		AccountAuths:    aa,
 		KeyAuths:        ka,
 	}
-
-	tx := &types.AccountUpdateOperation{
+	switch {
+	case keytype == 0:
+		active = keylist
+	case keytype == 1:
+		posting = keylist
+	}
+	tx := types.AccountUpdateOperation{
 		Account:      username,
 		Posting:      posting,
+		Active:       active,
 		MemoKey:      memo,
 		JSONMetadata: jsondata,
 	}
 
-	trx = append(trx, tx)
+	trx = append(trx, &tx)
+
 	resp, err := client.SendTrx(username, trx)
-	return &OperResp{NameOper: "AddPostingKeys", Bresp: resp}, err
+	return &OperResp{NameOper: "AddKeys", Bresp: resp}, err
+}
+
+//RemoveKeys removes a key from the account
+/*
+keytype:
+0 - active
+1 - posting
+*/
+func (client *Client) RemoveKeys(username string, keytype int, keys []string) (*OperResp, error) {
+	var trx []types.Operation
+
+	var ka = map[string]int64{}
+	var aa = map[string]int64{}
+	var weight uint32
+
+	var active *types.Authority
+	var posting *types.Authority
+
+	r, e := client.Database.GetAccounts([]string{username})
+	if e != nil {
+		return nil, e
+	}
+
+	memo := r[0].MemoKey
+	jsondata := r[0].JSONMetadata
+
+	switch {
+	case keytype == 0:
+		if len(r[0].Active.AccountAuths) < 1 && len(r[0].Active.KeyAuths) < 2 {
+			return nil, fmt.Errorf("You can not delete a single key")
+		}
+		weight = r[0].Active.WeightThreshold
+		for _, addkey := range keys {
+			for k, v := range r[0].Active.AccountAuths {
+				if k != addkey {
+					aa[k] = v
+				}
+			}
+
+			for k, v := range r[0].Active.KeyAuths {
+				if k != addkey {
+					ka[k] = v
+				}
+			}
+
+		}
+
+	case keytype == 1:
+		if len(r[0].Posting.AccountAuths) < 1 && len(r[0].Posting.KeyAuths) < 2 {
+			return nil, fmt.Errorf("You can not delete a single key")
+		}
+		weight = r[0].Posting.WeightThreshold
+		for _, addkey := range keys {
+			for k, v := range r[0].Posting.AccountAuths {
+				if k != addkey {
+					aa[k] = v
+				}
+			}
+
+			for k, v := range r[0].Posting.KeyAuths {
+				if k != addkey {
+					ka[k] = v
+				}
+			}
+
+		}
+
+	default:
+		return nil, fmt.Errorf("The types parameter is invalid")
+	}
+
+	keylist := &types.Authority{
+		WeightThreshold: weight,
+		AccountAuths:    aa,
+		KeyAuths:        ka,
+	}
+	switch {
+	case keytype == 0:
+		active = keylist
+	case keytype == 1:
+		posting = keylist
+	}
+	tx := types.AccountUpdateOperation{
+		Account:      username,
+		Posting:      posting,
+		Active:       active,
+		MemoKey:      memo,
+		JSONMetadata: jsondata,
+	}
+
+	trx = append(trx, &tx)
+
+	resp, err := client.SendTrx(username, trx)
+	return &OperResp{NameOper: "RemoveKeys", Bresp: resp}, err
 }

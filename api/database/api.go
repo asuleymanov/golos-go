@@ -5,7 +5,6 @@ import (
 
 	"github.com/asuleymanov/golos-go/transports"
 	"github.com/asuleymanov/golos-go/types"
-	"github.com/pkg/errors"
 )
 
 const apiID = "database_api"
@@ -20,7 +19,7 @@ func NewAPI(caller transports.Caller) *API {
 	return &API{caller}
 }
 
-var emptyParams = []string{}
+var emptyParams = struct{}{}
 
 func (api *API) call(method string, params, resp interface{}) error {
 	return api.caller.Call("call", []interface{}{apiID, method, params}, resp)
@@ -228,7 +227,7 @@ func (api *API) GetRequiredSignatures(trx *types.Transaction, keys []string) ([]
 	var resp []*string
 	err := api.call("get_required_signatures", []interface{}{trx, keys}, &resp)
 	if err != nil {
-		return nil, errors.Wrapf(err, "")
+		return nil, err
 	}
 	return resp, nil
 }

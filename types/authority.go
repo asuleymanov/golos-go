@@ -6,9 +6,9 @@ import (
 
 //Authority is an additional structure used by other structures.
 type Authority struct {
+	WeightThreshold uint32         `json:"weight_threshold"`
 	AccountAuths    StringInt64Map `json:"account_auths"`
 	KeyAuths        StringInt64Map `json:"key_auths"`
-	WeightThreshold uint32         `json:"weight_threshold"`
 }
 
 //MarshalTransaction is a function of converting type Authority to bytes.

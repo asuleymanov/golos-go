@@ -30,16 +30,19 @@ func (op *AccountUpdateOperation) MarshalTransaction(encoder *transaction.Encode
 	enc.EncodeUVarint(uint64(TypeAccountUpdate.Code()))
 	enc.EncodeString(op.Account)
 	if op.Owner != nil {
+		enc.Encode(byte(1))
 		enc.Encode(op.Owner)
 	} else {
 		enc.Encode(byte(0))
 	}
 	if op.Active != nil {
+		enc.Encode(byte(1))
 		enc.Encode(op.Active)
 	} else {
 		enc.Encode(byte(0))
 	}
 	if op.Posting != nil {
+		enc.Encode(byte(1))
 		enc.Encode(op.Posting)
 	} else {
 		enc.Encode(byte(0))

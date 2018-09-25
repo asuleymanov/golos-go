@@ -4,17 +4,6 @@ import (
 	"github.com/asuleymanov/golos-go/types"
 )
 
-//ChainProperties additional structure for the functions GetFeedHistory, GetWitnessSchedule, GetWitnessByAccount, GetWitnesses and GetWitnessByVote .
-type ChainProperties struct {
-	AccountCreationFee          *types.Asset `json:"account_creation_fee"`
-	MaximumBlockSize            uint32       `json:"maximum_block_size"`
-	SBDInterestRate             uint16       `json:"sbd_interest_rate"`
-	CreateAccountMinGolosFee    *types.Asset `json:"create_account_min_golos_fee"`
-	CreateAccountMinDelegation  *types.Asset `json:"create_account_min_delegation"`
-	CreateAccountDelegationTime uint32       `json:"create_account_delegation_time"`
-	MinDelegation               *types.Asset `json:"min_delegation"`
-}
-
 //CurrentMedianHistoryPrice structure for the GetCurrentMedianHistoryPrice function. And additional structure for the functions GetFeedHistory, GetWitnessByAccount, GetWitnesses and GetWitnessByVote.
 type CurrentMedianHistoryPrice struct {
 	Base  *types.Asset `json:"base"`
@@ -30,17 +19,17 @@ type FeedHistory struct {
 
 //WitnessSchedule structure for the GetWitnessSchedule function.
 type WitnessSchedule struct {
-	ID                            *types.Int       `json:"id"`
-	CurrentVirtualTime            string           `json:"current_virtual_time"`
-	NextShuffleBlockNum           *types.Int       `json:"next_shuffle_block_num"`
-	CurrentShuffledWitnesses      string           `json:"current_shuffled_witnesses"`
-	NumScheduledWitnesses         *types.Int       `json:"num_scheduled_witnesses"`
-	Top19Weight                   *types.Int       `json:"top19_weight"`
-	TimeshareWeight               *types.Int       `json:"timeshare_weight"`
-	MinerWeight                   *types.Int       `json:"miner_weight"`
-	WitnessPayNormalizationFactor *types.Int       `json:"witness_pay_normalization_factor"`
-	MedianProps                   *ChainProperties `json:"median_props"`
-	MajorityVersion               string           `json:"majority_version"`
+	ID                            *types.Int             `json:"id"`
+	CurrentVirtualTime            string                 `json:"current_virtual_time"`
+	NextShuffleBlockNum           *types.Int             `json:"next_shuffle_block_num"`
+	CurrentShuffledWitnesses      string                 `json:"current_shuffled_witnesses"`
+	NumScheduledWitnesses         *types.Int             `json:"num_scheduled_witnesses"`
+	Top19Weight                   *types.Int             `json:"top19_weight"`
+	TimeshareWeight               *types.Int             `json:"timeshare_weight"`
+	MinerWeight                   *types.Int             `json:"miner_weight"`
+	WitnessPayNormalizationFactor *types.Int             `json:"witness_pay_normalization_factor"`
+	MedianProps                   *types.ChainProperties `json:"median_props"`
+	MajorityVersion               string                 `json:"majority_version"`
 }
 
 //Witness structure for the GetWitnessByAccount, GetWitnesses and GetWitnessByVote function.
@@ -58,7 +47,7 @@ type Witness struct {
 	LastConfirmedBlockNum *types.Int                 `json:"last_confirmed_block_num"`
 	PowWorker             *types.Int                 `json:"pow_worker"`
 	SigningKey            string                     `json:"signing_key"`
-	Props                 *ChainProperties           `json:"props"`
+	Props                 *types.ChainProperties     `json:"props"`
 	SbdExchangeRate       *CurrentMedianHistoryPrice `json:"sbd_exchange_rate"`
 	LastSbdExchangeUpdate *types.Time                `json:"last_sbd_exchange_update"`
 	LastWork              string                     `json:"last_work"`

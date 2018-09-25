@@ -86,8 +86,8 @@ func (api *API) GetBlockHeader(blockNum uint32) (*BlockHeader, error) {
 }
 
 //GetChainProperties api request get_chain_properties
-func (api *API) GetChainProperties() (*ChainProperties, error) {
-	var resp ChainProperties
+func (api *API) GetChainProperties() (*types.ChainProperties, error) {
+	var resp types.ChainProperties
 	err := api.call("get_chain_properties", emptyParams, &resp)
 	if err != nil {
 		return nil, err

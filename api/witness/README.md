@@ -17,7 +17,6 @@ This package adds support for `witness_api`.
 | 9 | get_witnesses_by_vote | **DONE** |
 | 10 | lookup_witness_accounts | **DONE** |
 
-
 ## License
 
 MIT, see the `LICENSE` file.

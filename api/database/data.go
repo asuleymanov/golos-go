@@ -99,17 +99,6 @@ type BlockHeader struct {
 	Extensions            []interface{} `json:"extensions"`
 }
 
-//ChainProperties structure for the GetChainProperties function
-type ChainProperties struct {
-	AccountCreationFee          *types.Asset `json:"account_creation_fee"`
-	MaximumBlockSize            uint32       `json:"maximum_block_size"`
-	SBDInterestRate             uint16       `json:"sbd_interest_rate"`
-	CreateAccountMinGolosFee    *types.Asset `json:"create_account_min_golos_fee"`
-	CreateAccountMinDelegation  *types.Asset `json:"create_account_min_delegation"`
-	CreateAccountDelegationTime uint32       `json:"create_account_delegation_time"`
-	MinDelegation               *types.Asset `json:"min_delegation"`
-}
-
 //Config structure for the GetConfig function.
 type Config struct {
 	BuildTestnet                   bool         `json:"STEEMIT_BUILD_TESTNET"`

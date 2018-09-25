@@ -5,14 +5,10 @@
 
 Golang RPC client library for [Golos](https://golos.io).
 
-## Compatibility
-
-`golosd 0.18.0`
-
 ## Usage
 
 ```go
-import client "github.com/asuleymanov/golos-go"
+import "github.com/asuleymanov/golos-go"
 ```
 
 

@@ -30,10 +30,7 @@ func (api *API) GetAccountVotes(author string, opts ...interface{}) ([]*Votes, e
 	}
 	var resp []*Votes
 	err := api.call("get_account_votes", params, &resp)
-	if err != nil {
-		return nil, err
-	}
-	return resp, nil
+	return resp, err
 }
 
 //GetActiveVotes api request get_active_votes
@@ -46,10 +43,7 @@ func (api *API) GetActiveVotes(author, permlink string, opts ...interface{}) ([]
 	}
 	var resp []*VoteState
 	err := api.call("get_active_votes", params, &resp)
-	if err != nil {
-		return nil, err
-	}
-	return resp, nil
+	return resp, err
 }
 
 //GetAllContentReplies api request get_all_content_replies
@@ -62,10 +56,7 @@ func (api *API) GetAllContentReplies(parentAuthor, parentPermlink string, opts .
 	}
 	var resp []*Content
 	err := api.call("get_all_content_replies", params, &resp)
-	if err != nil {
-		return nil, err
-	}
-	return resp, nil
+	return resp, err
 }
 
 //GetContent api request get_content
@@ -78,10 +69,7 @@ func (api *API) GetContent(author, permlink string, opts ...interface{}) (*Conte
 	}
 	var resp Content
 	err := api.call("get_content", params, &resp)
-	if err != nil {
-		return nil, err
-	}
-	return &resp, nil
+	return &resp, err
 }
 
 //GetContentReplies api request get_content_replies
@@ -94,10 +82,7 @@ func (api *API) GetContentReplies(parentAuthor, parentPermlink string, opts ...i
 	}
 	var resp []*Content
 	err := api.call("get_content_replies", params, &resp)
-	if err != nil {
-		return nil, err
-	}
-	return resp, nil
+	return resp, err
 }
 
 //GetRepliesByLastUpdate api request get_replies_by_last_update
@@ -110,8 +95,5 @@ func (api *API) GetRepliesByLastUpdate(startAuthor, startPermlink string, limit 
 	}
 	var resp []*Content
 	err := api.call("get_replies_by_last_update", params, &resp)
-	if err != nil {
-		return nil, err
-	}
-	return resp, nil
+	return resp, err
 }

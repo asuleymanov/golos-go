@@ -797,7 +797,7 @@ func (client *Client) ProposalDelete(author, title, requester string) (*OperResp
 func (client *Client) SendPrivateMessage(from, to, message string) (*OperResp, error) {
 	var trx []types.Operation
 
-	req, errGetAcc := client.Database.GetAccounts([]string{from, to})
+	req, errGetAcc := client.Database.GetAccounts(from, to)
 	if errGetAcc != nil {
 		return nil, errGetAcc
 	}
@@ -845,7 +845,7 @@ func (client *Client) AddKeys(username string, keytype int, keys []string) (*Ope
 	var active *types.Authority
 	var posting *types.Authority
 
-	r, e := client.Database.GetAccounts([]string{username})
+	r, e := client.Database.GetAccounts(username)
 	if e != nil {
 		return nil, e
 	}
@@ -925,7 +925,7 @@ func (client *Client) RemoveKeys(username string, keytype int, keys []string) (*
 	var active *types.Authority
 	var posting *types.Authority
 
-	r, e := client.Database.GetAccounts([]string{username})
+	r, e := client.Database.GetAccounts(username)
 	if e != nil {
 		return nil, e
 	}

@@ -117,12 +117,7 @@ func (client *Client) Close() error {
 
 func initClient(url []string, options ...websocket.Option) (*websocket.Transport, error) {
 	// Initializing Websocket
-	t, err := websocket.NewTransport(url, options...)
-	if err != nil {
-		return nil, err
-	}
-
-	return t, nil
+	return websocket.NewTransport(url, options...)
 }
 
 //GenCommentMetadata generate default CommentMetadata

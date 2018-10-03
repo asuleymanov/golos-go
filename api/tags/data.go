@@ -7,11 +7,11 @@ type DiscussionQuery struct {
 	Tag            string   `json:"tag"`
 	Limit          uint32   `json:"limit"`
 	VoteLimit      uint32   `json:"vote_limit"`
-	FilterTags     []string `json:"filter_tags"`
+	FilterTags     []string `json:"filter_tags,omitempty"`
 	StartAuthor    string   `json:"start_author,omitempty"`
 	StartPermlink  string   `json:"start_permlink,omitempty"`
 	ParentAuthor   string   `json:"parent_author,omitempty"`
-	ParentPermlink string   `json:"parent_permlink"`
+	ParentPermlink string   `json:"parent_permlink,omitempty"`
 }
 
 //Content structure for the GetDiscussionsByActive, GetDiscussionsByAuthorBeforeDate, GetDiscussionsByBlog, GetDiscussionsByCashout, GetDiscussionsByChildren, GetDiscussionsByComments, GetDiscussionsByCreated, GetDiscussionsByFeed, GetDiscussionsByHot, GetDiscussionsByPayout, GetDiscussionsByPromoted, GetDiscussionsByTrending and GetDiscussionsByVotes functions.

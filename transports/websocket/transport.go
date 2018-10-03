@@ -190,7 +190,7 @@ Loop:
 
 		// In case auto-reconnect is disabled, fail immediately.
 		if !t.autoReconnectEnabled {
-			return checkErr(err)
+			return parseErr(err)
 		}
 
 		// In case this is a connection error, request a new connection.
@@ -205,11 +205,11 @@ Loop:
 		}
 
 		// Some other error occurred, return it immediately.
-		return checkErr(err)
+		return parseErr(err)
 	}
 }
 
-func checkErr(err error) error {
+func parseErr(err error) error {
 	if v, ok := err.(*jsonrpc2.Error); ok {
 		var derr transports.RPCErrData
 		json.Unmarshal([]byte(*v.Data), &derr)

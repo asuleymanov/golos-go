@@ -26,18 +26,12 @@ func (api *API) call(method string, params, resp interface{}) error {
 func (api *API) GetInbox(to string, limit, offset uint16) ([]*Message, error) {
 	var resp []*Message
 	err := api.call("get_inbox", []interface{}{to, time.Now(), limit, offset}, &resp)
-	if err != nil {
-		return nil, err
-	}
-	return resp, nil
+	return resp, err
 }
 
 //GetOutbox api request get_outbox
 func (api *API) GetOutbox(from string, limit, offset uint16) ([]*Message, error) {
 	var resp []*Message
 	err := api.call("get_outbox", []interface{}{from, time.Now(), limit, offset}, &resp)
-	if err != nil {
-		return nil, err
-	}
-	return resp, nil
+	return resp, err
 }

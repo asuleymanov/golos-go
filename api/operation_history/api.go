@@ -25,18 +25,12 @@ func (api *API) call(method string, params, resp interface{}) error {
 func (api *API) GetOpsInBlock(blockNum uint32, onlyVirtual bool) ([]*types.OperationObject, error) {
 	var resp []*types.OperationObject
 	err := api.call("get_ops_in_block", []interface{}{blockNum, onlyVirtual}, &resp)
-	if err != nil {
-		return nil, err
-	}
-	return resp, nil
+	return resp, err
 }
 
 //GetTransaction api request get_transaction
 func (api *API) GetTransaction(id string) (*types.Transaction, error) {
 	var resp types.Transaction
 	err := api.call("get_transaction", []string{id}, &resp)
-	if err != nil {
-		return nil, err
-	}
-	return &resp, nil
+	return &resp, err
 }

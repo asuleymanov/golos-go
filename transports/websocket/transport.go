@@ -212,8 +212,8 @@ Loop:
 func parseErr(err error) error {
 	if v, ok := err.(*jsonrpc2.Error); ok {
 		var derr transports.RPCErrData
-		errpar:=json.Unmarshal([]byte(*v.Data), &derr)
-		if errpar!=nil{
+		errpar := json.Unmarshal([]byte(*v.Data), &derr)
+		if errpar != nil {
 			return errors.Wrap(err, "call failed")
 		}
 		strERR := &transports.RPCError{

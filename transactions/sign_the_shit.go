@@ -8,7 +8,7 @@ import (
 	//"log"
 	"math/big"
 
-	"github.com/asuleymanov/golos-go/rfc6979"
+	"github.com/asuleymanov/golos-go/transactions/rfc6979"
 	secp256k1 "github.com/btcsuite/btcd/btcec"
 	"github.com/pkg/errors"
 )

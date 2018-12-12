@@ -1,7 +1,7 @@
 package types
 
 import (
-	"errors"
+	"github.com/pkg/errors"
 
 	// RPC
 	"github.com/asuleymanov/golos-go/encoding/transaction"

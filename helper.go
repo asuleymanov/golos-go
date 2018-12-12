@@ -1,7 +1,7 @@
 package client
 
 import (
-	"errors"
+	"github.com/pkg/errors"
 	"time"
 
 	"github.com/asuleymanov/golos-go/transactions"

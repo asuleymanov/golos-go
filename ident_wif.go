@@ -1,7 +1,7 @@
 package client
 
 import (
-	"errors"
+	"github.com/pkg/errors"
 
 	"github.com/asuleymanov/golos-go/encoding/wif"
 	"github.com/asuleymanov/golos-go/types"

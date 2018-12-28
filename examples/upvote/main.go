@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/pkg/errors"
 	"flag"
 	"fmt"
+	"github.com/pkg/errors"
 	"log"
 
 	"github.com/asuleymanov/golos-go"

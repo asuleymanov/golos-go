@@ -27,7 +27,7 @@ func (op *ChainPropertiesUpdateOperation) MarshalTransaction(encoder *transactio
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeChainPropertiesUpdate.Code()))
 	enc.Encode(op.Owner)
-	enc.Encode(byte(1))
+	enc.Encode(byte(2))
 	z, _ := json.Marshal(op.Props[1])
 	var d ChainProperties
 	_ = json.Unmarshal(z, &d)

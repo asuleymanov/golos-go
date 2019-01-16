@@ -2,8 +2,8 @@ package client
 
 import (
 	"encoding/hex"
-	"errors"
 	"fmt"
+	"github.com/pkg/errors"
 	"strconv"
 	"strings"
 	"time"
@@ -711,22 +711,12 @@ func (client *Client) UpdateAccountMetadata(account string, jsonMetadata types.A
 }
 
 //ChainPropertiesUpdate allows you to set delegate parameters for the network.
-func (client *Client) ChainPropertiesUpdate(owner string, accountcreationfee *types.Asset, maxblocksize uint32, sbdinterestrate uint16, createaccountmingolosfee, createaccountmindelegation *types.Asset, createaccountdelegationtime uint32, mindelegation *types.Asset) (*OperResp, error) {
+func (client *Client) ChainPropertiesUpdate(owner string, witness_props *types.ChainProperties) (*OperResp, error) {
 	var trx []types.Operation
 	var props []interface{}
 
-	chp := types.ChainProperties{
-		AccountCreationFee:          accountcreationfee,
-		MaximumBlockSize:            maxblocksize,
-		SBDInterestRate:             sbdinterestrate,
-		CreateAccountMinGolosFee:    createaccountmingolosfee,
-		CreateAccountMinDelegation:  createaccountmindelegation,
-		CreateAccountDelegationTime: createaccountdelegationtime,
-		MinDelegation:               mindelegation,
-	}
-
-	props = append(props, 1)
-	props = append(props, chp)
+	props = append(props, 2)
+	props = append(props, witness_props)
 
 	tx := &types.ChainPropertiesUpdateOperation{
 		Owner: owner,

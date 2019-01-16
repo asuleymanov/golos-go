@@ -4,7 +4,7 @@ package types
 type CustomOperation struct {
 	RequiredAuths []string `json:"required_auths"`
 	ID            uint16   `json:"id"`
-	Datas         string   `json:"data"`
+	Datas         []byte   `json:"data"`
 }
 
 //Type function that defines the type of operation CustomOperation.

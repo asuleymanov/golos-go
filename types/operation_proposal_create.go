@@ -9,9 +9,9 @@ type ProposalCreateOperation struct {
 	Author             string          `json:"author"`
 	Title              string          `json:"title"`
 	Memo               string          `json:"memo"`
-	ProposedOperations ProposalObjects `json:"proposed_operations"`
 	ExpirationTime     *Time           `json:"expiration_time"`
-	ReviewPeriodTime   *Time           `json:"review_period_time"`
+	ProposedOperations ProposalObjects `json:"proposed_operations"`
+	ReviewPeriodTime   *Time           `json:"review_period_time,omnitempty"`
 	Extensions         []interface{}   `json:"extensions"`
 }
 

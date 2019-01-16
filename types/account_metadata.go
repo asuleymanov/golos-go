@@ -37,7 +37,7 @@ func (op *AccountMetadata) UnmarshalJSON(p []byte) error {
 	if errUnq != nil {
 		return errUnq
 	}
-	if str == "" {
+	if str == "" || str == "\"\"" {
 		return nil
 	}
 

@@ -31,8 +31,8 @@ func (op *LimitOrderCreate2Operation) MarshalTransaction(encoder *transaction.En
 	enc.Encode(op.Owner)
 	enc.Encode(op.OrderID)
 	enc.Encode(op.AmountToSell)
-	enc.Encode(op.ExchangeRate)
 	enc.EncodeBool(op.FillOrKill)
+	enc.Encode(op.ExchangeRate)
 	enc.Encode(op.Expiration)
 	return enc.Err()
 }

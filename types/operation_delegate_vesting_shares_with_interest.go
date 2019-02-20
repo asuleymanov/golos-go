@@ -5,12 +5,18 @@ import (
 )
 
 //DelegateVestingSharesWithInterestOperation represents delegate_vesting_shares_with_interest operation data.
+/*
+PayoutStrategy:
+to_delegator - 0
+to_delegated_vesting - 1
+*/
 type DelegateVestingSharesWithInterestOperation struct {
-	Delegator     string        `json:"delegator"`
-	Delegatee     string        `json:"delegatee"`
-	VestingShares *Asset        `json:"vesting_shares"`
-	InterestRate  uint16        `json:"interest_rate"`
-	Extensions    []interface{} `json:"extensions"`
+	Delegator      string        `json:"delegator"`
+	Delegatee      string        `json:"delegatee"`
+	VestingShares  *Asset        `json:"vesting_shares"`
+	InterestRate   uint16        `json:"interest_rate"`
+	PayoutStrategy int           `json:"payout_strategy"`
+	Extensions     []interface{} `json:"extensions"`
 }
 
 //Type function that defines the type of operation DelegateVestingSharesWithInterestOperation.
@@ -31,6 +37,7 @@ func (op *DelegateVestingSharesWithInterestOperation) MarshalTransaction(encoder
 	enc.Encode(op.Delegatee)
 	enc.Encode(op.VestingShares)
 	enc.Encode(op.InterestRate)
+	enc.Encode(op.PayoutStrategy)
 	//enc.Encode(op.Extensions)
 	enc.Encode(byte(0))
 	return enc.Err()

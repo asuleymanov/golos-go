@@ -16,5 +16,3 @@ type POW2Input struct {
 	PrevBlock     []byte `json:"prev_block"`
 	Nonce         uint64 `json:"nonce"`
 }
-
-

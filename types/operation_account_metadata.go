@@ -6,8 +6,8 @@ import (
 
 //AccountMetadataOperation represents account_metadata operation data.
 type AccountMetadataOperation struct {
-	Account      string           `json:"account"`
-	JSONMetadata *AccountMetadata `json:"json_metadata"`
+	Account      string `json:"account"`
+	JSONMetadata string `json:"json_metadata"`
 }
 
 //Type function that defines the type of operation AccountMetadataOperation.

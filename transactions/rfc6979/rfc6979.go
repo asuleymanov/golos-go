@@ -14,15 +14,18 @@ package rfc6979
 
 import (
 	"bytes"
-	"crypto/ecdsa"
 	"crypto/hmac"
-	"crypto/sha256"
-	"encoding/binary"
 	"hash"
 	"math/big"
+	//"log"
+	//"encoding/hex"
+	"crypto/ecdsa"
+	"crypto/sha256"
+	"encoding/binary"
 	"math/rand"
 )
 
+//var one = big.NewInt(1)
 var oneInitializer = []byte{0x01}
 
 func RandStringBytes(n int) string {
@@ -36,8 +39,9 @@ func RandStringBytes(n int) string {
 }
 
 // https://tools.ietf.org/html/rfc6979#section-3.2
-func generateSecret(priv *ecdsa.PrivateKey, alg func() hash.Hash, hash []byte, test func(*big.Int) bool, nonce int) {
+func generateSecret(priv *ecdsa.PrivateKey, alg func() hash.Hash, hash []byte, test func(*big.Int) bool, nonce int) error {
 	var hashClone = make([]byte, len(hash))
+	var err error
 	copy(hashClone, hash)
 
 	if nonce > 0 {
@@ -45,7 +49,10 @@ func generateSecret(priv *ecdsa.PrivateKey, alg func() hash.Hash, hash []byte, t
 		binary.BigEndian.PutUint32(nonceA, uint32(nonce))
 		hashClone = append(hashClone, nonceA...)
 		hs := sha256.New()
-		hs.Write(hashClone)
+		_, err = hs.Write(hashClone)
+		if err != nil {
+			return err
+		}
 		hashClone = hs.Sum(nil)
 	}
 
@@ -63,41 +70,72 @@ func generateSecret(priv *ecdsa.PrivateKey, alg func() hash.Hash, hash []byte, t
 
 	m := append(append(append(v, 0x00), x...), hashClone...)
 
-	k = HmacSHA256(m, k)
+	k, err = HmacSHA256(m, k)
+	if err != nil {
+		return err
+	}
 
 	// Step E
-	v = HmacSHA256(v, k)
+	v, err = HmacSHA256(v, k)
+	if err != nil {
+		return err
+	}
 
 	// Step F
-	k = HmacSHA256(append(append(append(v, 0x01), x...), hashClone...), k)
+	k, err = HmacSHA256(append(append(append(v, 0x01), x...), hashClone...), k)
+	if err != nil {
+		return err
+	}
 
 	// Step G
-	v = HmacSHA256(v, k)
+	v, err = HmacSHA256(v, k)
+	if err != nil {
+		return err
+	}
 
 	// Step H1/H2a, ignored as tlen === qlen (256 bit)
 	// Step H2b
-	v = HmacSHA256(v, k)
+	v, err = HmacSHA256(v, k)
+	if err != nil {
+		return err
+	}
 
 	var t = hashToInt(v, c)
+	if err != nil {
+		return err
+	}
 
 	// Step H3, repeat until T is within the interval [1, n - 1]
 	for t.Sign() <= 0 || t.Cmp(q) >= 0 || !test(t) {
 
-		k = HmacSHA256(append(v, 0x00), k)
+		k, err = HmacSHA256(append(v, 0x00), k)
+		if err != nil {
+			return err
+		}
 
-		v = HmacSHA256(v, k)
+		v, err = HmacSHA256(v, k)
+		if err != nil {
+			return err
+		}
 
 		// Step H1/H2a, again, ignored as tlen === qlen (256 bit)
 		// Step H2b again
-		v = HmacSHA256(v, k)
+		v, err = HmacSHA256(v, k)
+		if err != nil {
+			return err
+		}
 
 		t = hashToInt(v, c)
 	}
+	return nil
 }
 
-func HmacSHA256(m, k []byte) []byte {
+func HmacSHA256(m, k []byte) ([]byte, error) {
 	mac := hmac.New(sha256.New, k)
-	mac.Write(m)
+	_, err := mac.Write(m)
+	if err != nil {
+		return []byte{}, err
+	}
 	expectedMAC := mac.Sum(nil)
-	return expectedMAC
+	return expectedMAC, nil
 }

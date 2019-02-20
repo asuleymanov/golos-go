@@ -7,6 +7,12 @@ import (
 )
 
 //CommentOptionsOperation represents comment_options operation data.
+/*
+Extensions:
+CommentPayoutBeneficiaries
+CommentAuctionWindowRewardDestination
+CommentCurationRewardsPercent
+*/
 type CommentOptionsOperation struct {
 	Author               string        `json:"author"`
 	Permlink             string        `json:"permlink"`

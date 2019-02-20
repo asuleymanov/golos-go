@@ -21,7 +21,7 @@ func SignECDSA(priv *ecdsa.PrivateKey, hash []byte, alg func() hash.Hash, nonce 
 	var hashClone = make([]byte, len(hash))
 	copy(hashClone, hash)
 
-	generateSecret(priv /* N, priv.D, */, alg, hashClone, func(k *big.Int) bool {
+	err = generateSecret(priv /* N, priv.D, */, alg, hashClone, func(k *big.Int) bool {
 		inv := new(big.Int).ModInverse(k, n)
 		r, _ = priv.Curve.ScalarBaseMult(k.Bytes())
 		r.Mod(r, n)

@@ -5,10 +5,6 @@ import (
 	"io"
 )
 
-var (
-	EmptyParams = []struct{}{}
-)
-
 //Caller interface for sending a request to a network transport
 type Caller interface {
 	Call(method string, args []interface{}, reply interface{}) error

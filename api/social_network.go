@@ -6,7 +6,7 @@ package api
 func (api *API) GetAccountVotes(author string, opts ...interface{}) ([]*Votes, error) {
 	var params []interface{}
 	if len(opts) > 0 {
-		params = []interface{}{author, opts[0]}
+		params = []interface{}{author, opts}
 	} else {
 		params = []interface{}{author}
 	}
@@ -19,7 +19,7 @@ func (api *API) GetAccountVotes(author string, opts ...interface{}) ([]*Votes, e
 func (api *API) GetActiveVotes(author, permlink string, opts ...interface{}) ([]*VoteState, error) {
 	var params []interface{}
 	if len(opts) > 0 {
-		params = []interface{}{author, permlink, opts[0]}
+		params = []interface{}{author, permlink, opts}
 	} else {
 		params = []interface{}{author, permlink}
 	}
@@ -29,53 +29,48 @@ func (api *API) GetActiveVotes(author, permlink string, opts ...interface{}) ([]
 }
 
 //GetAllContentReplies api request get_all_content_replies
-func (api *API) GetAllContentReplies(parentAuthor, parentPermlink string, opts ...interface{}) ([]*Content, error) {
+func (api *API) GetAllContentReplies(parentAuthor, parentPermlink string, opts ...interface{}) ([]*Discussion, error) {
 	var params []interface{}
 	if len(opts) > 0 {
-		params = []interface{}{parentAuthor, parentPermlink, opts[0]}
+		params = []interface{}{parentAuthor, parentPermlink, opts}
 	} else {
 		params = []interface{}{parentAuthor, parentPermlink}
 	}
-	var resp []*Content
+	var resp []*Discussion
 	err := api.call("social_network", "get_all_content_replies", params, &resp)
 	return resp, err
 }
 
 //GetContent api request get_content
-func (api *API) GetContent(author, permlink string, opts ...interface{}) (*Content, error) {
+func (api *API) GetContent(author, permlink string, opts ...interface{}) (*Discussion, error) {
 	var params []interface{}
 	if len(opts) > 0 {
-		params = []interface{}{author, permlink, opts[0]}
+		params = []interface{}{author, permlink, opts}
 	} else {
 		params = []interface{}{author, permlink}
 	}
-	var resp Content
+	var resp Discussion
 	err := api.call("social_network", "get_content", params, &resp)
 	return &resp, err
 }
 
 //GetContentReplies api request get_content_replies
-func (api *API) GetContentReplies(parentAuthor, parentPermlink string, opts ...interface{}) ([]*Content, error) {
+func (api *API) GetContentReplies(parentAuthor, parentPermlink string, opts ...interface{}) ([]*Discussion, error) {
 	var params []interface{}
 	if len(opts) > 0 {
-		params = []interface{}{parentAuthor, parentPermlink, opts[0]}
+		params = []interface{}{parentAuthor, parentPermlink, opts}
 	} else {
 		params = []interface{}{parentAuthor, parentPermlink}
 	}
-	var resp []*Content
+	var resp []*Discussion
 	err := api.call("social_network", "get_content_replies", params, &resp)
 	return resp, err
 }
 
 //GetRepliesByLastUpdate api request get_replies_by_last_update
-func (api *API) GetRepliesByLastUpdate(startAuthor, startPermlink string, limit uint32, opts ...interface{}) ([]*Content, error) {
-	var params []interface{}
-	if len(opts) > 0 {
-		params = []interface{}{startAuthor, startPermlink, limit, opts[0]}
-	} else {
-		params = []interface{}{startAuthor, startPermlink, limit}
-	}
-	var resp []*Content
-	err := api.call("social_network", "get_replies_by_last_update", params, &resp)
+func (api *API) GetRepliesByLastUpdate(startAuthor, startPermlink string, limit, vote_limit, vote_offset uint32) ([]*Discussion, error) {
+
+	var resp []*Discussion
+	err := api.call("social_network", "get_replies_by_last_update", []interface{}{startAuthor, startPermlink, limit, vote_limit, vote_offset}, &resp)
 	return resp, err
 }

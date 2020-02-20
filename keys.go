@@ -1,4 +1,4 @@
-package client
+package golos
 
 import (
 	"github.com/asuleymanov/golos-go/encoding/wif"
@@ -57,11 +57,6 @@ func init() {
 	OpTypeKey["award"] = []string{"posting"}
 	OpTypeKey["set_paid_subscription"] = []string{"active"}
 	OpTypeKey["paid_subscribe"] = []string{"active"}
-}
-
-//SetKeys you can specify keys for signing transactions.
-func (client *Client) SetKeys(keys *Keys) {
-	client.CurrentKeys = keys
 }
 
 //SigningKeys returns the key from the CurrentKeys

@@ -1,20 +1,20 @@
 package api
 
 import (
-	"github.com/pkg/errors"
+	"errors"
 )
 
 //follow
 
 //GetAccountReputations api request get_account_reputations
-func (api *API) GetAccountReputations(accounts ...string) ([]*uint32, error) {
-	var resp []*uint32
+func (api *API) GetAccountReputations(accounts ...string) ([]*AccountReputation, error) {
+	var resp []*AccountReputation
 	err := api.call("follow", "get_account_reputations", []interface{}{accounts}, &resp)
 	return resp, err
 }
 
 //GetBlog api request get_blog
-func (api *API) GetBlog(accountName string, entryID uint32, limit uint32) ([]*Blogs, error) {
+func (api *API) GetBlog(accountName string, entryID, limit uint32) ([]*Blogs, error) {
 	if limit > 500 {
 		return nil, errors.New("follow: get_blog -> limit must not exceed 500")
 	}
@@ -31,7 +31,7 @@ func (api *API) GetBlogAuthors(author string) ([]*BlogAuthor, error) {
 }
 
 //GetBlogEntries api request get_blog_entries
-func (api *API) GetBlogEntries(accountName string, entryID uint32, limit uint32) ([]*BlogEntries, error) {
+func (api *API) GetBlogEntries(accountName string, entryID, limit uint32) ([]*BlogEntries, error) {
 	if limit > 500 {
 		return nil, errors.New("follow: get_blog_entries -> limit must not exceed 500")
 	}
@@ -41,7 +41,7 @@ func (api *API) GetBlogEntries(accountName string, entryID uint32, limit uint32)
 }
 
 //GetFeed api request get_feed
-func (api *API) GetFeed(accountName string, entryID uint32, limit uint32) ([]*Feeds, error) {
+func (api *API) GetFeed(accountName string, entryID, limit uint32) ([]*Feeds, error) {
 	if limit > 500 {
 		return nil, errors.New("follow: get_feed -> limit must not exceed 500")
 	}
@@ -51,7 +51,7 @@ func (api *API) GetFeed(accountName string, entryID uint32, limit uint32) ([]*Fe
 }
 
 //GetFeedEntries api request get_feed_entries
-func (api *API) GetFeedEntries(accountName string, entryID uint32, limit uint32) ([]*FeedEntry, error) {
+func (api *API) GetFeedEntries(accountName string, entryID, limit uint32) ([]*FeedEntry, error) {
 	if limit > 500 {
 		return nil, errors.New("follow: get_feed_entries -> limit must not exceed 500")
 	}
@@ -70,18 +70,15 @@ func (api *API) GetFollowCount(accountName string) (*FollowCount, error) {
 //GetFollowers api request get_followers
 /*
 kind:
-undefined
-blog
-ignore
+0 = undefined
+1 = blog
+2 = ignore
 */
-func (api *API) GetFollowers(accountName, start, kind string, limit uint32) ([]*FollowObject, error) {
+func (api *API) GetFollowers(accountName, start string, kind, limit uint32) ([]*FollowObject, error) {
 	if limit > 1000 {
 		return nil, errors.New("follow: get_followers -> limit must not exceed 1000")
 	}
-	switch {
-	case kind != "undefined", kind != "blog", kind != "ignore":
-		return nil, errors.New("follow: get_followers -> kind can take values only \"undefined\", \"blog\" and \"ignore\"")
-	}
+
 	var resp []*FollowObject
 	err := api.call("follow", "get_followers", []interface{}{accountName, start, kind, limit}, &resp)
 	return resp, err
@@ -90,18 +87,15 @@ func (api *API) GetFollowers(accountName, start, kind string, limit uint32) ([]*
 //GetFollowing api request get_following
 /*
 kind:
-undefined
-blog
-ignore
+0 = undefined
+1 = blog
+2 = ignore
 */
-func (api *API) GetFollowing(accountName, start, kind string, limit uint32) ([]*FollowObject, error) {
+func (api *API) GetFollowing(accountName, start string, kind, limit uint32) ([]*FollowObject, error) {
 	if limit > 1000 {
 		return nil, errors.New("follow: get_following -> limit must not exceed 1000")
 	}
-	switch {
-	case kind != "undefined", kind != "blog", kind != "ignore":
-		return nil, errors.New("follow: get_followers -> kind can take values only \"undefined\", \"blog\" and \"ignore\"")
-	}
+
 	var resp []*FollowObject
 	err := api.call("follow", "get_following", []interface{}{accountName, start, kind, limit}, &resp)
 	return resp, err

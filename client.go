@@ -1,4 +1,4 @@
-package client
+package golos
 
 import (
 	"net/url"
@@ -15,17 +15,16 @@ var (
 )
 
 // Client can be used to access GOLOS remote APIs.
-// There is a public field for every GOLOS API available,
-// e.g. Client.Database corresponds to database_api.
+// There is a function for every available GOLOS API,
+// for example, Client.API.GetConfig() corresponds to database_api -> get_config.
 type Client struct {
 	cc transports.CallCloser
 
-	chainID string
+	asyncProtocol bool
 
-	AsyncProtocol bool
-
-	// Database represents database_api.
 	API *api.API
+
+	Config api.Config
 
 	// Current keys for operations
 	CurrentKeys *Keys
@@ -33,9 +32,9 @@ type Client struct {
 
 // NewClient creates a new RPC client that use the given CallCloser internally.
 // Initialize only server present API. Absent API initialized as nil value.
-func NewClient(s string) (*Client, error) {
+func NewClient(apiURL string) (*Client, error) {
 	// Parse URL
-	u, err := url.Parse(s)
+	u, err := url.Parse(apiURL)
 	if err != nil {
 		return nil, err
 	}
@@ -44,12 +43,12 @@ func NewClient(s string) (*Client, error) {
 	var call transports.CallCloser
 	switch u.Scheme {
 	case "wss", "ws":
-		call, err = websocket.NewTransport(s)
+		call, err = websocket.NewTransport(apiURL)
 		if err != nil {
 			return nil, err
 		}
 	case "https", "http":
-		call, err = http.NewTransport(s)
+		call, err = http.NewTransport(apiURL)
 		if err != nil {
 			return nil, err
 		}
@@ -58,15 +57,15 @@ func NewClient(s string) (*Client, error) {
 	}
 	client := &Client{cc: call}
 
-	client.AsyncProtocol = false
+	client.asyncProtocol = false
 
 	client.API = api.NewAPI(client.cc)
 
-	chainID, err := client.API.GetConfig()
+	conf, err := client.API.GetConfig()
 	if err != nil {
 		return nil, err
 	}
-	client.chainID = chainID.ChainID
+	client.Config = *conf
 
 	return client, nil
 }

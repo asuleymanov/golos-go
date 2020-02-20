@@ -1,0 +1,507 @@
+Worker:
+DEFINE_API(worker_api_plugin, get_worker_requests) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (worker_request_query, query)
+        (worker_request_sort, sort)
+        (bool, fill_posts)
+    )
+DEFINE_API(worker_api_plugin, get_worker_request_votes) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (account_name_type, author)
+        (string, permlink)
+        (account_name_type, start_voter)
+        (uint32_t,          limit)
+    )
+
+Social Network:
+DEFINE_API(social_network, get_content_replies) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (string,   author)
+        (string,   permlink)
+        (uint32_t, vote_limit, DEFAULT_VOTE_LIMIT)
+        (uint32_t, vote_offset, 0)
+    );
+DEFINE_API(social_network, get_all_content_replies) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(string,   author)
+		(string,   permlink)
+		(uint32_t, vote_limit, DEFAULT_VOTE_LIMIT)
+		(uint32_t, vote_offset, 0)
+	);
+DEFINE_API(social_network, get_account_votes) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(account_name_type, voter)
+		(uint32_t,          from,  0)
+		(uint64_t,          limit, DEFAULT_VOTE_LIMIT)
+	);
+DEFINE_API(social_network, get_content) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(string,   author)
+		(string,   permlink)
+		(uint32_t, vote_limit, DEFAULT_VOTE_LIMIT)
+		(uint32_t, vote_offset, 0)
+	);
+DEFINE_API(social_network, get_active_votes) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(string,   author)
+		(string,   permlink)
+		(uint32_t, vote_limit, DEFAULT_VOTE_LIMIT)
+		(uint32_t, vote_offset, 0)
+	);
+DEFINE_API(social_network, get_replies_by_last_update) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(string,   start_parent_author)
+		(string,   start_permlink)
+		(uint32_t, limit)
+		(uint32_t, vote_limit, DEFAULT_VOTE_LIMIT)
+		(uint32_t, vote_offset, 0)
+	);
+
+Private Message:
+DEFINE_API(private_message_plugin, get_inbox) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(std::string, to)
+		(message_box_query, query)
+	);
+DEFINE_API(private_message_plugin, get_outbox) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(std::string, from)
+		(message_box_query, query)
+	);
+DEFINE_API(private_message_plugin, get_thread) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(std::string, from)
+		(std::string, to)
+		(message_thread_query, query)
+	);
+DEFINE_API(private_message_plugin, get_settings) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(std::string, owner)
+	);
+DEFINE_API(private_message_plugin, get_contacts_size) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(std::string, owner)
+	);
+DEFINE_API(private_message_plugin, get_contact_info) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(std::string, owner)
+		(std::string, contact)
+	);
+DEFINE_API(private_message_plugin, get_contacts) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(std::string, owner)
+		(private_contact_type, type)
+		(uint16_t, limit)
+		(uint32_t, offset)
+	);
+DEFINE_API(private_message_plugin, set_callback) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(callback_query, query)
+	);
+
+Witness:
+DEFINE_API(plugin, get_current_median_history_price) {
+    PLUGIN_API_VALIDATE_ARGS();
+DEFINE_API(plugin, get_feed_history) {
+    PLUGIN_API_VALIDATE_ARGS();
+DEFINE_API(plugin, get_miner_queue) {
+    PLUGIN_API_VALIDATE_ARGS();
+DEFINE_API(plugin, get_active_witnesses) {
+    PLUGIN_API_VALIDATE_ARGS();
+DEFINE_API(plugin, get_witness_schedule) {
+    PLUGIN_API_VALIDATE_ARGS();
+DEFINE_API(plugin, get_witnesses) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (vector<witness_object::id_type>, witness_ids)
+    );
+DEFINE_API(plugin, get_witness_by_account) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (string, account_name)
+    );
+DEFINE_API(plugin, get_witnesses_by_vote) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (string,   from)
+        (uint32_t, limit)
+    );
+DEFINE_API(plugin, get_witness_count) {
+    PLUGIN_API_VALIDATE_ARGS();
+DEFINE_API(plugin, lookup_witness_accounts) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (string,   lower_bound_name)
+        (uint32_t, limit)
+    );
+
+Tags:
+DEFINE_API(tags_plugin, get_languages) {
+	PLUGIN_API_VALIDATE_ARGS();
+DEFINE_API(tags_plugin, get_discussions_by_blog) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(discussion_query, query)
+	);
+DEFINE_API(tags_plugin, get_discussions_by_feed) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(discussion_query, query)
+	);
+DEFINE_API(tags_plugin, get_discussions_by_comments) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(discussion_query, query)
+	);
+DEFINE_API(tags_plugin, get_discussions_by_trending) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(discussion_query, query)
+	);
+DEFINE_API(tags_plugin, get_discussions_by_promoted) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(discussion_query, query)
+	);
+DEFINE_API(tags_plugin, get_discussions_by_created) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(discussion_query, query)
+	);
+DEFINE_API(tags_plugin, get_discussions_by_active) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(discussion_query, query)
+	);
+DEFINE_API(tags_plugin, get_discussions_by_cashout) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(discussion_query, query)
+	);
+DEFINE_API(tags_plugin, get_discussions_by_payout) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(discussion_query, query)
+	);
+DEFINE_API(tags_plugin, get_discussions_by_votes) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(discussion_query, query)
+	);
+DEFINE_API(tags_plugin, get_discussions_by_children) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(discussion_query, query)
+	);
+DEFINE_API(tags_plugin, get_discussions_by_hot) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(discussion_query, query)
+	);
+DEFINE_API(tags_plugin, get_trending_tags) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(string,   after)
+		(uint32_t, limit)
+	);
+DEFINE_API(tags_plugin, get_tags_used_by_author) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(string, author)
+	);
+DEFINE_API(tags_plugin, get_discussions_by_author_before_date) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(string,         author)
+		(string,         start_permlink)
+		(time_point_sec, before_date)
+		(uint32_t,       limit)
+		(uint32_t,       vote_limit, DEFAULT_VOTE_LIMIT)
+		(uint32_t,       vote_offset, 0)
+	);
+
+Operation History:
+DEFINE_API(plugin, get_block_with_virtual_ops) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(uint32_t, block_num)
+	);
+DEFINE_API(plugin, get_ops_in_block) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(uint32_t, block_num)
+		(bool,     only_virtual)
+	);
+DEFINE_API(plugin, get_transaction) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(transaction_id_type, id)
+	);
+
+Follow:
+DEFINE_API(plugin, get_followers) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(account_name_type, following)
+		(account_name_type, start_follower)
+		(follow_type,       type)
+		(uint32_t,          limit)
+	);
+DEFINE_API(plugin, get_following) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(account_name_type, follower)
+		(account_name_type, start_following)
+		(follow_type,       type)
+		(uint32_t,          limit)
+	);
+DEFINE_API(plugin, get_follow_count) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(account_name_type, account)
+	);
+DEFINE_API(plugin, get_feed_entries){
+	PLUGIN_API_VALIDATE_ARGS(
+		(account_name_type, account)
+		(uint32_t,          entry_id)
+		(uint32_t,          limit)
+	);
+DEFINE_API(plugin, get_feed) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(account_name_type, account)
+		(uint32_t,          entry_id)
+		(uint32_t,          limit)
+	);
+DEFINE_API(plugin, get_blog_entries) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(account_name_type, account)
+		(uint32_t,          entry_id)
+		(uint32_t,          limit)
+	);
+DEFINE_API(plugin, get_blog) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(account_name_type, account)
+		(uint32_t,          entry_id)
+		(uint32_t,          limit)
+	);
+DEFINE_API(plugin, get_account_reputations) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(std::vector<account_name_type>, accounts)
+	);
+DEFINE_API(plugin, get_reblogged_by) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(account_name_type, author)
+		(std::string,       permlink)
+	);
+DEFINE_API(plugin, get_blog_authors) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(account_name_type, account)
+	);
+
+Block Info:
+DEFINE_API ( plugin, get_block_info ) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (uint32_t, start_block_num)
+        (uint32_t, count)
+    );
+DEFINE_API ( plugin, get_blocks_with_info ) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (uint32_t, start_block_num)
+        (uint32_t, count)
+    );
+
+Auth Util:
+DEFINE_API ( plugin, check_authority_signature ) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(std::string, account_name)
+		(std::string, level)
+		(fc::sha256, dig)
+		(std::vector<protocol::signature_type>, sigs)
+	);
+
+Account History:
+DEFINE_API(plugin, get_account_history) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(account_name_type, account)
+		(uint32_t, from, 0xFFFFFFFF)
+		(uint32_t, limit, ACCOUNT_HISTORY_DEFAULT_LIMIT)
+		(account_history_query, query, account_history_query())
+	);
+
+Network Broadcast:
+DEFINE_API(network_broadcast_api_plugin, broadcast_transaction) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(signed_transaction, trx)
+		(uint32_t,           max_block_age, 0)
+	);
+DEFINE_API(network_broadcast_api_plugin, broadcast_transaction_synchronous) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(signed_transaction, trx)
+		(uint32_t,           max_block_age, 0)
+	);
+DEFINE_API(network_broadcast_api_plugin, broadcast_block) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(signed_block, block)
+	);
+DEFINE_API(network_broadcast_api_plugin,broadcast_transaction_with_callback){
+	PLUGIN_API_VALIDATE_ARGS(
+		(std::string,        unused)
+		(signed_transaction, trx)
+		(uint32_t,           max_block_age, 0)
+	);
+
+Market History:
+DEFINE_API(market_history_plugin, get_ticker) {
+	PLUGIN_API_VALIDATE_ARGS();
+DEFINE_API(market_history_plugin, get_volume) {
+	PLUGIN_API_VALIDATE_ARGS();
+DEFINE_API(market_history_plugin, get_order_book) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(uint32_t, limit)
+	);
+DEFINE_API(market_history_plugin, get_order_book_extended) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(uint32_t, limit)
+	);
+DEFINE_API(market_history_plugin, get_trade_history) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(time_point_sec, start)
+		(time_point_sec, end)
+		(uint32_t,       limit)
+	);
+DEFINE_API(market_history_plugin, get_recent_trades) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(uint32_t, limit)
+	);
+DEFINE_API(market_history_plugin, get_market_history) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(uint32_t,       bucket_seconds)
+		(time_point_sec, start)
+		(time_point_sec, end)
+	);
+DEFINE_API(market_history_plugin, get_market_history_buckets) {
+	PLUGIN_API_VALIDATE_ARGS();
+DEFINE_API(market_history_plugin, get_open_orders) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(string, account)
+	);
+
+Account By Key:
+DEFINE_API(account_by_key_plugin, get_key_references) {
+	PLUGIN_API_VALIDATE_ARGS(
+		(flat_set<public_key_type>, keys)
+	);
+
+Account Notes:
+DEFINE_API(account_notes_plugin, get_value) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (account_name_type, account)
+        (string,          key)
+    );
+DEFINE_API(account_notes_plugin, get_settings) {
+	PLUGIN_API_VALIDATE_ARGS();
+
+
+Raw Block:
+DEFINE_API ( plugin, get_raw_block ) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (uint32_t, block_num)
+    );
+
+Database:
+DEFINE_API(plugin, get_block_header) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (uint32_t, block_num)
+    );
+DEFINE_API(plugin, get_block) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (uint32_t, block_num)
+    );
+DEFINE_API(plugin, set_block_applied_callback) {
+    PLUGIN_API_VALIDATE_ARGS(
+		(block_applied_callback, callback)
+	);
+DEFINE_API(plugin, set_pending_transaction_callback) {
+	PLUGIN_API_VALIDATE_ARGS();
+DEFINE_API(plugin, get_config) {
+    PLUGIN_API_VALIDATE_ARGS();
+DEFINE_API(plugin, get_dynamic_global_properties) {
+    PLUGIN_API_VALIDATE_ARGS();
+DEFINE_API(plugin, get_chain_properties) {
+    PLUGIN_API_VALIDATE_ARGS();
+DEFINE_API(plugin, get_hardfork_version) {
+    PLUGIN_API_VALIDATE_ARGS();
+DEFINE_API(plugin, get_next_scheduled_hardfork) {
+    PLUGIN_API_VALIDATE_ARGS();
+DEFINE_API(plugin, get_accounts) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (vector<std::string>, account_names)
+    );
+DEFINE_API(plugin, lookup_account_names) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (vector<std::string>, account_names)
+    );
+DEFINE_API(plugin, lookup_accounts) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (account_name_type, lower_bound_name)
+        (uint32_t,          limit)
+    );
+DEFINE_API(plugin, get_account_count) {
+    PLUGIN_API_VALIDATE_ARGS();
+DEFINE_API(plugin, get_owner_history) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (string, account)
+    );
+DEFINE_API(plugin, get_recovery_request) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (account_name_type, account)
+    );
+DEFINE_API(plugin, get_escrow) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (account_name_type, from)
+        (uint32_t,          escrow_id)
+    );
+DEFINE_API(plugin, get_withdraw_routes) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (string,               account)
+        (withdraw_route_type,  type, incoming)
+    );
+DEFINE_API(plugin, get_account_bandwidth) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (string,         account)
+        (bandwidth_type, type)
+    );
+DEFINE_API(plugin, get_transaction_digest) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (transaction, trx)
+    );
+DEFINE_API(plugin, get_transaction_hex) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (transaction, trx)
+    );
+DEFINE_API(plugin, get_required_signatures) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (signed_transaction,        trx)
+        (flat_set<public_key_type>, available_keys)
+    );
+DEFINE_API(plugin, get_potential_signatures) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (signed_transaction, trx)
+    );
+DEFINE_API(plugin, verify_authority) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (signed_transaction, trx)
+    );
+DEFINE_API(plugin, verify_account_authority) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (account_name_type,         name)
+        (flat_set<public_key_type>, keys)
+    );
+DEFINE_API(plugin, get_conversion_requests) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (string, account)
+    );
+DEFINE_API(plugin, get_savings_withdraw_from) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (string, account)
+    );
+DEFINE_API(plugin, get_savings_withdraw_to) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (string, account)
+    );
+DEFINE_API(plugin, get_vesting_delegations) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (string,           account)
+        (string,           from)
+        (uint32_t,         limit, 100)
+        (delegations_type, type, delegated)
+    );
+DEFINE_API(plugin, get_expiring_vesting_delegations) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (string,         account)
+        (time_point_sec, from)
+        (uint32_t,       limit, 100)
+    );
+DEFINE_API(plugin, get_database_info) {
+    PLUGIN_API_VALIDATE_ARGS();
+DEFINE_API(plugin, get_proposed_transactions) {
+    PLUGIN_API_VALIDATE_ARGS(
+        (string, account)
+        (uint32_t, from)
+        (uint32_t, limit)
+    );

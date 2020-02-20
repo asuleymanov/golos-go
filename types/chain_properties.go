@@ -28,7 +28,7 @@ type ChainProperties struct {
 	CustomOpsBandwidthMultiplier    uint16 `json:"custom_ops_bandwidth_multiplier,omitempty"`
 	MinCurationPercent              uint16 `json:"min_curation_percent,omitempty"`
 	MaxCurationPercent              uint16 `json:"max_curation_percent,omitempty"`
-	CurationRewardCurve             uint64 `json:"curation_reward_curve,omitempty"`
+	CurationRewardCurve             string `json:"curation_reward_curve,omitempty"`
 	AllowDistributeAuctionReward    bool   `json:"allow_distribute_auction_reward,omitempty"`
 	AllowReturnAuctionRewardToFund  bool   `json:"allow_return_auction_reward_to_fund,omitempty"`
 	WorkerRewardPercent             uint16 `json:"worker_reward_percent,omitempty"`

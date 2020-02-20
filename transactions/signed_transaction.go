@@ -11,6 +11,7 @@ import (
 
 	// RPC
 	"github.com/asuleymanov/golos-go/encoding/transaction"
+	"github.com/asuleymanov/golos-go/operations"
 	"github.com/asuleymanov/golos-go/types"
 
 	// Vendor
@@ -19,11 +20,11 @@ import (
 
 //SignedTransaction structure of a signed transaction
 type SignedTransaction struct {
-	*types.Transaction
+	*operations.Transaction
 }
 
 //NewSignedTransaction initialization of a new signed transaction
-func NewSignedTransaction(tx *types.Transaction) *SignedTransaction {
+func NewSignedTransaction(tx *operations.Transaction) *SignedTransaction {
 	if tx.Expiration == nil {
 		expiration := time.Now().Add(30 * time.Second).UTC()
 		tx.Expiration = &types.Time{Time: &expiration}

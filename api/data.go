@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/asuleymanov/golos-go/operations"
 	"github.com/asuleymanov/golos-go/types"
 )
 
@@ -89,14 +90,14 @@ type Account struct {
 
 //Block structure for the GetBlock function
 type Block struct {
-	Number                uint32              `json:"-"`
-	Timestamp             types.Time          `json:"timestamp"`
-	Witness               string              `json:"witness"`
-	WitnessSignature      string              `json:"witness_signature"`
-	TransactionMerkleRoot string              `json:"transaction_merkle_root"`
-	Previous              string              `json:"previous"`
-	Extensions            []interface{}       `json:"extensions"`
-	Transactions          []types.Transaction `json:"transactions"`
+	Number                uint32                   `json:"-"`
+	Timestamp             types.Time               `json:"timestamp"`
+	Witness               string                   `json:"witness"`
+	WitnessSignature      string                   `json:"witness_signature"`
+	TransactionMerkleRoot string                   `json:"transaction_merkle_root"`
+	Previous              string                   `json:"previous"`
+	Extensions            []interface{}            `json:"extensions"`
+	Transactions          []operations.Transaction `json:"transactions"`
 }
 
 //BlockHeader structure for the GetBlockHeader function
@@ -231,10 +232,10 @@ type ConversionRequests struct {
 
 //DatabaseInfo structure for the GetDatabaseInfo function.
 type DatabaseInfo struct {
-	TotalSize    uint64              `json:"total_size"`
-	FreeSize     uint64              `json:"free_size"`
-	ReservedSize uint64              `json:"reserved_size"`
-	UsedSize     uint64              `json:"used_size"`
+	TotalSize    types.UInt64        `json:"total_size"`
+	FreeSize     types.UInt64        `json:"free_size"`
+	ReservedSize types.UInt64        `json:"reserved_size"`
+	UsedSize     types.UInt64        `json:"used_size"`
 	IndexList    []DatabaseInfoIndex `json:"index_list"`
 }
 
@@ -269,10 +270,10 @@ type DynamicGlobalProperties struct {
 	AverageBlockSize             uint32           `json:"average_block_size"`
 	MaximumBlockSize             uint32           `json:"maximum_block_size"`
 	CurrentAslot                 uint64           `json:"current_aslot"`
-	RecentSlotsFilled            types.UInt64     `json:"recent_slots_filled"`
+	RecentSlotsFilled            string           `json:"recent_slots_filled"`
 	ParticipationCount           uint8            `json:"participation_count"`
 	LastIrreversibleBlockNum     uint32           `json:"last_irreversible_block_num"`
-	MaxVirtualBandwidth          uint64           `json:"max_virtual_bandwidth"`
+	MaxVirtualBandwidth          string           `json:"max_virtual_bandwidth"`
 	CurrentReserveRatio          uint64           `json:"current_reserve_ratio"`
 	CustomOpsBandwidthMultiplier uint16           `json:"custom_ops_bandwidth_multiplier"`
 	TransitBlockNum              uint32           `json:"transit_block_num"`
@@ -304,19 +305,19 @@ type OwnerHistory struct {
 
 //ProposalObject structure for the GetProposedTransaction function.
 type ProposalObject struct {
-	Author                    string           `json:"author"`
-	Title                     string           `json:"title"`
-	Memo                      string           `json:"memo"`
-	ExpirationTime            types.Time       `json:"expiration_time"`
-	ReviewPeriodTime          types.Time       `json:"review_period_time,omitempty"`
-	ProposedOperations        types.Operations `json:"proposed_operations"`
-	RequiredActiveApprovals   []string         `json:"required_active_approvals"`
-	AvailableActiveApprovals  []string         `json:"available_active_approvals"`
-	RequiredOwnerApprovals    []string         `json:"required_owner_approvals"`
-	AvailableOwnerApprovals   []string         `json:"available_owner_approvals"`
-	RequiredPostingApprovals  []string         `json:"required_posting_approvals"`
-	AvailablePostingApprovals []string         `json:"available_posting_approvals"`
-	AvailableKeyApprovals     []string         `json:"available_key_approvals"`
+	Author                    string                `json:"author"`
+	Title                     string                `json:"title"`
+	Memo                      string                `json:"memo"`
+	ExpirationTime            types.Time            `json:"expiration_time"`
+	ReviewPeriodTime          types.Time            `json:"review_period_time,omitempty"`
+	ProposedOperations        operations.Operations `json:"proposed_operations"`
+	RequiredActiveApprovals   []string              `json:"required_active_approvals"`
+	AvailableActiveApprovals  []string              `json:"available_active_approvals"`
+	RequiredOwnerApprovals    []string              `json:"required_owner_approvals"`
+	AvailableOwnerApprovals   []string              `json:"available_owner_approvals"`
+	RequiredPostingApprovals  []string              `json:"required_posting_approvals"`
+	AvailablePostingApprovals []string              `json:"available_posting_approvals"`
+	AvailableKeyApprovals     []string              `json:"available_key_approvals"`
 }
 
 //SavingsWithdraw structure for the GetSavingsWithdrawFrom and GetSavingsWithdrawTo functions.

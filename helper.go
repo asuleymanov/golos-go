@@ -1,6 +1,7 @@
 package golos
 
 import (
+	"github.com/asuleymanov/golos-go/operations"
 	"github.com/asuleymanov/golos-go/transactions"
 	"github.com/asuleymanov/golos-go/types"
 )
@@ -30,8 +31,8 @@ func JSONTrxString(v *transactions.SignedTransaction) (string, error) {
 }
 
 //JSONOpString generate Operations to String
-func JSONOpString(v []types.Operation) (string, error) {
-	var tx types.Operations
+func JSONOpString(v []operations.Operation) (string, error) {
+	var tx operations.Operations
 
 	tx = append(tx, v...)
 
@@ -43,11 +44,11 @@ func JSONOpString(v []types.Operation) (string, error) {
 }
 
 //GenerateProposalOperation generate []Operation to ProposalOperations
-func GenerateProposalOperation(ops []types.Operation) types.ProposalObjects {
-	var ans types.ProposalObjects
+func GenerateProposalOperation(ops []operations.Operation) operations.ProposalObjects {
+	var ans operations.ProposalObjects
 
 	for _, val := range ops {
-		ans = append(ans, types.ProposalObject{Operation: val, OperationType: val.Type()})
+		ans = append(ans, operations.ProposalObject{Operation: val, OperationType: val.Type()})
 	}
 
 	return ans

@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 
+	"github.com/asuleymanov/golos-go/operations"
 	"github.com/asuleymanov/golos-go/types"
 )
 
@@ -130,7 +131,7 @@ func (api *API) GetOwnerHistory(accountName string) ([]*OwnerHistory, error) {
 }
 
 //GetPotentialSignatures api request get_potential_signatures
-func (api *API) GetPotentialSignatures(trx *types.Transaction) ([]*string, error) {
+func (api *API) GetPotentialSignatures(trx *operations.Transaction) ([]*string, error) {
 	var resp []*string
 	err := api.call("database_api", "get_potential_signatures", []interface{}{&trx}, &resp)
 	return resp, err
@@ -151,7 +152,7 @@ func (api *API) GetRecoveryRequest(accountName string) (*AccountRecoveryRequest,
 }
 
 //GetRequiredSignatures api request get_required_signatures
-func (api *API) GetRequiredSignatures(trx *types.Transaction, keys ...string) ([]*string, error) {
+func (api *API) GetRequiredSignatures(trx *operations.Transaction, keys ...string) ([]*string, error) {
 	var resp []*string
 	err := api.call("database_api", "get_required_signatures", []interface{}{trx, keys}, &resp)
 	return resp, err
@@ -172,7 +173,7 @@ func (api *API) GetSavingsWithdrawTo(accountName string) ([]*SavingsWithdraw, er
 }
 
 //GetTransactionHex api request get_transaction_hex
-func (api *API) GetTransactionHex(trx *types.Transaction) (*string, error) {
+func (api *API) GetTransactionHex(trx *operations.Transaction) (*string, error) {
 	var resp string
 	err := api.call("database_api", "get_transaction_hex", []interface{}{&trx}, &resp)
 	return &resp, err
@@ -231,7 +232,7 @@ func (api *API) GetVerifyAccountAuthority(accountName string, keys ...string) (*
 }
 
 //GetVerifyAuthority api request verify_authority
-func (api *API) GetVerifyAuthority(trx *types.Transaction) (*bool, error) {
+func (api *API) GetVerifyAuthority(trx *operations.Transaction) (*bool, error) {
 	var resp bool
 	err := api.call("database_api", "verify_authority", []interface{}{&trx}, &resp)
 	return &resp, err

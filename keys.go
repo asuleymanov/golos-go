@@ -2,13 +2,13 @@ package golos
 
 import (
 	"github.com/asuleymanov/golos-go/encoding/wif"
-	"github.com/asuleymanov/golos-go/types"
+	"github.com/asuleymanov/golos-go/operations"
 	"github.com/pkg/errors"
 )
 
 var (
 	//OpTypeKey include a description of the operation and the key needed to sign it
-	OpTypeKey = make(map[types.OpType][]string)
+	OpTypeKey = make(map[operations.OpType][]string)
 )
 
 //Keys is used as a keystroke for a specific user.
@@ -60,7 +60,7 @@ func init() {
 }
 
 //SigningKeys returns the key from the CurrentKeys
-func (client *Client) SigningKeys(trx types.Operation) ([][]byte, error) {
+func (client *Client) SigningKeys(trx operations.Operation) ([][]byte, error) {
 	var keys [][]byte
 
 	if client.CurrentKeys == nil {

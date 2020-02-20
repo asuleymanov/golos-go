@@ -3,7 +3,7 @@ package api
 import (
 	"encoding/json"
 
-	"github.com/asuleymanov/golos-go/types"
+	"github.com/asuleymanov/golos-go/operations"
 	"github.com/pkg/errors"
 )
 
@@ -12,7 +12,7 @@ import (
 //GetAccountHistory the history of all user actions on the network in the form of transactions.
 //If from = -1, the last {limit + 1} elements of the history will be shown.
 //The limit parameter must not exceed from (exception from = -1), since the previous {from} elements of the history are displayed.
-func (api *API) GetAccountHistory(account string, from uint64, limit uint32) ([]*types.OperationObject, error) {
+func (api *API) GetAccountHistory(account string, from uint64, limit uint32) ([]*operations.OperationObject, error) {
 	if limit > 10000 {
 		return nil, errors.New("account_history: get_account_history -> limit must not exceed 10000")
 	}
@@ -31,13 +31,13 @@ func (api *API) GetAccountHistory(account string, from uint64, limit uint32) ([]
 	if err := json.Unmarshal([]byte(raw), &tmp1); err != nil {
 		return nil, err
 	}
-	var resp []*types.OperationObject
+	var resp []*operations.OperationObject
 	for _, v := range tmp1 {
 		byteData, errm := json.Marshal(&v[1])
 		if errm != nil {
 			return nil, errm
 		}
-		var tmp *types.OperationObject
+		var tmp *operations.OperationObject
 		if err := json.Unmarshal(byteData, &tmp); err != nil {
 			return nil, err
 		}

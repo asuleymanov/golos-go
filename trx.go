@@ -4,12 +4,13 @@ import (
 	"time"
 
 	"github.com/asuleymanov/golos-go/api"
+	"github.com/asuleymanov/golos-go/operations"
 	"github.com/asuleymanov/golos-go/transactions"
 	"github.com/asuleymanov/golos-go/types"
 )
 
 //SendTrx generates and sends an array of transactions to VIZ.
-func (client *Client) SendTrx(username string, strx []types.Operation) (*types.OperationResponse, error) {
+func (client *Client) SendTrx(username string, strx []operations.Operation) (*types.OperationResponse, error) {
 	var bresp types.OperationResponse
 
 	// Getting the necessary parameters
@@ -23,7 +24,7 @@ func (client *Client) SendTrx(username string, strx []types.Operation) (*types.O
 	if err != nil {
 		return nil, err
 	}
-	tx := transactions.NewSignedTransaction(&types.Transaction{
+	tx := transactions.NewSignedTransaction(&operations.Transaction{
 		RefBlockNum:    transactions.RefBlockNum(props.HeadBlockNumber),
 		RefBlockPrefix: refBlockPrefix,
 	})
@@ -75,7 +76,7 @@ func (client *Client) SendTrx(username string, strx []types.Operation) (*types.O
 	return &bresp, nil
 }
 
-func (client *Client) GetTrx(strx []types.Operation) (*types.Transaction, error) {
+func (client *Client) GetTrx(strx []operations.Operation) (*operations.Transaction, error) {
 	// Getting the necessary parameters
 	props, err := client.API.GetDynamicGlobalProperties()
 	if err != nil {
@@ -87,7 +88,7 @@ func (client *Client) GetTrx(strx []types.Operation) (*types.Transaction, error)
 	if err != nil {
 		return nil, err
 	}
-	tx := &types.Transaction{
+	tx := &operations.Transaction{
 		RefBlockNum:    transactions.RefBlockNum(props.HeadBlockNumber),
 		RefBlockPrefix: refBlockPrefix,
 	}

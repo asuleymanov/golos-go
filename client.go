@@ -1,13 +1,13 @@
 package golos
 
 import (
+	"errors"
 	"net/url"
 
 	"github.com/asuleymanov/golos-go/api"
 	"github.com/asuleymanov/golos-go/transports"
 	"github.com/asuleymanov/golos-go/transports/http"
 	"github.com/asuleymanov/golos-go/transports/websocket"
-	"github.com/pkg/errors"
 )
 
 var (
@@ -16,7 +16,7 @@ var (
 
 // Client can be used to access GOLOS remote APIs.
 // There is a function for every available GOLOS API,
-// for example, Client.API.GetConfig() corresponds to database_api -> get_config.
+// for example, Client.API.GetDatabaseInfo() corresponds to database_api -> get_database_info.
 type Client struct {
 	cc transports.CallCloser
 

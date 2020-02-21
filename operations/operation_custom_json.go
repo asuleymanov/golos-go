@@ -1,17 +1,14 @@
 package operations
 
 import (
-	// Stdlib
 	"bytes"
 	"encoding/json"
+	"errors"
+	"fmt"
 	"io"
 	"reflect"
 	"strings"
 
-	// Vendor
-	"github.com/pkg/errors"
-
-	// RPC
 	"github.com/asuleymanov/golos-go/encoding/transaction"
 )
 
@@ -28,12 +25,6 @@ var customJSONDataObjects = map[string]interface{}{
 	TypeLogin:          &LoginOperation{},
 	TypePrivateMessage: &PrivateMessageOperation{},
 }
-
-// FC_REFLECT( steemit::chain::custom_json_operation,
-//             (required_auths)
-//             (required_posting_auths)
-//             (id)
-//             (json) )
 
 //CustomJSONOperation represents custom_json operation data.
 type CustomJSONOperation struct {
@@ -70,10 +61,10 @@ func (op *CustomJSONOperation) UnmarshalData() (interface{}, error) {
 	if op.JSON[0] == '[' {
 		rawTuple := make([]json.RawMessage, 2)
 		if err := json.NewDecoder(strings.NewReader(op.JSON)).Decode(&rawTuple); err != nil {
-			return nil, errors.Wrapf(err, "failed to unmarshal CustomJSONOperation.JSON: \n%v", op.JSON)
+			return nil, fmt.Errorf("failed to unmarshal CustomJSONOperation.JSON: \n%v \n Error : %s", op.JSON, err)
 		}
 		if len(rawTuple) < 2 || rawTuple[1] == nil {
-			return nil, errors.Errorf("invalid CustomJSONOperation.JSON: \n%v", op.JSON)
+			return nil, fmt.Errorf("invalid CustomJSONOperation.JSON: \n%v", op.JSON)
 		}
 		bodyReader = bytes.NewReader([]byte(rawTuple[1]))
 	} else {
@@ -82,7 +73,7 @@ func (op *CustomJSONOperation) UnmarshalData() (interface{}, error) {
 
 	// Unmarshal into the new object instance.
 	if err := json.NewDecoder(bodyReader).Decode(opData); err != nil {
-		return nil, errors.Wrapf(err, "failed to unmarshal CustomJSONOperation.JSON: \n%v", op.JSON)
+		return nil, fmt.Errorf("failed to unmarshal CustomJSONOperation.JSON: \n%v \n Error : %s", op.JSON, err)
 	}
 
 	return opData, nil

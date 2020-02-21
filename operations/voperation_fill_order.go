@@ -6,12 +6,12 @@ import (
 
 //FillOrderOperation represents fill_order operation data.
 type FillOrderOperation struct {
-	CurrentOwner   string       `json:"current_owner"`
-	CurrentOrderid uint32       `json:"current_orderid"`
-	CurrentPays    *types.Asset `json:"current_pays"`
-	OpenOwner      string       `json:"open_owner"`
-	OpenOrderid    uint32       `json:"open_orderid"`
-	OpenPays       *types.Asset `json:"open_pays"`
+	CurrentOwner   string      `json:"current_owner"`
+	CurrentOrderid uint32      `json:"current_orderid"`
+	CurrentPays    types.Asset `json:"current_pays"`
+	OpenOwner      string      `json:"open_owner"`
+	OpenOrderid    uint32      `json:"open_orderid"`
+	OpenPays       types.Asset `json:"open_pays"`
 }
 
 //Type function that defines the type of operation FillOrderOperation.

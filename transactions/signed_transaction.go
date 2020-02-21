@@ -3,19 +3,15 @@
 package transactions
 
 import (
-	// Stdlib
 	"bytes"
 	"crypto/sha256"
 	"encoding/hex"
+	"fmt"
 	"time"
 
-	// RPC
 	"github.com/asuleymanov/golos-go/encoding/transaction"
 	"github.com/asuleymanov/golos-go/operations"
 	"github.com/asuleymanov/golos-go/types"
-
-	// Vendor
-	"github.com/pkg/errors"
 )
 
 //SignedTransaction structure of a signed transaction
@@ -51,11 +47,11 @@ func (tx *SignedTransaction) Digest(chain string) ([]byte, error) {
 	// Write the chain ID.
 	rawChainID, err := hex.DecodeString(chain)
 	if err != nil {
-		return nil, errors.Wrapf(err, "failed to decode chain ID: %v", chain)
+		return nil, fmt.Errorf("failed to decode chain ID: %v \n Error : %s", chain, err)
 	}
 
 	if _, err := msgBuffer.Write(rawChainID); err != nil {
-		return nil, errors.Wrap(err, "failed to write chain ID")
+		return nil, fmt.Errorf("failed to write chain ID : %s", err)
 	}
 
 	// Write the serialized transaction.
@@ -65,7 +61,7 @@ func (tx *SignedTransaction) Digest(chain string) ([]byte, error) {
 	}
 
 	if _, err := msgBuffer.Write(rawTx); err != nil {
-		return nil, errors.Wrap(err, "failed to write serialized transaction")
+		return nil, fmt.Errorf("failed to write serialized transaction : %s", err)
 	}
 
 	// Compute the digest.

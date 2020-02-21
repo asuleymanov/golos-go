@@ -1,15 +1,12 @@
 package types
 
 import (
-	// Stdlib
 	"encoding/json"
+	"errors"
+	"fmt"
 	"strconv"
 
-	// RPC
 	"github.com/asuleymanov/golos-go/encoding/transaction"
-
-	// Vendor
-	"github.com/pkg/errors"
 )
 
 func unmarshalInt(data []byte) (int64, error) {
@@ -28,7 +25,7 @@ func unmarshalInt(data []byte) (int64, error) {
 	} else {
 		err = json.Unmarshal(data, &i)
 	}
-	return i, errors.Wrapf(err, "types: failed to unmarshal integer: %v", data)
+	return i, fmt.Errorf("types: failed to unmarshal integer: %v\n Error : %s", data, err)
 }
 
 //Int8 type from parameter JSON

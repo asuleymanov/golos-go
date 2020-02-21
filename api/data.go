@@ -232,17 +232,17 @@ type ConversionRequests struct {
 
 //DatabaseInfo structure for the GetDatabaseInfo function.
 type DatabaseInfo struct {
-	TotalSize    types.UInt64        `json:"total_size"`
-	FreeSize     types.UInt64        `json:"free_size"`
-	ReservedSize types.UInt64        `json:"reserved_size"`
-	UsedSize     types.UInt64        `json:"used_size"`
+	TotalSize    string              `json:"total_size"`
+	FreeSize     string              `json:"free_size"`
+	ReservedSize uint64              `json:"reserved_size"`
+	UsedSize     string              `json:"used_size"`
 	IndexList    []DatabaseInfoIndex `json:"index_list"`
 }
 
 //DatabaseInfoIndex additional structure for the function GetDatabaseInfo.
 type DatabaseInfoIndex struct {
 	Name        string `json:"name"`
-	RecordCount uint32 `json:"record_count"`
+	RecordCount uint64 `json:"record_count"`
 }
 
 //DynamicGlobalProperties structure for the GetDynamicGlobalProperties function.
@@ -270,10 +270,10 @@ type DynamicGlobalProperties struct {
 	AverageBlockSize             uint32           `json:"average_block_size"`
 	MaximumBlockSize             uint32           `json:"maximum_block_size"`
 	CurrentAslot                 uint64           `json:"current_aslot"`
-	RecentSlotsFilled            string           `json:"recent_slots_filled"`
+	RecentSlotsFilled            types.UInt64     `json:"recent_slots_filled"`
 	ParticipationCount           uint8            `json:"participation_count"`
 	LastIrreversibleBlockNum     uint32           `json:"last_irreversible_block_num"`
-	MaxVirtualBandwidth          string           `json:"max_virtual_bandwidth"`
+	MaxVirtualBandwidth          uint64           `json:"max_virtual_bandwidth"`
 	CurrentReserveRatio          uint64           `json:"current_reserve_ratio"`
 	CustomOpsBandwidthMultiplier uint16           `json:"custom_ops_bandwidth_multiplier"`
 	TransitBlockNum              uint32           `json:"transit_block_num"`

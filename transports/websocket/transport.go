@@ -2,6 +2,7 @@ package websocket
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"math"
@@ -10,7 +11,6 @@ import (
 
 	"github.com/asuleymanov/golos-go/types"
 	"github.com/gorilla/websocket"
-	"github.com/pkg/errors"
 )
 
 var (

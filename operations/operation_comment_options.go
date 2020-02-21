@@ -17,7 +17,7 @@ CommentCurationRewardsPercent
 type CommentOptionsOperation struct {
 	Author               string        `json:"author"`
 	Permlink             string        `json:"permlink"`
-	MaxAcceptedPayout    *types.Asset  `json:"max_accepted_payout"`
+	MaxAcceptedPayout    types.Asset   `json:"max_accepted_payout"`
 	PercentSteemDollars  uint16        `json:"percent_steem_dollars"`
 	AllowVotes           bool          `json:"allow_votes"`
 	AllowCurationRewards bool          `json:"allow_curation_rewards"`

@@ -7,16 +7,16 @@ import (
 
 //AccountCreateWithDelegationOperation represents account_create_with_delegation operation data.
 type AccountCreateWithDelegationOperation struct {
-	Fee            *types.Asset     `json:"fee"`
-	Delegation     *types.Asset     `json:"delegation"`
-	Creator        string           `json:"creator"`
-	NewAccountName string           `json:"new_account_name"`
-	Owner          *types.Authority `json:"owner"`
-	Active         *types.Authority `json:"active"`
-	Posting        *types.Authority `json:"posting"`
-	MemoKey        string           `json:"memo_key"`
-	JSONMetadata   string           `json:"json_metadata"`
-	Extensions     []interface{}    `json:"extensions"`
+	Fee            types.Asset     `json:"fee"`
+	Delegation     types.Asset     `json:"delegation"`
+	Creator        string          `json:"creator"`
+	NewAccountName string          `json:"new_account_name"`
+	Owner          types.Authority `json:"owner"`
+	Active         types.Authority `json:"active"`
+	Posting        types.Authority `json:"posting"`
+	MemoKey        string          `json:"memo_key"`
+	JSONMetadata   string          `json:"json_metadata"`
+	Extensions     []interface{}   `json:"extensions"`
 }
 
 //Type function that defines the type of operation AccountCreateWithDelegationOperation.
@@ -42,7 +42,10 @@ func (op *AccountCreateWithDelegationOperation) MarshalTransaction(encoder *tran
 	enc.Encode(op.Posting)
 	enc.EncodePubKey(op.MemoKey)
 	enc.Encode(op.JSONMetadata)
-	//enc.Encode(op.Extensions)
+	/*if len(op.Extensions)>0{
+
+	}else{*/
 	enc.Encode(byte(0))
+	//}
 	return enc.Err()
 }

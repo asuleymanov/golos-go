@@ -6,8 +6,8 @@ import (
 
 //ProducerRewardOperationOperation represents producer_reward operation data.
 type ProducerRewardOperationOperation struct {
-	Producer      string       `json:"producer"`
-	VestingShares *types.Asset `json:"vesting_shares"`
+	Producer      string      `json:"producer"`
+	VestingShares types.Asset `json:"vesting_shares"`
 }
 
 //Type function that defines the type of operation ProducerRewardOperationOperation.

@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/pkg/errors"
+	"errors"
 
 	"github.com/asuleymanov/golos-go/encoding/transaction"
 	"github.com/asuleymanov/golos-go/types"

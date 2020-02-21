@@ -7,12 +7,12 @@ import (
 
 //LimitOrderCreate2Operation represents limit_order_create2 operation data.
 type LimitOrderCreate2Operation struct {
-	Owner        string          `json:"owner"`
-	OrderID      uint32          `json:"orderid"`
-	AmountToSell *types.Asset    `json:"amount_to_sell"`
-	ExchangeRate *types.ExchRate `json:"exchange_rate"`
-	FillOrKill   bool            `json:"fill_or_kill"`
-	Expiration   *types.Time     `json:"expiration"`
+	Owner        string         `json:"owner"`
+	OrderID      uint32         `json:"orderid"`
+	AmountToSell types.Asset    `json:"amount_to_sell"`
+	ExchangeRate types.ExchRate `json:"exchange_rate"`
+	FillOrKill   bool           `json:"fill_or_kill"`
+	Expiration   types.Time     `json:"expiration"`
 }
 
 //Type function that defines the type of operation LimitOrderCreate2Operation.
@@ -32,8 +32,8 @@ func (op *LimitOrderCreate2Operation) MarshalTransaction(encoder *transaction.En
 	enc.Encode(op.Owner)
 	enc.Encode(op.OrderID)
 	enc.Encode(op.AmountToSell)
-	enc.EncodeBool(op.FillOrKill)
 	enc.Encode(op.ExchangeRate)
+	enc.Encode(op.FillOrKill)
 	enc.Encode(op.Expiration)
 	return enc.Err()
 }

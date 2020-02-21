@@ -6,11 +6,11 @@ import (
 
 //AuthorRewardOperation represents author_reward operation data.
 type AuthorRewardOperation struct {
-	Author        string       `json:"author"`
-	Permlink      string       `json:"permlink"`
-	SbdPayout     *types.Asset `json:"sbd_payout"`
-	SteemPayout   *types.Asset `json:"steem_payout"`
-	VestingPayout *types.Asset `json:"vesting_payout"`
+	Author        string      `json:"author"`
+	Permlink      string      `json:"permlink"`
+	SbdPayout     types.Asset `json:"sbd_payout"`
+	SteemPayout   types.Asset `json:"steem_payout"`
+	VestingPayout types.Asset `json:"vesting_payout"`
 }
 
 //Type function that defines the type of operation AuthorRewardOperation.

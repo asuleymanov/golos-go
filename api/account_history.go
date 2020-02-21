@@ -2,9 +2,9 @@ package api
 
 import (
 	"encoding/json"
+	"errors"
 
 	"github.com/asuleymanov/golos-go/operations"
-	"github.com/pkg/errors"
 )
 
 //account_history

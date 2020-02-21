@@ -6,9 +6,9 @@ import (
 
 //CommentRewardOperation represents comment_reward operation data.
 type CommentRewardOperation struct {
-	Author   string       `json:"author"`
-	Permlink string       `json:"permlink"`
-	Payout   *types.Asset `json:"payout"`
+	Author   string      `json:"author"`
+	Permlink string      `json:"permlink"`
+	Payout   types.Asset `json:"payout"`
 }
 
 //Type function that defines the type of operation CommentRewardOperation.

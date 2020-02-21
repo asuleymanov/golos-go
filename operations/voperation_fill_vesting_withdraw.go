@@ -6,10 +6,10 @@ import (
 
 //FillVestingWithdrawOperation represents fill_vesting_withdraw operation data.
 type FillVestingWithdrawOperation struct {
-	FromAccount string       `json:"from_account"`
-	ToAccount   string       `json:"to_account"`
-	Withdrawn   *types.Asset `json:"withdrawn"`
-	Deposited   *types.Asset `json:"deposited"`
+	FromAccount string      `json:"from_account"`
+	ToAccount   string      `json:"to_account"`
+	Withdrawn   types.Asset `json:"withdrawn"`
+	Deposited   types.Asset `json:"deposited"`
 }
 
 //Type function that defines the type of operation FillVestingWithdrawOperation.

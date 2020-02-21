@@ -14,7 +14,7 @@ to_delegated_vesting - 1
 type DelegateVestingSharesWithInterestOperation struct {
 	Delegator      string        `json:"delegator"`
 	Delegatee      string        `json:"delegatee"`
-	VestingShares  *types.Asset  `json:"vesting_shares"`
+	VestingShares  types.Asset   `json:"vesting_shares"`
 	InterestRate   uint16        `json:"interest_rate"`
 	PayoutStrategy int           `json:"payout_strategy"`
 	Extensions     []interface{} `json:"extensions"`

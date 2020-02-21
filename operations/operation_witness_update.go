@@ -7,11 +7,11 @@ import (
 
 //WitnessUpdateOperation represents witness_update operation data.
 type WitnessUpdateOperation struct {
-	Owner           string                    `json:"owner"`
-	URL             string                    `json:"url"`
-	BlockSigningKey string                    `json:"block_signing_key"`
-	Props           *types.ChainPropertiesOLD `json:"props"`
-	Fee             *types.Asset              `json:"fee"`
+	Owner           string                   `json:"owner"`
+	URL             string                   `json:"url"`
+	BlockSigningKey string                   `json:"block_signing_key"`
+	Props           types.ChainPropertiesOLD `json:"props"`
+	Fee             types.Asset              `json:"fee"`
 }
 
 //Type function that defines the type of operation WitnessUpdateOperation.

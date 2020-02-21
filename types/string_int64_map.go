@@ -3,8 +3,7 @@ package types
 import (
 	"bytes"
 	"encoding/json"
-
-	"github.com/pkg/errors"
+	"errors"
 )
 
 //StringInt64Map type from parameter JSON

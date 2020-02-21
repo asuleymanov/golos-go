@@ -6,11 +6,11 @@ import (
 
 //POWOperation represents pow operation data.
 type POWOperation struct {
-	WorkerAccount string                 `json:"worker_account"`
-	BlockID       string                 `json:"block_id"`
-	Nonce         *types.Int             `json:"nonce"`
-	Work          *types.POW             `json:"work"`
-	Props         *types.ChainProperties `json:"props"`
+	WorkerAccount string                   `json:"worker_account"`
+	BlockID       string                   `json:"block_id"`
+	Nonce         uint64                   `json:"nonce"`
+	Work          types.POW                `json:"work"`
+	Props         types.ChainPropertiesOLD `json:"props"`
 }
 
 //Type function that defines the type of operation POWOperation.

@@ -7,10 +7,10 @@ import (
 
 //TransferToSavingsOperation represents transfer_to_savings operation data.
 type TransferToSavingsOperation struct {
-	From   string       `json:"from"`
-	To     string       `json:"to"`
-	Amount *types.Asset `json:"amount"`
-	Memo   string       `json:"memo"`
+	From   string      `json:"from"`
+	To     string      `json:"to"`
+	Amount types.Asset `json:"amount"`
+	Memo   string      `json:"memo"`
 }
 
 //Type function that defines the type of operation TransferToSavingsOperation.

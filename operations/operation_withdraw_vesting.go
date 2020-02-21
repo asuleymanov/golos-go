@@ -7,8 +7,8 @@ import (
 
 //WithdrawVestingOperation represents withdraw_vesting operation data.
 type WithdrawVestingOperation struct {
-	Account       string       `json:"account"`
-	VestingShares *types.Asset `json:"vesting_shares"`
+	Account       string      `json:"account"`
+	VestingShares types.Asset `json:"vesting_shares"`
 }
 
 //Type function that defines the type of operation WithdrawVestingOperation.

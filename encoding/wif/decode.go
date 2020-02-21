@@ -1,16 +1,16 @@
 package wif
 
 import (
-	// Vendor
+	"fmt"
+
 	"github.com/btcsuite/btcutil"
-	"github.com/pkg/errors"
 )
 
 // Decode can be used to turn WIF into a raw private key (32 bytes).
 func Decode(wif string) ([]byte, error) {
 	w, err := btcutil.DecodeWIF(wif)
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to decode WIF")
+		return nil, fmt.Errorf("failed to decode WIF : %s", err)
 	}
 
 	return w.PrivKey.Serialize(), nil
@@ -21,7 +21,7 @@ func Decode(wif string) ([]byte, error) {
 func GetPublicKey(wif string) ([]byte, error) {
 	w, err := btcutil.DecodeWIF(wif)
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to decode WIF")
+		return nil, fmt.Errorf("failed to decode WIF : %s", err)
 	}
 
 	return w.PrivKey.PubKey().SerializeCompressed(), nil

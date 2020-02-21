@@ -6,8 +6,8 @@ import (
 
 //ReturnVestingDelegationOperation represents return_vesting_delegation operation data.
 type ReturnVestingDelegationOperation struct {
-	Account       string       `json:"account"`
-	VestingShares *types.Asset `json:"vesting_shares"`
+	Account       string      `json:"account"`
+	VestingShares types.Asset `json:"vesting_shares"`
 }
 
 //Type function that defines the type of operation ReturnVestingDelegationOperation.

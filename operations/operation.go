@@ -3,9 +3,8 @@ package operations
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"reflect"
-
-	"github.com/pkg/errors"
 )
 
 // dataObjects keeps mapping operation type -> operation data object.
@@ -60,7 +59,11 @@ var dataObjects = map[OpType]Operation{
 	TypeBreakFreeReferral:                 &BreakFreeReferralOperation{},
 	TypeDelegateVestingSharesWithInterest: &DelegateVestingSharesWithInterestOperation{},
 	TypeRejectVestingSharesDelegation:     &RejectVestingSharesDelegationOperation{},
-	TypeFillConvertRequest:                &FillConvertRequestOperation{},
+	TypeTransitToCyberway:                 &TransitToCyberwayOperation{},
+	TypeWorkerRequest:                     &WorkerRequestOperation{},
+	TypeWorkerRequestDelete:               &WorkerRequestDeleteOperation{},
+	TypeWorkerRequestVote:                 &WorkerRequestVoteOperation{},
+	TypeFillConvertRequest:                &FillConvertRequestOperation{}, //Virtual Operation
 	TypeAuthorReward:                      &AuthorRewardOperation{},
 	TypeCurationReward:                    &CurationRewardOperation{},
 	TypeCommentReward:                     &CommentRewardOperation{},
@@ -77,6 +80,10 @@ var dataObjects = map[OpType]Operation{
 	TypeProducerRewardOperation:           &ProducerRewardOperationOperation{},
 	TypeDelegationReward:                  &DelegationRewardOperation{},
 	TypeAuctionWindowReward:               &AuctionWindowRewardOperation{},
+	TypeTotalCommentReward:                &TotalCommentRewardOperation{},
+	TypeWorkerReward:                      &WorkerRewardOperation{},
+	TypeWorkerState:                       &WorkerStateOperation{},
+	TypeConvertSbdDebt:                    &ConvertSbdDebtOperation{},
 }
 
 // Operation represents an operation stored in a transaction.
@@ -142,16 +149,16 @@ func (op *operationTuple) UnmarshalJSON(data []byte) error {
 	// The operation object is [opType, opBody].
 	raw := make([]*json.RawMessage, 2)
 	if err := json.Unmarshal(data, &raw); err != nil {
-		return errors.Wrapf(err, "failed to unmarshal operation object: %v", string(data))
+		return fmt.Errorf("failed to unmarshal operation object: %v\n Error : %s", string(data), err)
 	}
 	if len(raw) != 2 {
-		return errors.Errorf("invalid operation object: %v", string(data))
+		return fmt.Errorf("invalid operation object: %v", string(data))
 	}
 
 	// Unmarshal the type.
 	var opType OpType
 	if err := json.Unmarshal(*raw[0], &opType); err != nil {
-		return errors.Wrapf(err, "failed to unmarshal Operation.Type: %v", string(*raw[0]))
+		return fmt.Errorf("failed to unmarshal Operation.Type: %v\n Error : %s", string(*raw[0]), err)
 	}
 
 	// Unmarshal the data.
@@ -163,7 +170,7 @@ func (op *operationTuple) UnmarshalJSON(data []byte) error {
 		).Interface().(Operation)
 
 		if err := json.Unmarshal(*raw[1], opData); err != nil {
-			return errors.Wrapf(err, "failed to unmarshal Operation.Data: %v", string(*raw[1]))
+			return fmt.Errorf("failed to unmarshal Operation.Data: %v\n Error : %s", string(*raw[1]), err)
 		}
 	} else {
 		opData = &UnknownOperation{opType, raw[1]}

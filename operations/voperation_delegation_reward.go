@@ -1,8 +1,15 @@
 package operations
 
-//DelegationRewardOperation represents shutdown_witness operation data.
+import (
+	"github.com/asuleymanov/golos-go/types"
+)
+
+//DelegationRewardOperation represents delegation_reward operation data.
 type DelegationRewardOperation struct {
-	Owner string `json:"owner"`
+	Delegator      string      `json:"delegator"`
+	Delegatee      string      `json:"delegatee"`
+	PayoutStrategy int         `json:"payout_strategy"`
+	VestingShares  types.Asset `json:"vesting_shares"`
 }
 
 //Type function that defines the type of operation DelegationRewardOperation.

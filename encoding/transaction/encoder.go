@@ -1,18 +1,17 @@
 package transaction
 
 import (
-	// Stdlib
 	"bytes"
 	"encoding/binary"
+	"errors"
+	"fmt"
 	"io"
 	"regexp"
 	"strconv"
 	"strings"
 
-	// Vendor
 	"github.com/btcsuite/btcd/btcec"
 	"github.com/btcsuite/btcutil/base58"
-	"github.com/pkg/errors"
 	"golang.org/x/crypto/ripemd160"
 )
 
@@ -47,7 +46,7 @@ func (encoder *Encoder) EncodeUVarint(i uint64) error {
 //EncodeNumber converting number to byte
 func (encoder *Encoder) EncodeNumber(v interface{}) error {
 	if err := binary.Write(encoder.w, binary.LittleEndian, v); err != nil {
-		return errors.Wrapf(err, "encoder: failed to write number: %v", v)
+		return fmt.Errorf("encoder: failed to write number: %v\n Error : %s", v, err)
 	}
 	return nil
 }
@@ -55,14 +54,14 @@ func (encoder *Encoder) EncodeNumber(v interface{}) error {
 //EncodeArrString converting []string to byte
 func (encoder *Encoder) EncodeArrString(v []string) error {
 	if err := encoder.EncodeUVarint(uint64(len(v))); err != nil {
-		return errors.Wrapf(err, "encoder: failed to write string: %v", v)
+		return fmt.Errorf("encoder: failed to write string: %v\n Error : %s", v, err)
 	}
 	for _, val := range v {
 		if err := encoder.EncodeUVarint(uint64(len(val))); err != nil {
-			return errors.Wrapf(err, "encoder: failed to write string: %v", val)
+			return fmt.Errorf("encoder: failed to write string: %v\n Error : %s", val, err)
 		}
 		if _, err := io.Copy(encoder.w, strings.NewReader(val)); err != nil {
-			return errors.Wrapf(err, "encoder: failed to write string: %v", val)
+			return fmt.Errorf("encoder: failed to write string: %v\n Error : %s", val, err)
 		}
 	}
 	return nil
@@ -101,15 +100,17 @@ func (encoder *Encoder) Encode(v interface{}) error {
 		return encoder.EncodeString(v)
 	case []byte:
 		return encoder.writeBytes(v)
+	case bool:
+		return encoder.EncodeBool(v)
 	default:
-		return errors.Errorf("encoder: unsupported type encountered")
+		return fmt.Errorf("encoder: unsupported type encountered")
 	}
 }
 
 //EncodeString converting string to byte
 func (encoder *Encoder) EncodeString(v string) error {
 	if err := encoder.EncodeUVarint(uint64(len(v))); err != nil {
-		return errors.Wrapf(err, "encoder: failed to write string: %v", v)
+		return fmt.Errorf("encoder: failed to write string: %v\n Error : %s", v, err)
 	}
 
 	return encoder.writeString(v)
@@ -117,14 +118,14 @@ func (encoder *Encoder) EncodeString(v string) error {
 
 func (encoder *Encoder) writeBytes(bs []byte) error {
 	if _, err := encoder.w.Write(bs); err != nil {
-		return errors.Wrapf(err, "encoder: failed to write bytes: %v", bs)
+		return fmt.Errorf("encoder: failed to write bytes: %v\n Error : %s", bs, err)
 	}
 	return nil
 }
 
 func (encoder *Encoder) writeString(s string) error {
 	if _, err := io.Copy(encoder.w, strings.NewReader(s)); err != nil {
-		return errors.Wrapf(err, "encoder: failed to write string: %v", s)
+		return fmt.Errorf("encoder: failed to write string: %v\n Error : %s", s, err)
 	}
 	return nil
 }
@@ -154,19 +155,19 @@ func (encoder *Encoder) EncodeMoney(s string) error {
 			perc = len(asset[0]) - ind - 1
 		}
 		if err := binary.Write(encoder.w, binary.LittleEndian, amm); err != nil {
-			return errors.Wrapf(err, "encoder: failed to write number: %v", amm)
+			return fmt.Errorf("encoder: failed to write number: %v\n Error : %s", amm, err)
 		}
 		if err := binary.Write(encoder.w, binary.LittleEndian, byte(perc)); err != nil {
-			return errors.Wrapf(err, "encoder: failed to write number: %v", perc)
+			return fmt.Errorf("encoder: failed to write number: %v\n Error : %s", perc, err)
 		}
 
 		if _, err := io.Copy(encoder.w, strings.NewReader(asset[1])); err != nil {
-			return errors.Wrapf(err, "encoder: failed to write string: %v", asset[1])
+			return fmt.Errorf("encoder: failed to write string: %v\n Error : %s", asset[1], err)
 		}
 
 		for i := byte(len(asset[1])); i < 7; i++ {
 			if err := binary.Write(encoder.w, binary.LittleEndian, byte(0)); err != nil {
-				return errors.Wrapf(err, "encoder: failed to write number: %v", 0)
+				return fmt.Errorf("encoder: failed to write number: %v\n Error : %s", 0, err)
 			}
 		}
 		return nil
@@ -192,7 +193,7 @@ func (encoder *Encoder) EncodePubKey(s string) error {
 		}
 		pkn3, _ := btcec.ParsePubKey(pkn2, btcec.S256())
 		if _, err := encoder.w.Write(pkn3.SerializeCompressed()); err != nil {
-			return errors.Wrapf(err, "encoder: failed to write bytes: %v", pkn3.SerializeCompressed())
+			return fmt.Errorf("encoder: failed to write bytes: %v\n Error : %s", pkn3.SerializeCompressed(), err)
 		}
 		return nil
 	}

@@ -7,13 +7,13 @@ import (
 
 //ProposalCreateOperation represents proposal_create operation data.
 type ProposalCreateOperation struct {
-	Author             string          `json:"author"`
-	Title              string          `json:"title"`
-	Memo               string          `json:"memo"`
-	ExpirationTime     *types.Time     `json:"expiration_time"`
-	ProposedOperations ProposalObjects `json:"proposed_operations"`
-	ReviewPeriodTime   *types.Time     `json:"review_period_time,omnitempty"`
-	Extensions         []interface{}   `json:"extensions"`
+	Author             string            `json:"author"`
+	Title              string            `json:"title"`
+	Memo               string            `json:"memo"`
+	ExpirationTime     types.Time        `json:"expiration_time"`
+	ProposedOperations []ProposalObjects `json:"proposed_operations"`
+	ReviewPeriodTime   *types.Time       `json:"review_period_time,omnitempty"`
+	Extensions         []interface{}     `json:"extensions"`
 }
 
 //Type function that defines the type of operation ProposalCreateOperation.
@@ -35,8 +35,12 @@ func (op *ProposalCreateOperation) MarshalTransaction(encoder *transaction.Encod
 	enc.Encode(op.Memo)
 	enc.Encode(op.ExpirationTime)
 	enc.Encode(op.ProposedOperations)
-	enc.Encode(byte(1))
-	enc.Encode(op.ReviewPeriodTime)
+	if op.ReviewPeriodTime == nil {
+		enc.Encode(byte(0))
+	} else {
+		enc.Encode(byte(1))
+		enc.Encode(op.ReviewPeriodTime)
+	}
 	//enc.Encode(op.Extensions)
 	enc.Encode(byte(0))
 	return enc.Err()

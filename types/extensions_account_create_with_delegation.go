@@ -8,8 +8,8 @@ import (
 type AccountReferral struct {
 	Referrer     string `json:"referrer"`
 	InterestRate uint16 `json:"interest_rate"`
-	EndDate      *Time  `json:"end_date"`
-	BreakFee     *Asset `json:"break_fee"`
+	EndDate      Time   `json:"end_date"`
+	BreakFee     Asset  `json:"break_fee"`
 }
 
 //MarshalTransaction is a function of converting type AccountReferral to bytes.

@@ -25,6 +25,6 @@ func (op *DeclineVotingRightsOperation) MarshalTransaction(encoder *transaction.
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeDeclineVotingRights.Code()))
 	enc.Encode(op.Account)
-	enc.EncodeBool(op.Decline)
+	enc.Encode(op.Decline)
 	return enc.Err()
 }

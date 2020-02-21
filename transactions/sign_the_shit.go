@@ -4,13 +4,14 @@ import (
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/sha256"
+	"errors"
+	"fmt"
 	//"encoding/hex"
 	//"log"
 	"math/big"
 
 	"github.com/asuleymanov/golos-go/transactions/rfc6979"
 	secp256k1 "github.com/btcsuite/btcd/btcec"
-	"github.com/pkg/errors"
 )
 
 //SignSingle signature of the transaction by one of the keys
@@ -53,7 +54,7 @@ func signBufferSha256(bufSha256 []byte, privateKey *ecdsa.PrivateKey) ([]byte, e
 
 		nonce++
 		if err != nil {
-			return nil, errors.Wrapf(err, "SignSingle[signBufferSha256]: ")
+			return nil, fmt.Errorf("SignSingle[signBufferSha256]: %s", err)
 		}
 
 		ecsignature := &secp256k1.Signature{R: r, S: s}

@@ -8,11 +8,9 @@ import (
 	"math"
 	"net/http"
 	"sync"
-
 	"time"
 
 	"github.com/asuleymanov/golos-go/types"
-	"github.com/pkg/errors"
 )
 
 type Transport struct {
@@ -68,12 +66,12 @@ func (caller *Transport) Call(method string, args []interface{}, reply interface
 
 	respBody, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return errors.Wrap(err, "failed to read body")
+		return fmt.Errorf("failed to read body : %s", err)
 	}
 
 	var rpcResponse types.RPCResponse
 	if err = json.Unmarshal(respBody, &rpcResponse); err != nil {
-		return errors.Wrapf(err, "failed to unmarshal response: %+v", string(respBody))
+		return fmt.Errorf("failed to unmarshal response: %+v \n Error : %s", string(respBody), err)
 	}
 
 	if rpcResponse.Error != nil {
@@ -82,7 +80,7 @@ func (caller *Transport) Call(method string, args []interface{}, reply interface
 
 	if rpcResponse.Result != nil {
 		if err := json.Unmarshal(*rpcResponse.Result, reply); err != nil {
-			return errors.Wrapf(err, "failed to unmarshal rpc result: %+v", string(*rpcResponse.Result))
+			return fmt.Errorf("failed to unmarshal rpc result: %+v \n Error : %s", string(*rpcResponse.Result), err)
 		}
 	}
 
@@ -105,7 +103,7 @@ func check(url string) error {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
-		return errors.Errorf("Error. URL: %s STATUS: %s\n", url, resp.StatusCode)
+		return fmt.Errorf("Error. URL: %s STATUS: %s\n", url, resp.StatusCode)
 	}
 	return nil
 }

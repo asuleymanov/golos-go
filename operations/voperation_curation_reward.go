@@ -6,10 +6,10 @@ import (
 
 //CurationRewardOperation represents curation_reward operation data.
 type CurationRewardOperation struct {
-	Curator         string       `json:"curator"`
-	Reward          *types.Asset `json:"reward"`
-	CommentAuthor   string       `json:"comment_author"`
-	CommentPermlink string       `json:"comment_permlink"`
+	Curator         string      `json:"curator"`
+	Reward          types.Asset `json:"reward"`
+	CommentAuthor   string      `json:"comment_author"`
+	CommentPermlink string      `json:"comment_permlink"`
 }
 
 //Type function that defines the type of operation CurationRewardOperation.

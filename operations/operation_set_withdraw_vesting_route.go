@@ -29,6 +29,6 @@ func (op *SetWithdrawVestingRouteOperation) MarshalTransaction(encoder *transact
 	enc.Encode(op.FromAccount)
 	enc.Encode(op.ToAccount)
 	enc.Encode(op.Percent)
-	enc.EncodeBool(op.AutoVest)
+	enc.Encode(op.AutoVest)
 	return enc.Err()
 }

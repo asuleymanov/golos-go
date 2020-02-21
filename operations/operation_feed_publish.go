@@ -7,8 +7,8 @@ import (
 
 //FeedPublishOperation represents feed_publish operation data.
 type FeedPublishOperation struct {
-	Publisher    string          `json:"publisher"`
-	ExchangeRate *types.ExchRate `json:"exchange_rate"`
+	Publisher    string         `json:"publisher"`
+	ExchangeRate types.ExchRate `json:"exchange_rate"`
 }
 
 //Type function that defines the type of operation FeedPublishOperation.

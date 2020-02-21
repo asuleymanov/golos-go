@@ -6,8 +6,8 @@ import (
 
 //POW2Operation represents pow2 operation data.
 type POW2Operation struct {
-	Input      *types.POW2Input `json:"input"`
-	PowSummary uint32           `json:"pow_summary"`
+	Input      types.POW2Input `json:"input"`
+	PowSummary uint32          `json:"pow_summary"`
 }
 
 //Type function that defines the type of operation POW2Operation.

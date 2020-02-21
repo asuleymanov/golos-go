@@ -1,9 +1,10 @@
 package golos
 
 import (
+	"errors"
+
 	"github.com/asuleymanov/golos-go/encoding/wif"
 	"github.com/asuleymanov/golos-go/operations"
-	"github.com/pkg/errors"
 )
 
 var (

@@ -25,6 +25,6 @@ func (op *ProveAuthorityOperation) MarshalTransaction(encoder *transaction.Encod
 	enc := transaction.NewRollingEncoder(encoder)
 	enc.EncodeUVarint(uint64(TypeProveAuthority.Code()))
 	enc.Encode(op.Challenged)
-	enc.EncodeBool(op.RequireOwner)
+	enc.Encode(op.RequireOwner)
 	return enc.Err()
 }

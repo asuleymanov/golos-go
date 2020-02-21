@@ -58,6 +58,10 @@ const (
 	TypeBreakFreeReferral                 OpType = "break_free_referral"
 	TypeDelegateVestingSharesWithInterest OpType = "delegate_vesting_shares_with_interest"
 	TypeRejectVestingSharesDelegation     OpType = "reject_vesting_shares_delegation"
+	TypeTransitToCyberway                 OpType = "transit_to_cyberway"
+	TypeWorkerRequest                     OpType = "worker_request"
+	TypeWorkerRequestDelete               OpType = "worker_request_delete"
+	TypeWorkerRequestVote                 OpType = "worker_request_vote"
 	TypeFillConvertRequest                OpType = "fill_convert_request" //Virtual Operation
 	TypeAuthorReward                      OpType = "author_reward"
 	TypeCurationReward                    OpType = "curation_reward"
@@ -75,6 +79,10 @@ const (
 	TypeProducerRewardOperation           OpType = "producer_reward_operation"
 	TypeDelegationReward                  OpType = "delegation_reward"
 	TypeAuctionWindowReward               OpType = "auction_window_reward"
+	TypeTotalCommentReward                OpType = "total_comment_reward"
+	TypeWorkerReward                      OpType = "worker_reward"
+	TypeWorkerState                       OpType = "worker_state"
+	TypeConvertSbdDebt                    OpType = "convert_sbd_debt"
 )
 
 var opTypes = [...]OpType{
@@ -127,7 +135,11 @@ var opTypes = [...]OpType{
 	TypeBreakFreeReferral,
 	TypeDelegateVestingSharesWithInterest,
 	TypeRejectVestingSharesDelegation,
-	TypeFillConvertRequest,
+	TypeTransitToCyberway,
+	TypeWorkerRequest,
+	TypeWorkerRequestDelete,
+	TypeWorkerRequestVote,
+	TypeFillConvertRequest, //Virtual Operation
 	TypeAuthorReward,
 	TypeCurationReward,
 	TypeCommentReward,
@@ -144,6 +156,10 @@ var opTypes = [...]OpType{
 	TypeProducerRewardOperation,
 	TypeDelegationReward,
 	TypeAuctionWindowReward,
+	TypeTotalCommentReward,
+	TypeWorkerReward,
+	TypeWorkerState,
+	TypeConvertSbdDebt,
 }
 
 // opCodes keeps mapping operation type -> operation code.

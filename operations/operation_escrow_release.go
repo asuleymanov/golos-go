@@ -7,14 +7,14 @@ import (
 
 //EscrowReleaseOperation represents escrow_release operation data.
 type EscrowReleaseOperation struct {
-	From        string       `json:"from"`
-	To          string       `json:"to"`
-	Agent       string       `json:"agent"`
-	Who         string       `json:"who"`
-	Receiver    string       `json:"receiver"`
-	EscrowID    uint32       `json:"escrow_id"`
-	SbdAmount   *types.Asset `json:"sbd_amount"`
-	SteemAmount *types.Asset `json:"steem_amount"`
+	From        string      `json:"from"`
+	To          string      `json:"to"`
+	Agent       string      `json:"agent"`
+	Who         string      `json:"who"`
+	Receiver    string      `json:"receiver"`
+	EscrowID    uint32      `json:"escrow_id"`
+	SbdAmount   types.Asset `json:"sbd_amount"`
+	SteemAmount types.Asset `json:"steem_amount"`
 }
 
 //Type function that defines the type of operation EscrowReleaseOperation.

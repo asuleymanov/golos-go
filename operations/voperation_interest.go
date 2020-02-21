@@ -6,8 +6,8 @@ import (
 
 //InterestOperation represents interest operation data.
 type InterestOperation struct {
-	Owner    string       `json:"owner"`
-	Interest *types.Asset `json:"interest"`
+	Owner    string      `json:"owner"`
+	Interest types.Asset `json:"interest"`
 }
 
 //Type function that defines the type of operation InterestOperation.

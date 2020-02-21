@@ -33,6 +33,6 @@ func (op *EscrowApproveOperation) MarshalTransaction(encoder *transaction.Encode
 	enc.Encode(op.Agent)
 	enc.Encode(op.Who)
 	enc.Encode(op.EscrowID)
-	enc.EncodeBool(op.Approve)
+	enc.Encode(op.Approve)
 	return enc.Err()
 }

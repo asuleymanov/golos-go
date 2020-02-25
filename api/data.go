@@ -262,7 +262,7 @@ type DynamicGlobalProperties struct {
 	TotalVersingFund             types.Asset      `json:"total_vesting_fund_steem"`
 	TotalVestingShares           types.Asset      `json:"total_vesting_shares"`
 	TotalRewardFund              types.Asset      `json:"total_reward_fund_steem"`
-	TotalRewardShares2           types.UInt64     `json:"total_reward_shares2"`
+	TotalRewardShares2           string     `json:"total_reward_shares2"`
 	SBDInterestRate              uint16           `json:"sbd_interest_rate"`
 	SBDPrintRate                 uint16           `json:"sbd_print_rate"`
 	SBDDebtPercent               uint16           `json:"sbd_debt_percent"`
@@ -270,15 +270,15 @@ type DynamicGlobalProperties struct {
 	AverageBlockSize             uint32           `json:"average_block_size"`
 	MaximumBlockSize             uint32           `json:"maximum_block_size"`
 	CurrentAslot                 uint64           `json:"current_aslot"`
-	RecentSlotsFilled            types.UInt64     `json:"recent_slots_filled"`
+	RecentSlotsFilled            string     `json:"recent_slots_filled"`
 	ParticipationCount           uint8            `json:"participation_count"`
 	LastIrreversibleBlockNum     uint32           `json:"last_irreversible_block_num"`
-	MaxVirtualBandwidth          uint64           `json:"max_virtual_bandwidth"`
+	MaxVirtualBandwidth          string           `json:"max_virtual_bandwidth"`
 	CurrentReserveRatio          uint64           `json:"current_reserve_ratio"`
 	CustomOpsBandwidthMultiplier uint16           `json:"custom_ops_bandwidth_multiplier"`
 	TransitBlockNum              uint32           `json:"transit_block_num"`
 	TransitWitnesses             string           `json:"transit_witnesses"`
-	WorkerRequests               []WorkerRequests `json:"worker_requests"`
+  WorkerRequests               []interface{} `json:"worker_requests"`
 }
 
 //VestingDelegationExpiration structure for the GetExpiringVestingDelegations function.

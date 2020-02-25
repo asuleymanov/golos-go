@@ -10,11 +10,11 @@ type WorkerRequestOperation struct {
 	Author            string        `json:"author"`
 	Permlink          string        `json:"permlink"`
 	Worker            string        `json:"worker"`
-	RequiredAmountMin types.Asset   `json:"required_amount_min"`
-	RequiredAmountMax types.Asset   `json:"required_amount_max"`
+	RequiredAmountMin *types.Asset   `json:"required_amount_min"`
+	RequiredAmountMax *types.Asset   `json:"required_amount_max"`
 	VestReward        bool          `json:"vest_reward"`
 	Duration          uint32        `json:"duration"`
-	Extensions        []interface{} `json:"extensions"`
+	Extensions        []interface{} `json:"extensions,omitempty"`
 }
 
 //Type function that defines the type of operation WorkerRequestOperation.

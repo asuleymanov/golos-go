@@ -20,6 +20,6 @@ func (api *API) BroadcastTransactionSynchronous(tx *operations.Transaction, maxB
 		params = []interface{}{tx}
 	}
 	var resp BroadcastResponse
-	err := api.call("network_broadcast_api", "broadcast_transaction_synchronous", []interface{}{params}, &resp)
+	err := api.call("network_broadcast_api", "broadcast_transaction_synchronous", params, &resp)
 	return &resp, err
 }

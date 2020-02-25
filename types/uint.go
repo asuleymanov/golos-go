@@ -25,7 +25,7 @@ func unmarshalUInt(data []byte) (uint64, error) {
 	} else {
 		err = json.Unmarshal(data, &i)
 	}
-  return i, fmt.Errorf("types: failed to unmarshal unsigned integer: %s Error: %s", string(data), err)
+	return i, fmt.Errorf("types: failed to unmarshal unsigned integer: %s Error: %w", string(data), err)
 }
 
 //UInt type from parameter JSON

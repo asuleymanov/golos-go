@@ -54,7 +54,7 @@ func signBufferSha256(bufSha256 []byte, privateKey *ecdsa.PrivateKey) ([]byte, e
 
 		nonce++
 		if err != nil {
-			return nil, fmt.Errorf("SignSingle[signBufferSha256]: %s", err)
+			return nil, fmt.Errorf("SignSingle[signBufferSha256]: %w", err)
 		}
 
 		ecsignature := &secp256k1.Signature{R: r, S: s}

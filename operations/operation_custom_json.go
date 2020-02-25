@@ -61,7 +61,7 @@ func (op *CustomJSONOperation) UnmarshalData() (interface{}, error) {
 	if op.JSON[0] == '[' {
 		rawTuple := make([]json.RawMessage, 2)
 		if err := json.NewDecoder(strings.NewReader(op.JSON)).Decode(&rawTuple); err != nil {
-			return nil, fmt.Errorf("failed to unmarshal CustomJSONOperation.JSON: \n%v \n Error : %s", op.JSON, err)
+			return nil, fmt.Errorf("failed to unmarshal CustomJSONOperation.JSON: \n%v \n Error : %w", op.JSON, err)
 		}
 		if len(rawTuple) < 2 || rawTuple[1] == nil {
 			return nil, fmt.Errorf("invalid CustomJSONOperation.JSON: \n%v", op.JSON)
@@ -73,7 +73,7 @@ func (op *CustomJSONOperation) UnmarshalData() (interface{}, error) {
 
 	// Unmarshal into the new object instance.
 	if err := json.NewDecoder(bodyReader).Decode(opData); err != nil {
-		return nil, fmt.Errorf("failed to unmarshal CustomJSONOperation.JSON: \n%v \n Error : %s", op.JSON, err)
+		return nil, fmt.Errorf("failed to unmarshal CustomJSONOperation.JSON: \n%v \n Error : %w", op.JSON, err)
 	}
 
 	return opData, nil

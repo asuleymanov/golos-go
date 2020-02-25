@@ -46,7 +46,7 @@ func (encoder *Encoder) EncodeUVarint(i uint64) error {
 //EncodeNumber converting number to byte
 func (encoder *Encoder) EncodeNumber(v interface{}) error {
 	if err := binary.Write(encoder.w, binary.LittleEndian, v); err != nil {
-		return fmt.Errorf("encoder: failed to write number: %v\n Error : %s", v, err)
+		return fmt.Errorf("encoder: failed to write number: %v\n Error : %w", v, err)
 	}
 	return nil
 }
@@ -54,14 +54,14 @@ func (encoder *Encoder) EncodeNumber(v interface{}) error {
 //EncodeArrString converting []string to byte
 func (encoder *Encoder) EncodeArrString(v []string) error {
 	if err := encoder.EncodeUVarint(uint64(len(v))); err != nil {
-		return fmt.Errorf("encoder: failed to write string: %v\n Error : %s", v, err)
+		return fmt.Errorf("encoder: failed to write string: %v\n Error : %w", v, err)
 	}
 	for _, val := range v {
 		if err := encoder.EncodeUVarint(uint64(len(val))); err != nil {
-			return fmt.Errorf("encoder: failed to write string: %v\n Error : %s", val, err)
+			return fmt.Errorf("encoder: failed to write string: %v\n Error : %w", val, err)
 		}
 		if _, err := io.Copy(encoder.w, strings.NewReader(val)); err != nil {
-			return fmt.Errorf("encoder: failed to write string: %v\n Error : %s", val, err)
+			return fmt.Errorf("encoder: failed to write string: %v\n Error : %w", val, err)
 		}
 	}
 	return nil
@@ -110,7 +110,7 @@ func (encoder *Encoder) Encode(v interface{}) error {
 //EncodeString converting string to byte
 func (encoder *Encoder) EncodeString(v string) error {
 	if err := encoder.EncodeUVarint(uint64(len(v))); err != nil {
-		return fmt.Errorf("encoder: failed to write string: %v\n Error : %s", v, err)
+		return fmt.Errorf("encoder: failed to write string: %v\n Error : %w", v, err)
 	}
 
 	return encoder.writeString(v)
@@ -118,14 +118,14 @@ func (encoder *Encoder) EncodeString(v string) error {
 
 func (encoder *Encoder) writeBytes(bs []byte) error {
 	if _, err := encoder.w.Write(bs); err != nil {
-		return fmt.Errorf("encoder: failed to write bytes: %v\n Error : %s", bs, err)
+		return fmt.Errorf("encoder: failed to write bytes: %v\n Error : %w", bs, err)
 	}
 	return nil
 }
 
 func (encoder *Encoder) writeString(s string) error {
 	if _, err := io.Copy(encoder.w, strings.NewReader(s)); err != nil {
-		return fmt.Errorf("encoder: failed to write string: %v\n Error : %s", s, err)
+		return fmt.Errorf("encoder: failed to write string: %v\n Error : %w", s, err)
 	}
 	return nil
 }
@@ -155,19 +155,19 @@ func (encoder *Encoder) EncodeMoney(s string) error {
 			perc = len(asset[0]) - ind - 1
 		}
 		if err := binary.Write(encoder.w, binary.LittleEndian, amm); err != nil {
-			return fmt.Errorf("encoder: failed to write number: %v\n Error : %s", amm, err)
+			return fmt.Errorf("encoder: failed to write number: %v\n Error : %w", amm, err)
 		}
 		if err := binary.Write(encoder.w, binary.LittleEndian, byte(perc)); err != nil {
-			return fmt.Errorf("encoder: failed to write number: %v\n Error : %s", perc, err)
+			return fmt.Errorf("encoder: failed to write number: %v\n Error : %w", perc, err)
 		}
 
 		if _, err := io.Copy(encoder.w, strings.NewReader(asset[1])); err != nil {
-			return fmt.Errorf("encoder: failed to write string: %v\n Error : %s", asset[1], err)
+			return fmt.Errorf("encoder: failed to write string: %v\n Error : %w", asset[1], err)
 		}
 
 		for i := byte(len(asset[1])); i < 7; i++ {
 			if err := binary.Write(encoder.w, binary.LittleEndian, byte(0)); err != nil {
-				return fmt.Errorf("encoder: failed to write number: %v\n Error : %s", 0, err)
+				return fmt.Errorf("encoder: failed to write number: %v\n Error : %w", 0, err)
 			}
 		}
 		return nil
@@ -193,7 +193,7 @@ func (encoder *Encoder) EncodePubKey(s string) error {
 		}
 		pkn3, _ := btcec.ParsePubKey(pkn2, btcec.S256())
 		if _, err := encoder.w.Write(pkn3.SerializeCompressed()); err != nil {
-			return fmt.Errorf("encoder: failed to write bytes: %v\n Error : %s", pkn3.SerializeCompressed(), err)
+			return fmt.Errorf("encoder: failed to write bytes: %v\n Error : %w", pkn3.SerializeCompressed(), err)
 		}
 		return nil
 	}

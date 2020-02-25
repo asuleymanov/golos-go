@@ -66,12 +66,12 @@ func (caller *Transport) Call(method string, args []interface{}, reply interface
 
 	respBody, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return fmt.Errorf("failed to read body : %s", err)
+		return fmt.Errorf("failed to read body : %w", err)
 	}
 
 	var rpcResponse types.RPCResponse
 	if err = json.Unmarshal(respBody, &rpcResponse); err != nil {
-		return fmt.Errorf("failed to unmarshal response: %+v \n Error : %s", string(respBody), err)
+		return fmt.Errorf("failed to unmarshal response: %+v \n Error : %w", string(respBody), err)
 	}
 
 	if rpcResponse.Error != nil {
@@ -80,7 +80,7 @@ func (caller *Transport) Call(method string, args []interface{}, reply interface
 
 	if rpcResponse.Result != nil {
 		if err := json.Unmarshal(*rpcResponse.Result, reply); err != nil {
-			return fmt.Errorf("failed to unmarshal rpc result: %+v \n Error : %s", string(*rpcResponse.Result), err)
+			return fmt.Errorf("failed to unmarshal rpc result: %+v \n Error : %w", string(*rpcResponse.Result), err)
 		}
 	}
 

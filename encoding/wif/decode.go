@@ -10,7 +10,7 @@ import (
 func Decode(wif string) ([]byte, error) {
 	w, err := btcutil.DecodeWIF(wif)
 	if err != nil {
-		return nil, fmt.Errorf("failed to decode WIF : %s", err)
+		return nil, fmt.Errorf("failed to decode WIF : %w", err)
 	}
 
 	return w.PrivKey.Serialize(), nil
@@ -21,7 +21,7 @@ func Decode(wif string) ([]byte, error) {
 func GetPublicKey(wif string) ([]byte, error) {
 	w, err := btcutil.DecodeWIF(wif)
 	if err != nil {
-		return nil, fmt.Errorf("failed to decode WIF : %s", err)
+		return nil, fmt.Errorf("failed to decode WIF : %w", err)
 	}
 
 	return w.PrivKey.PubKey().SerializeCompressed(), nil

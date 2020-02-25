@@ -18,13 +18,13 @@ func (ss *StringSlice) UnmarshalJSON(data []byte) error {
 	if data[0] == '[' {
 		var v []string
 		if err := json.Unmarshal(data, &v); err != nil {
-			return fmt.Errorf("failed to unmarshal string slice : %s", err)
+			return fmt.Errorf("failed to unmarshal string slice : %w", err)
 		}
 		*ss = v
 	} else {
 		var v string
 		if err := json.Unmarshal(data, &v); err != nil {
-			return fmt.Errorf("failed to unmarshal string slice : %s", err)
+			return fmt.Errorf("failed to unmarshal string slice : %w", err)
 		}
 		*ss = strings.Split(v, " ")
 	}

@@ -239,15 +239,13 @@ func (api *API) GetVerifyAuthority(trx *operations.Transaction) (*bool, error) {
 }
 
 // Set callback to invoke as soon as a new block is applied
-func (api *API) SetBlockAppliedCallback(notice func(header *BlockHeader, error error)) (err error) {
+func (api *API) SetBlockAppliedCallback(notice func(header *CallbackBlockResponse, error error)) (err error) {
 	err = api.setCallback("database_api", "set_block_applied_callback", func(raw json.RawMessage) {
-		var header []BlockHeader
+		var header CallbackBlockResponse
 		if err := json.Unmarshal(raw, &header); err != nil {
 			notice(nil, err)
 		}
-		for _, b := range header {
-			notice(&b, nil)
-		}
+		notice(&header, nil)
 	})
 	return
 }

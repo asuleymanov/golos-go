@@ -11,7 +11,7 @@ type TotalCommentRewardOperation struct {
 	AuthorReward     types.Asset `json:"author_reward"`
 	BenefactorReward types.Asset `json:"benefactor_reward"`
 	CuratorReward    types.Asset `json:"curator_reward"`
-	NetRshares       int64       `json:"net_rshares"`
+	NetRshares       string      `json:"net_rshares"`
 }
 
 //Type function that defines the type of operation TotalCommentRewardOperation.

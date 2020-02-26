@@ -795,3 +795,8 @@ type WorkerRequestQuery struct {
 	SelectAuthors []string `json:"select_authors"`
 	SelectStates  []int8   `json:"select_states"`
 }
+
+type CallbackBlockResponse struct {
+	BlockNum   int                                  `json:"block_num"`
+	Operations []operations.CallbackBlockOperations `json:"operations"`
+}

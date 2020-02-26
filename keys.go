@@ -44,8 +44,8 @@ func init() {
 	OpTypeKey["challenge_authority"] = []string{"owner"}
 	OpTypeKey["prove_authority"] = []string{"active"}
 	OpTypeKey["request_account_recovery"] = []string{"active"}
-	OpTypeKey["recover_account"] = []string{"active"}
-	OpTypeKey["change_recovery_account"] = []string{"posting"}
+	OpTypeKey["recover_account"] = []string{"owner"}
+	OpTypeKey["change_recovery_account"] = []string{"owner"}
 	OpTypeKey["escrow_transfer"] = []string{"active"}
 	OpTypeKey["escrow_dispute"] = []string{"active"}
 	OpTypeKey["escrow_release"] = []string{"active"}

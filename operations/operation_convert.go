@@ -7,9 +7,9 @@ import (
 
 //ConvertOperation represents convert operation data.
 type ConvertOperation struct {
-	Owner     string      `json:"owner"`
-	RequestID uint32      `json:"requestid"`
-	Amount    types.Asset `json:"amount"`
+	Owner     string       `json:"owner"`
+	RequestID uint32       `json:"requestid"`
+	Amount    *types.Asset `json:"amount"`
 }
 
 //Type function that defines the type of operation ConvertOperation.

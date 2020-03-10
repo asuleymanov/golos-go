@@ -7,16 +7,16 @@ import (
 
 //EscrowTransferOperation represents escrow_transfer operation data.
 type EscrowTransferOperation struct {
-	From                 string      `json:"from"`
-	To                   string      `json:"to"`
-	Agent                string      `json:"agent"`
-	EscrowID             uint32      `json:"escrow_id"`
-	SbdAmount            types.Asset `json:"sbd_amount"`
-	SteemAmount          types.Asset `json:"steem_amount"`
-	Fee                  types.Asset `json:"fee"`
-	RatificationDeadline types.Time  `json:"ratification_deadline"`
-	EscrowExpiration     types.Time  `json:"escrow_expiration"`
-	JSONMeta             string      `json:"json_meta"`
+	From                 string       `json:"from"`
+	To                   string       `json:"to"`
+	Agent                string       `json:"agent"`
+	EscrowID             uint32       `json:"escrow_id"`
+	SbdAmount            *types.Asset `json:"sbd_amount"`
+	SteemAmount          *types.Asset `json:"steem_amount"`
+	Fee                  *types.Asset `json:"fee"`
+	RatificationDeadline *types.Time  `json:"ratification_deadline"`
+	EscrowExpiration     *types.Time  `json:"escrow_expiration"`
+	JSONMeta             string       `json:"json_meta"`
 }
 
 //Type function that defines the type of operation EscrowTransferOperation.

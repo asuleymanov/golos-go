@@ -7,9 +7,9 @@ import (
 
 //DelegateVestingSharesOperation represents delegate_vesting_shares operation data.
 type DelegateVestingSharesOperation struct {
-	Delegator     string      `json:"delegator"`
-	Delegatee     string      `json:"delegatee"`
-	VestingShares types.Asset `json:"vesting_shares"`
+	Delegator     string       `json:"delegator"`
+	Delegatee     string       `json:"delegatee"`
+	VestingShares *types.Asset `json:"vesting_shares"`
 }
 
 //Type function that defines the type of operation DelegateVestingSharesOperation.

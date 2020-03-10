@@ -7,12 +7,12 @@ import (
 
 //LimitOrderCreateOperation represents limit_order_create operation data.
 type LimitOrderCreateOperation struct {
-	Owner        string      `json:"owner"`
-	OrderID      uint32      `json:"orderid"`
-	AmountToSell types.Asset `json:"amount_to_sell"`
-	MinToReceive types.Asset `json:"min_to_receive"`
-	FillOrKill   bool        `json:"fill_or_kill"`
-	Expiration   types.Time  `json:"expiration"`
+	Owner        string       `json:"owner"`
+	OrderID      uint32       `json:"orderid"`
+	AmountToSell *types.Asset `json:"amount_to_sell"`
+	MinToReceive *types.Asset `json:"min_to_receive"`
+	FillOrKill   bool         `json:"fill_or_kill"`
+	Expiration   *types.Time  `json:"expiration"`
 }
 
 //Type function that defines the type of operation LimitOrderCreateOperation.

@@ -39,13 +39,6 @@ func (encoder *RollingEncoder) EncodeBool(v bool) {
 	}
 }
 
-//EncodeMoney adding Asset to the converted value
-func (encoder *RollingEncoder) EncodeMoney(v string) {
-	if encoder.err == nil {
-		encoder.err = encoder.next.EncodeMoney(v)
-	}
-}
-
 //EncodeString adding string to the converted value
 func (encoder *RollingEncoder) EncodeString(v string) {
 	if encoder.err == nil {
@@ -71,6 +64,20 @@ func (encoder *RollingEncoder) EncodeArrString(v []string) {
 func (encoder *RollingEncoder) Encode(v interface{}) {
 	if encoder.err == nil {
 		encoder.err = encoder.next.Encode(v)
+	}
+}
+
+//WriteBytes adding []byte to the converted value
+func (encoder *RollingEncoder) WriteBytes(v []byte) {
+	if encoder.err == nil {
+		encoder.err = encoder.next.WriteBytes(v)
+	}
+}
+
+//WriteString adding string to the converted value
+func (encoder *RollingEncoder) WriteString(v string) {
+	if encoder.err == nil {
+		encoder.err = encoder.next.WriteString(v)
 	}
 }
 

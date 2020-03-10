@@ -7,10 +7,10 @@ import (
 
 //TransferOperation represents transfer operation data.
 type TransferOperation struct {
-	From   string      `json:"from"`
-	To     string      `json:"to"`
-	Amount types.Asset `json:"amount"`
-	Memo   string      `json:"memo"`
+	From   string       `json:"from"`
+	To     string       `json:"to"`
+	Amount *types.Asset `json:"amount"`
+	Memo   string       `json:"memo"`
 }
 
 //Type function that defines the type of operation TransferOperation.

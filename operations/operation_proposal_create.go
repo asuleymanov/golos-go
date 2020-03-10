@@ -10,7 +10,7 @@ type ProposalCreateOperation struct {
 	Author             string            `json:"author"`
 	Title              string            `json:"title"`
 	Memo               string            `json:"memo"`
-	ExpirationTime     types.Time        `json:"expiration_time"`
+	ExpirationTime     *types.Time       `json:"expiration_time"`
 	ProposedOperations []ProposalObjects `json:"proposed_operations"`
 	ReviewPeriodTime   *types.Time       `json:"review_period_time,omnitempty"`
 	Extensions         []interface{}     `json:"extensions"`

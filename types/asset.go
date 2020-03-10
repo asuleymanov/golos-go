@@ -49,7 +49,28 @@ func (op *Asset) MarshalTransaction(encoder *transaction.Encoder) error {
 	if err != nil {
 		return err
 	}
-	return encoder.EncodeMoney(str)
+
+	enc := transaction.NewRollingEncoder(encoder)
+	asset := strings.Split(str, " ")
+	amm, errParsInt := strconv.ParseInt(strings.Replace(asset[0], ".", "", -1), 10, 64)
+	if errParsInt != nil {
+		return errParsInt
+	}
+	ind := strings.Index(asset[0], ".")
+	var perc int
+	if ind == -1 {
+		perc = 0
+	} else {
+		perc = len(asset[0]) - ind - 1
+	}
+
+	enc.EncodeNumber(amm)
+	enc.EncodeNumber(byte(perc))
+	enc.WriteString(asset[1])
+	for i := byte(len(asset[1])); i < 7; i++ {
+		enc.EncodeNumber(byte(0))
+	}
+	return enc.Err()
 }
 
 //String function convert type Asset to string.

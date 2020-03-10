@@ -7,9 +7,9 @@ import (
 
 //TransferToVestingOperation represents transfer_to_vesting operation data.
 type TransferToVestingOperation struct {
-	From   string      `json:"from"`
-	To     string      `json:"to"`
-	Amount types.Asset `json:"amount"`
+	From   string       `json:"from"`
+	To     string       `json:"to"`
+	Amount *types.Asset `json:"amount"`
 }
 
 //Type function that defines the type of operation TransferToVestingOperation.

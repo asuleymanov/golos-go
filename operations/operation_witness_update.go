@@ -11,7 +11,7 @@ type WitnessUpdateOperation struct {
 	URL             string                   `json:"url"`
 	BlockSigningKey string                   `json:"block_signing_key"`
 	Props           types.ChainPropertiesOLD `json:"props"`
-	Fee             types.Asset              `json:"fee"`
+	Fee             *types.Asset             `json:"fee"`
 }
 
 //Type function that defines the type of operation WitnessUpdateOperation.

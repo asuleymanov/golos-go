@@ -9,10 +9,10 @@ import (
 type LimitOrderCreate2Operation struct {
 	Owner        string         `json:"owner"`
 	OrderID      uint32         `json:"orderid"`
-	AmountToSell types.Asset    `json:"amount_to_sell"`
+	AmountToSell *types.Asset   `json:"amount_to_sell"`
 	ExchangeRate types.ExchRate `json:"exchange_rate"`
 	FillOrKill   bool           `json:"fill_or_kill"`
-	Expiration   types.Time     `json:"expiration"`
+	Expiration   *types.Time    `json:"expiration"`
 }
 
 //Type function that defines the type of operation LimitOrderCreate2Operation.

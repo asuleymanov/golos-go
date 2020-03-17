@@ -7,23 +7,31 @@ import (
 	"github.com/asuleymanov/golos-go/operations"
 )
 
+var(
+  weight int16 = 0
+  pkey = "<Privat Posting Key>"
+  user = "<UserName>"
+  author = "<AuthorName>"
+  link = "<Permlink>"
+)
+
 func main() {
 	cls, _ := golos.NewClient("wss://golos.solox.world/ws")
 	defer cls.Close()
 
-	cls.SetKeys(&golos.Keys{PKey: []string{"<Privat Posting Key>"}})
+	cls.SetKeys(&golos.Keys{PKey: []string{pkey}})
 
-	var trx []types.Operation
+	var trx []operations.Operation
 
-	tx := &types.VoteOperation{
-		Voter:    "<UserName>",
-		Author:   "<AuthorName>",
-		Permlink: "<Permlink>",
-		Weight:   types.Int16(Weight),
+	tx := &operations.VoteOperation{
+		Voter:    user,
+		Author:   author,
+		Permlink: link,
+		Weight:   weight,
 	}
 	trx = append(trx, tx)
 
-	resp, err := client.SendTrx("<UserName>", trx)
+	resp, err := cls.SendTrx(user, trx)
 	if err != nil {
 		fmt.Println("Error : ", err)
 	} else {

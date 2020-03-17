@@ -12,20 +12,6 @@ import (
 	"github.com/asuleymanov/golos-go/encoding/transaction"
 )
 
-var (
-	TypeFollow         = "follow"
-	TypeReblog         = "reblog"
-	TypeLogin          = "login"
-	TypePrivateMessage = "private_message"
-)
-
-var customJSONDataObjects = map[string]interface{}{
-	TypeFollow:         &FollowOperation{},
-	TypeReblog:         &ReblogOperation{},
-	TypeLogin:          &LoginOperation{},
-	TypePrivateMessage: &PrivateMessageOperation{},
-}
-
 //CustomJSONOperation represents custom_json operation data.
 type CustomJSONOperation struct {
 	RequiredAuths        []string `json:"required_auths"`
@@ -79,47 +65,6 @@ func (op *CustomJSONOperation) UnmarshalData() (interface{}, error) {
 	return opData, nil
 }
 
-//MarshalTransaction is a function of converting type CustomJSONOperation to bytes.
-func (op *CustomJSONOperation) MarshalTransaction(encoder *transaction.Encoder) error {
-	enc := transaction.NewRollingEncoder(encoder)
-	enc.EncodeUVarint(uint64(TypeCustomJSON.Code()))
-	enc.EncodeArrString(op.RequiredAuths)
-	enc.EncodeArrString(op.RequiredPostingAuths)
-	enc.Encode(op.ID)
-	enc.Encode(op.JSON)
-	return enc.Err()
-}
-
-//FollowOperation the structure for the operation CustomJSONOperation.
-type FollowOperation struct {
-	Follower  string   `json:"follower"`
-	Following string   `json:"following"`
-	What      []string `json:"what"`
-}
-
-//ReblogOperation the structure for the operation CustomJSONOperation.
-type ReblogOperation struct {
-	Account  string `json:"account"`
-	Author   string `json:"author"`
-	Permlink string `json:"permlink"`
-}
-
-//LoginOperation the structure for the operation CustomJSONOperation.
-type LoginOperation struct {
-	Account string `json:"account"`
-}
-
-//PrivateMessageOperation the structure for the operation CustomJSONOperation.
-type PrivateMessageOperation struct {
-	From             string `json:"from"`
-	To               string `json:"to"`
-	FromMemoKey      string `json:"from_memo_key"`
-	ToMemoKey        string `json:"to_memo_key"`
-	SentTime         uint64 `json:"sent_time"`
-	Checksum         uint32 `json:"checksum"`
-	EncryptedMessage string `json:"encrypted_message"`
-}
-
 //MarshalCustomJSON generate a row from the structure fields.
 func MarshalCustomJSON(v interface{}) (string, error) {
 	var tmp []interface{}
@@ -130,10 +75,8 @@ func MarshalCustomJSON(v interface{}) (string, error) {
 		tmp = append(tmp, TypeFollow)
 	case "ReblogOperation":
 		tmp = append(tmp, TypeReblog)
-	case "LoginOperation":
-		tmp = append(tmp, TypeLogin)
-	case "PrivateMessageOperation":
-		tmp = append(tmp, TypePrivateMessage)
+	case "DeleteReblogOperation":
+		tmp = append(tmp, TypeDeleteReblog)
 	default:
 		return "", errors.New("Unknown type")
 	}
@@ -146,4 +89,15 @@ func MarshalCustomJSON(v interface{}) (string, error) {
 	}
 
 	return string(b), nil //strings.Replace(string(b), "\"", "\\\"", -1), nil
+}
+
+//MarshalTransaction is a function of converting type CustomJSONOperation to bytes.
+func (op *CustomJSONOperation) MarshalTransaction(encoder *transaction.Encoder) error {
+	enc := transaction.NewRollingEncoder(encoder)
+	enc.EncodeUVarint(uint64(TypeCustomJSON.Code()))
+	enc.EncodeArrString(op.RequiredAuths)
+	enc.EncodeArrString(op.RequiredPostingAuths)
+	enc.Encode(op.ID)
+	enc.Encode(op.JSON)
+	return enc.Err()
 }
